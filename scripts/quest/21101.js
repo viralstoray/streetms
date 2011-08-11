@@ -22,6 +22,8 @@
 /*	
 	Author : Biscuit
 */
+importPackage(Packages.client);
+
 var status = -1;
 
 function start(mode, type, selection) {
@@ -42,10 +44,25 @@ function start(mode, type, selection) {
 	} else if (status == 1) {
 		qm.sendNext("#b(You might be starting to remember something...)#k", 3);
 		qm.changeJobById(2100);
+		qm.c.getPlayer().setRemainingAp(23);
+		qm.c.getPlayer().setStr(35);
+		qm.c.getPlayer().updateSingleStat(MapleStat.STR, 35);
+		qm.c.getPlayer().setDex(4);
+		qm.c.getPlayer().updateSingleStat(MapleStat.DEX, 4);
+		qm.c.getPlayer().setInt(4);
+		qm.c.getPlayer().updateSingleStat(MapleStat.INT, 4);
+		qm.c.getPlayer().setLuk(4);
+		qm.c.getPlayer().updateSingleStat(MapleStat.LUK, 4);
+		var hp = Math.round((Math.random() * 100) + 400);
+		var mp = Math.round((Math.random() * 100) + 100);
+		qm.c.getPlayer().setMaxHp(hp);
+		qm.c.getPlayer().updateSingleStat(MapleStat.MAXHP, hp);
+		qm.c.getPlayer().setMaxMp(mp);
+		qm.c.getPlayer().updateSingleStat(MapleStat.MAXMP, mp);
 		qm.forceStartQuest();
 		qm.forceCompleteQuest();
 	} else if (status == 2) {
-		qm.warp(914090100);
+		//qm.warp(914090100); - bugged
 		qm.dispose();
 	}
 }

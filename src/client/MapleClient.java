@@ -798,6 +798,10 @@ public class MapleClient {
     public int gmLevel() {
         return this.gmlevel;
     }
+    
+    public boolean isGM() {
+        return this.gmlevel > 0;
+    }
 
     public void setScriptEngine(String name, ScriptEngine e) {
         engines.put(name, e);

@@ -342,7 +342,7 @@ public class MapleClient {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            ps = con.prepareStatement("SELECT id, password, salt, gender, banned, gm, pin, pic, characterslots, tos FROM accounts WHERE name = ?");
+            ps = con.prepareStatement("SELECT id, password, gender, banned, gm, pin, pic, characterslots FROM accounts WHERE name = ?");
             ps.setString(1, login);
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -358,7 +358,6 @@ public class MapleClient {
                 String passhash = rs.getString("password");
 
                 //we do not unban
-                byte tos = rs.getByte("tos");
                 ps.close();
                 rs.close();
                 if (getLoginState() > LOGIN_NOTLOGGEDIN) { // already loggedin

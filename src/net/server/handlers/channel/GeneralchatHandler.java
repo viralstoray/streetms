@@ -34,15 +34,25 @@ public final class GeneralchatHandler extends net.AbstractMaplePacketHandler {
         String s = slea.readMapleAsciiString();
         MapleCharacter chr = c.getPlayer();
         char heading = s.charAt(0);
-        if (heading == '/' || heading == '!' || heading == '@') {
+        if (heading == '!' || heading == '@') {
             String[] sp = s.split(" ");
             sp[0] = sp[0].toLowerCase().substring(1);
-            if (!PlayerCommand.execute(c, sp)) {
+            /*if (!PlayerCommand.execute(c, sp)) {
                 if (chr.isGM()) {
                     if (!GMCommand.execute(c, sp)) {
                         //Commands.executeAdminCommand(c, sp, heading);
                         chr.getMap().broadcastMessage(MaplePacketCreator.getChatText(chr.getId(), s, chr.isGM(), slea.readByte()));
                     }
+                }
+            }*/
+            // fixed this, since we don't have admin commands
+            if (chr.isGM()) {
+                if (!GMCommand.execute(c, sp)) {
+                    chr.getMap().broadcastMessage(MaplePacketCreator.getChatText(chr.getId(), s, chr.isGM(), slea.readByte()));
+                }
+            } else {
+                if (!PlayerCommand.execute(c, sp)) {
+                    chr.getMap().broadcastMessage(MaplePacketCreator.getChatText(chr.getId(), s, chr.isGM(), slea.readByte()));
                 }
             }
         } else {

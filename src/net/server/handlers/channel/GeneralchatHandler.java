@@ -34,32 +34,26 @@ public final class GeneralchatHandler extends net.AbstractMaplePacketHandler {
         String s = slea.readMapleAsciiString();
         MapleCharacter chr = c.getPlayer();
         char heading = s.charAt(0);
+        // if we have a command, parse it
         if (heading == '!' || heading == '@') {
             String[] sp = s.split(" ");
             sp[0] = sp[0].toLowerCase().substring(1);
-            /*if (!PlayerCommand.execute(c, sp)) {
-                if (chr.isGM()) {
-                    if (!GMCommand.execute(c, sp)) {
-                        //Commands.executeAdminCommand(c, sp, heading);
-                        chr.getMap().broadcastMessage(MaplePacketCreator.getChatText(chr.getId(), s, chr.isGM(), slea.readByte()));
-                    }
-                }
-            }*/
-            // fixed this, since we don't have admin commands
             if (chr.isGM()) {
                 if (!GMCommand.execute(c, sp)) {
-                    chr.getMap().broadcastMessage(MaplePacketCreator.getChatText(chr.getId(), s, chr.isGM(), slea.readByte()));
+                    chr.getMap().broadcastMessage(MaplePacketCreator.getGMChatText(chr, s, slea.readByte()));
                 }
             } else {
                 if (!PlayerCommand.execute(c, sp)) {
-                    chr.getMap().broadcastMessage(MaplePacketCreator.getChatText(chr.getId(), s, chr.isGM(), slea.readByte()));
+                    chr.getMap().broadcastMessage(MaplePacketCreator.getChatText(chr.getId(), s, false, slea.readByte()));
                 }
             }
+        // if not, pass it through
         } else {
-            if (!chr.isHidden())
-                chr.getMap().broadcastMessage(MaplePacketCreator.getChatText(chr.getId(), s, chr.isGM(), slea.readByte()));
-            else
-                chr.getMap().broadcastGMMessage(MaplePacketCreator.getChatText(chr.getId(), s, chr.isGM(), slea.readByte()));
+            if (chr.isGM()) {
+                chr.getMap().broadcastMessage(MaplePacketCreator.getGMChatText(chr, s, slea.readByte()));
+            } else {
+                chr.getMap().broadcastMessage(MaplePacketCreator.getChatText(chr.getId(), s, false, slea.readByte()));
+            }
         }
     }
 }

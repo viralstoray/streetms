@@ -833,12 +833,7 @@ public class MaplePacketCreator {
         for (MapleCharacter chr : chars) {
             addCharEntry(mplew, chr, false);
         }
-        if (ServerConstants.ENABLE_PIC) {
-            mplew.write(c.getPic() == null || c.getPic().length() == 0 ? 0 : 1);
-        } else {
-            mplew.write(2);
-        }
-
+        mplew.write(2);
         mplew.writeInt(c.getCharacterSlots());
         return mplew.getPacket();
     }
@@ -1500,6 +1495,54 @@ public class MaplePacketCreator {
         mplew.writeMapleAsciiString(text);
         mplew.write(show);
         return mplew.getPacket();
+    }
+    
+    /**
+     * Determines the type of packet to send for a GM talking.
+     * 
+     * @param int The choice chat type the GM chose.
+     * @return packet
+     */
+    public static MaplePacket getGMChatText(MapleCharacter chr, String text, int show) {
+        MaplePacket p;
+        switch (chr.getGMText()) {
+            // normal
+            case 0:
+                p = getChatText(chr.getId(), text, false, show);
+            break;
+            // white bg
+            case 1:
+                p = getChatText(chr.getId(), text, true, show);
+            break;
+            // blue
+            case 2:
+                p = serverNotice(6, chr.getName() + ": " + text);
+            break;
+            // pink
+            case 3:
+                p = serverNotice(5, chr.getName() + ": " + text);
+            break;
+            // yellow
+            case 4:
+                p = sendYellowTip(chr.getName() + ": " + text);
+            break;
+            // orange
+            case 5:
+                p = multiChat(chr.getName(), text, 0);
+            break;
+            // purple
+            case 6:
+                p = multiChat(chr.getName(), text, 2);
+            break;
+            // green
+            case 7:
+                p = multiChat(chr.getName(), text, 3);
+            break;
+            default:
+                p = getChatText(chr.getId(), text, false, 1);
+            break;
+        }
+        return p;
     }
 
     /**

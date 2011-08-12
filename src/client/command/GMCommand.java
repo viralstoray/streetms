@@ -119,6 +119,35 @@ public class GMCommand {
             player.message("Done");
         } else if (sub[0].equals("gmshop")) {
             MapleShopFactory.getInstance().getShop(1337).sendShop(c);
+        } else if (sub[0].equals("gmtext")) {
+            sub[1] = sub[1].toLowerCase();
+            if (sub[1].equals("normal")) {
+                player.setGMText(0);
+            } else if (sub[1].equals("whitebg")) {
+                player.setGMText(1);
+            } else if (sub[1].equals("blue")) {
+                player.setGMText(2);
+            } else if (sub[1].equals("pink")) {
+                player.setGMText(3);
+            } else if (sub[1].equals("yellow")) {
+                player.setGMText(4);
+            } else if (sub[1].equals("orange")) {
+                player.setGMText(5);
+            } else if (sub[1].equals("purple")) {
+                player.setGMText(6);
+            } else if (sub[1].equals("green")) {
+                player.setGMText(7);
+            } else {
+                player.message("Usage: !gmtext normal/whitebg/blue/pink/yellow/orange/purple/green");
+                return true;
+            }
+            try {
+                PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("UPDATE characters SET gmtext = ? WHERE id = ?");
+                ps.setInt(1, player.getGMText());
+                ps.setInt(2, player.getId());
+                ps.executeUpdate();
+                ps.close();
+            } catch (Exception e) {}
         } else if (sub[0].equals("goto")) {
             // change our 1st argument to lower to simplify things
             sub[1] = sub[1].toLowerCase();

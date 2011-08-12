@@ -144,8 +144,8 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
             }
         }
         c.announce(MaplePacketCreator.getCharInfo(player));
-        if (!player.isHidden()) {
-            player.toggleHide(true);
+        if (player.isHidden()) {
+            player.toggleHide(false);
         }
         player.sendKeymap();
         player.sendMacros();

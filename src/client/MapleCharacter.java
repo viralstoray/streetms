@@ -161,6 +161,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     private int expRate = 1, mesoRate = 1, dropRate = 1;
     private int omokwins, omokties, omoklosses, matchcardwins, matchcardties, matchcardlosses;
     private int married;
+    private int gmtext;
     private long dojoFinish, lastfametime, lastUsedCashItem, lastHealed;
     private transient int localmaxhp, localmaxmp, localstr, localdex, localluk, localint_, magic, watk;
     private boolean hidden, canDoor = true, Berserk, hasMerchant;
@@ -1661,6 +1662,10 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     public int getGender() {
         return gender;
     }
+    
+    public int getGMText() {
+        return gmtext;
+    }
 
     public boolean isMale() {
         return getGender() == 0;
@@ -2509,6 +2514,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ret.meso.set(rs.getInt("meso"));
             ret.merchantmeso = rs.getInt("MerchantMesos");
             ret.gmLevel = rs.getInt("gm");
+            ret.gmtext = rs.getInt("gmtext");
             ret.skinColor = MapleSkinColor.getById(rs.getInt("skincolor"));
             ret.gender = rs.getInt("gender");
             ret.job = MapleJob.getById(rs.getInt("job"));
@@ -3783,6 +3789,13 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
 
     public void setGM(int level) {
         this.gmLevel = level;
+    }
+    
+    public void setGMText(int text) {
+        if (text != this.gmtext) {
+            this.gmtext = text;
+        }
+        message("Your GM text color has been updated.");
     }
 
     public void setGuildId(int _id) {

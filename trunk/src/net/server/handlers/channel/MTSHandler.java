@@ -389,28 +389,32 @@ public final class MTSHandler extends AbstractMaplePacketHandler {
                     rs = ps.executeQuery();
                     if (rs.next()) {
                         int price = rs.getInt("price") + 100 + (int) (rs.getInt("price") * 0.1); //taxes
-                        if (c.getPlayer().getCashShop().getCash(4) >= price) { //FIX
+                        //if (c.getPlayer().getCashShop().getCash(4) >= price) { //FIX
+                        if (c.getPlayer().getMeso() >= price) {
                             boolean alwaysnull = true;
                             for (Channel cserv : Server.getInstance().getAllChannels()) {
                                 MapleCharacter victim = cserv.getPlayerStorage().getCharacterById(rs.getInt("seller"));
                                 if (victim != null) {
-                                    victim.getCashShop().gainCash(4, rs.getInt("price"));
+                                    //victim.getCashShop().gainCash(4, rs.getInt("price"));
+                                    victim.gainMeso(rs.getInt(price), false);
                                     alwaysnull = false;
                                 }
                             }
                             if (alwaysnull) {
-                                PreparedStatement pse = con.prepareStatement("SELECT accountid FROM characters WHERE id = ?");
-                                pse.setInt(1, rs.getInt("seller"));
-                                ResultSet rse = pse.executeQuery();
-                                if (rse.next()) {
-                                    PreparedStatement psee = con.prepareStatement("UPDATE accounts SET nxPrepaid = nxPrepaid + ? WHERE id = ?");
+                                //PreparedStatement pse = con.prepareStatement("SELECT accountid FROM characters WHERE id = ?");
+                                //pse.setInt(1, rs.getInt("seller"));
+                                //ResultSet rse = pse.executeQuery();
+                                //if (rse.next()) {
+                                    //PreparedStatement psee = con.prepareStatement("UPDATE accounts SET nxPrepaid = nxPrepaid + ? WHERE id = ?");
+                                    PreparedStatement psee = con.prepareStatement("UPDATE characters set meso = meso + ? WHERE id = ?");
                                     psee.setInt(1, rs.getInt("price"));
-                                    psee.setInt(2, rse.getInt("accountid"));
+                                    //psee.setInt(2, rse.getInt("accountid"));
+                                    psee.setInt(2, rs.getInt("seller"));
                                     psee.executeUpdate();
                                     psee.close();
-                                }
-                                pse.close();
-                                rse.close();
+                                //}
+                                //pse.close();
+                                //rse.close();
                             }
                             PreparedStatement pse = con.prepareStatement("UPDATE mts_items SET seller = ?, transfer = 1 WHERE id = ?");
                             pse.setInt(1, c.getPlayer().getId());
@@ -421,7 +425,8 @@ public final class MTSHandler extends AbstractMaplePacketHandler {
                             pse.setInt(1, id);
                             pse.executeUpdate();
                             pse.close();
-                            c.getPlayer().getCashShop().gainCash(4, -price);
+                            //c.getPlayer().getCashShop().gainCash(4, -price);
+                            c.getPlayer().gainMeso(-price, false);
                             c.announce(MaplePacketCreator.enableCSUse());
                             c.announce(getMTS(c.getPlayer().getCurrentTab(), c.getPlayer().getCurrentType(), c.getPlayer().getCurrentPage()));
                             c.announce(MaplePacketCreator.MTSConfirmBuy());
@@ -449,24 +454,30 @@ public final class MTSHandler extends AbstractMaplePacketHandler {
                     rs = ps.executeQuery();
                     if (rs.next()) {
                         int price = rs.getInt("price") + 100 + (int) (rs.getInt("price") * 0.1);
-                        if (c.getPlayer().getCashShop().getCash(4) >= price) {
+                        //if (c.getPlayer().getCashShop().getCash(4) >= price) {
+                        if (c.getPlayer().getMeso() >= price) {
                             for (Channel cserv : Server.getInstance().getAllChannels()) {
                                 MapleCharacter victim = cserv.getPlayerStorage().getCharacterById(rs.getInt("seller"));
                                 if (victim != null) {
-                                    victim.getCashShop().gainCash(4, rs.getInt("price"));
+                                    //victim.getCashShop().gainCash(4, rs.getInt("price"));
+                                    c.getPlayer().gainMeso(-rs.getInt("price"), false);
+                                    victim.gainMeso(rs.getInt("price"), false);
                                 } else {
-                                    PreparedStatement pse = con.prepareStatement("SELECT accountid FROM characters WHERE id = ?");
-                                    pse.setInt(1, rs.getInt("seller"));
-                                    ResultSet rse = pse.executeQuery();
-                                    if (rse.next()) {
-                                        PreparedStatement psee = con.prepareStatement("UPDATE accounts SET nxPrepaid = nxPrepaid + ? WHERE id = ?");
+                                    //PreparedStatement pse = con.prepareStatement("SELECT accountid FROM characters WHERE id = ?");
+                                    //pse.setInt(1, rs.getInt("seller"));
+                                    //ResultSet rse = pse.executeQuery();
+                                    //if (rse.next()) {
+                                        //PreparedStatement psee = con.prepareStatement("UPDATE accounts SET nxPrepaid = nxPrepaid + ? WHERE id = ?");
+                                        c.getPlayer().gainMeso(-rs.getInt("price"), false);
+                                        PreparedStatement psee = con.prepareStatement("UPDATE characters SET meso = meso + ? WHERE id = ?");
                                         psee.setInt(1, rs.getInt("price"));
-                                        psee.setInt(2, rse.getInt("accountid"));
+                                        //psee.setInt(2, rse.getInt("accountid"));
+                                        psee.setInt(2, rs.getInt("seller"));
                                         psee.executeUpdate();
                                         psee.close();
-                                    }
-                                    pse.close();
-                                    rse.close();
+                                    //}
+                                    //pse.close();
+                                    //rse.close();
                                 }
                             }
                             PreparedStatement pse = con.prepareStatement("UPDATE mts_items SET seller = ?, transfer = 1 WHERE id = ?");

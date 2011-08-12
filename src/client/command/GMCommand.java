@@ -77,7 +77,7 @@ public class GMCommand {
                 MapleMonster mob = MapleLifeFactory.getMonster(9300166);
                 player.getMap().spawnMonsterOnGroudBelow(mob, player.getPosition());
             } else {
-                if (sub[1].equals("map")) {
+                if (sub[1].equalsIgnoreCase("map")) {
                     for (MapleCharacter chr : player.getMap().getCharacters()) {
                         player.getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(9300166), chr.getPosition());
                     }
@@ -97,6 +97,12 @@ public class GMCommand {
         } else if (sub[0].equalsIgnoreCase("dispose")) {
             NPCScriptManager.getInstance().dispose(c);
             c.getSession().write(MaplePacketCreator.enableActions());
+        } else if (sub[0].equalsIgnoreCase("droprate")) {
+            c.getWorldServer().setDropRate((byte) (Byte.parseByte(sub[1]) % 128));
+            cserv.broadcastPacket(MaplePacketCreator.serverNotice(6, "The Drop Rate has been changed to " + Integer.parseInt(sub[1]) + "x."));
+            for (MapleCharacter mc : c.getWorldServer().getPlayerStorage().getAllCharacters()) {
+                mc.setRates();
+            }
         } else if (sub[0].equalsIgnoreCase("exprate")) {
             c.getWorldServer().setExpRate((byte) (Byte.parseByte(sub[1]) % 128));
             cserv.broadcastPacket(MaplePacketCreator.serverNotice(6, "The EXP Rate has been changed to " + Integer.parseInt(sub[1]) + "x."));
@@ -318,11 +324,11 @@ public class GMCommand {
                 return true;
             }
             player.message("Unbanned " + sub[1]);
-        } else if (sub[0].equals("warpto")) {
+        } else if (sub[0].equalsIgnoreCase("warpto")) {
             MapleCharacter warpUser = cserv.getPlayerStorage().getCharacterByName(sub[1]);
             MapleMap map = warpUser.getMap();
             player.changeMap(map, map.findClosestSpawnpoint(warpUser.getPosition()));
-        } else if (sub[0].equals("warphere")) {
+        } else if (sub[0].equalsIgnoreCase("warphere")) {
             MapleCharacter warpUser = cserv.getPlayerStorage().getCharacterByName(sub[1]);
             warpUser.message("You're being warped to " + player.getName() + ".");
             MapleMap map = player.getMap();

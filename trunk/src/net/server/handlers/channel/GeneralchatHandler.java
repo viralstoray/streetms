@@ -25,7 +25,8 @@ import client.MapleCharacter;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 import client.MapleClient;
-import client.command.Commands;
+import client.command.GMCommand;
+import client.command.PlayerCommand;
 
 public final class GeneralchatHandler extends net.AbstractMaplePacketHandler {
 
@@ -36,10 +37,11 @@ public final class GeneralchatHandler extends net.AbstractMaplePacketHandler {
         if (heading == '/' || heading == '!' || heading == '@') {
             String[] sp = s.split(" ");
             sp[0] = sp[0].toLowerCase().substring(1);
-            if (!Commands.executePlayerCommand(c, sp, heading)) {
+            if (!PlayerCommand.execute(c, sp)) {
                 if (chr.isGM()) {
-                    if (!Commands.executeGMCommand(c, sp, heading)) {
-                        Commands.executeAdminCommand(c, sp, heading);
+                    if (!GMCommand.execute(c, sp)) {
+                        //Commands.executeAdminCommand(c, sp, heading);
+                        chr.getMap().broadcastMessage(MaplePacketCreator.getChatText(chr.getId(), s, chr.isGM(), slea.readByte()));
                     }
                 }
             }

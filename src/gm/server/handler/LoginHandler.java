@@ -41,7 +41,7 @@ public class LoginHandler implements GMPacketHandler {
             rs = ps.executeQuery();
             if (rs.next()) {
                 String pw = rs.getString("password");
-                if (password.equals(pw) || MapleClient.checkHash(pw, "SHA-1", password)) {
+                if (MapleClient.checkPassword(pw, password)) {
                     /*
                     int accid = rs.getInt("id");
                     ps.close();

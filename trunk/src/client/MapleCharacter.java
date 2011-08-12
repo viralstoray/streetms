@@ -4754,24 +4754,12 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         player.getCashShop().gainCash(1, amount);
     }
     
-    public void addToLottery(int addAmount) {
+    public void addToLottery() {
         try {
             Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps;
-            PreparedStatement check = con.prepareStatement("SELECT * FROM lottery WHERE winner IS NULL");
-            ResultSet rcheck = check.executeQuery();
-            
-            if (!rcheck.next()) {
-                ps = con.prepareStatement("INSERT INTO lottery (amount) VALUES(?)");
-                ps.setInt(1, addAmount);
-                ps.execute();
-            } else {
-                ps = con.prepareStatement("UPDATE lottery SET amount = amount + ? WHERE winner IS NULL");
-                ps.setInt(1, addAmount);
-                ps.execute();
-            }
-            rcheck.close();
-            check.close();
+            PreparedStatement ps = con.prepareStatement("INSERT INTO lottery (charid) VALUES(?)");
+            ps.setInt(1, client.getPlayer().getId());
+            ps.execute();
             ps.close();
         } catch (SQLException ex) {
             System.out.print("Error adding to lottery: " + ex);
@@ -4780,56 +4768,52 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
 	
     public int getCurrentLotteryAmount() {
         try {
+            int numRows = 0;
             Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM lottery WHERE winner IS NULL");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM lottery");
             ResultSet rs = ps.executeQuery();
 
-            if (!rs.next()) {
-                rs.close();
-                ps.close();
-                return 0;
-            } else {
-                return rs.getInt("amount");
-            }	
+            while (rs.next()) {
+                numRows++;
+            }
+            
+            rs.close();
+            ps.close();
+            
+            return numRows * getLotteryPrice();
         } catch (SQLException ex) {
             System.out.print("Error getting lottery amount: " + ex);
             return 0;
         }
     }
     
-    public String getLastLotteryWinner() {
+    public int getLotteryPrice() {
+        return 100000;
+    }
+    
+    public int getLotteryWinner() {
         try {
             Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM lottery WHERE winner IS NOT NULL");
+            PreparedStatement ps = con.prepareStatement("SELECT charid FROM lottery ORDER BY RAND() LIMIT 1");
             ResultSet rs = ps.executeQuery();
-            
-            if (!rs.next()) {
-                rs.close();
-                ps.close();
-                return null;
-            } else {
-                return rs.getString("winner");
-            }
+            int winner = rs.getInt("charid");
+            rs.close();
+            ps.close();
+            return winner;
         } catch (SQLException ex) {
             System.out.print("Error getting lottery winner: " + ex);
-            return null;
+            return 0;
         }
     }
     
     public void resetLottery() {
         try {
             Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("UPDATE lottery SET winner = ? WHERE winner IS NULL");
-            ps.setString(1, name);
+            PreparedStatement ps = con.prepareStatement("TRUNCATE TABLE lottery; ALTER TABLE lottery AUTO_INCREMENT = 1;");
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
             System.out.print("Error resetting lottery: " + ex);
         }
-    }
-    
-    public void announceLotteryWinner(String amount) {
-        String announcement = "[Lottery] " + name + " has just won the lottery for " + amount + " NX! Congratulations!";
-        Server.getInstance().broadcastMessage(client.getPlayer().getWorld(), MaplePacketCreator.serverNotice(5, announcement));
     }
 }

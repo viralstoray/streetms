@@ -15,7 +15,6 @@ import java.io.File;
 import java.sql.PreparedStatement;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import net.server.Channel;
 import net.server.Server;
 import provider.MapleData;
@@ -104,6 +103,12 @@ public class GMCommand {
             for (MapleCharacter mc : c.getWorldServer().getPlayerStorage().getAllCharacters()) {
                 mc.setRates();
             }
+        } else if (sub[0].equals("drawlottery")) {
+            MapleCharacter winner = c.getWorldServer().getPlayerStorage().getCharacterById(player.getLotteryWinner());
+            winner.giftNX(player.getCurrentLotteryAmount() / 1000);
+            String message = "[Lottery] " + winner.getName() + "has just won " + (player.getCurrentLotteryAmount() / 1000) + " NX Cash by winning the lottery! Congratulations!";
+            Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(5, message));
+            player.resetLottery();
         } else if (sub[0].equals("exprate")) {
             c.getWorldServer().setExpRate((byte) (Byte.parseByte(sub[1]) % 128));
             cserv.broadcastPacket(MaplePacketCreator.serverNotice(6, "The EXP Rate has been changed to " + Integer.parseInt(sub[1]) + "x."));

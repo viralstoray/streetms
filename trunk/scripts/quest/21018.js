@@ -47,29 +47,3 @@ function start(mode, type, selection) {
 		qm.dispose();
 	}
 }
-
-function end(mode, type, selection) {
-    status++;
-    if (mode != 1) {
-		if(type == 1 && mode == 0) {
-			qm.sendOk("Aran, you cannot turn away from your destiny!");
-			qm.dispose();
-			return;
-		}else{
-			qm.dispose();
-			return;
-		}
-	}
-	
-	if (status == 0) {
-		qm.sendOk("I see that you have defeated all 5 Murukuns. Have you noticed how much stronger you've gotten since the first training session? Well, now that you're ready, let's get on with the real training, and... Wait!\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 1200 exp");
-	} else if (status == 1) {
-		qm.sendNext("Come to think of it, I still have yet to ask you your name, dear hero. You are one of the five heroes, yes, but which of them are you? You lost all of your memories, so you probably can't answer...");
-	} else if (status == 2) {
-		qm.sendNextPrev("It's time for your to begin your real training so you can defeat the Black Mage, but we must first know which of the five heroes you are so we can create a training program that caters to your strengths. There's no point learning skills for weapons you've never used. That won't help you against the Black Mage either.");
-	} else if (status == 3) {
-		qm.sendPrev("But really...who are you?");
-		qm.forceCompleteQuest();
-		qm.gainExp(1200);
-	}
-}

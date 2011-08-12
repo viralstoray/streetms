@@ -19,29 +19,24 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*	
-	Author : Biscuit
+/*
+	Author: Biscuit
 */
-var status = -1;
 
-function start(mode, type, selection) {
-    status++;
-    if (mode != 1) {
-		if(type == 1 && mode == 0) {
-			qm.sendOk("Aran, you cannot turn away from your destiny!");
-			qm.dispose();
-			return;
-		}else{
-			qm.dispose();
-			return;
-		}
-	}
-	
-	if (status == 0) {
-		qm.sendAcceptDecline("Shall we continue with your Basic Training? Before accepting, please make sure you have properly equipped your sword and your skills and potions are readily accessible.");
-	} else if (status == 1) {
-		qm.forceStartQuest();
-		qm.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow3");
-		qm.dispose();
-	}
+var status = 0;
+
+function start() {
+    cm.sendYesNo("Are you trying to leave Rien? Board this ship and I'll take you to #bLith Harbor#k in Victoria Island for free.");
+}
+
+function action(mode, type, selection) {
+    if(mode != 1)
+        cm.dispose();
+    else {
+        status++;
+        if(status == 1) {
+            cm.warp(104000000);
+			cm.dispose();
+        }
+    }
 }

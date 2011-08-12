@@ -356,7 +356,6 @@ public class MapleClient {
                 gender = rs.getByte("gender");
                 characterSlots = rs.getByte("characterslots");
                 String passhash = rs.getString("password");
-                String salt = rs.getString("salt");
 
                 //we do not unban
                 byte tos = rs.getByte("tos");
@@ -365,12 +364,9 @@ public class MapleClient {
                 if (getLoginState() > LOGIN_NOTLOGGEDIN) { // already loggedin
                     loggedIn = false;
                     loginok = 7;
-                } else if (pwd.equals(passhash) || checkHash(passhash, "SHA-1", pwd) || checkHash(passhash, "SHA-512", pwd + salt)) {
-                    if (tos == 0) {
-                        loginok = 23;
-                    } else {
-                        loginok = 0;
-                    }
+                } else if (checkPassword(passhash, pwd)) {
+                    // don't worry about the tos
+                    loginok = 0;
                 } else {
                     loggedIn = false;
                     loginok = 4;
@@ -870,9 +866,9 @@ public class MapleClient {
         }
     }
 
-    public static boolean checkHash(String hash, String type, String password) {
+    public static boolean checkPassword(String hash, String password) {
         try {
-            MessageDigest digester = MessageDigest.getInstance(type);
+            MessageDigest digester = MessageDigest.getInstance("MD5");
             digester.update(password.getBytes("UTF-8"), 0, password.length());
             return HexTool.toString(digester.digest()).replace(" ", "").toLowerCase().equals(hash);
         } catch (Exception e) {

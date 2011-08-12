@@ -15,6 +15,7 @@ import java.io.File;
 import java.sql.PreparedStatement;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import net.server.Channel;
 import net.server.Server;
 import provider.MapleData;
@@ -46,7 +47,7 @@ public class GMCommand {
         MapleCharacter player = c.getPlayer();
         Channel cserv = c.getChannelServer();
         Server srv = Server.getInstance();
-        if (sub[0].equalsIgnoreCase("allgms")) {
+        if (sub[0].equals("allgms") || sub[0].equals("allgms")) {
             String message = joinStringFrom(sub, 1);
             for (Channel ch : srv.getChannelsFromWorld(player.getWorld())) {
                 for (MapleCharacter gms : ch.getPlayerStorage().getAllCharacters()) {
@@ -55,14 +56,14 @@ public class GMCommand {
                     }
                 }
             }
-        } else if (sub[0].equalsIgnoreCase("ap")) {
+        } else if (sub[0].equals("ap")) {
             player.setRemainingAp(Integer.parseInt(sub[1]));
-        } else if (sub[0].equalsIgnoreCase("buffme")) {
+        } else if (sub[0].equals("buffme")) {
             final int[] array = {9001000, 9101002, 9101003, 9101008, 2001002, 1101007, 1005, 2301003, 5121009, 1111002, 4111001, 4111002, 4211003, 4211005, 1321000, 2321004, 3121002};
             for (int i : array) {
                 SkillFactory.getSkill(i).getEffect(SkillFactory.getSkill(i).getMaxLevel()).applyTo(player);
             }
-	} else if (sub[0].equalsIgnoreCase("ban")) {
+	} else if (sub[0].equals("ban")) {
             try {
                 PreparedStatement p = DatabaseConnection.getConnection().prepareStatement("UPDATE accounts SET banned = 1 WHERE id = " + MapleCharacter.getIdByName(sub[1]));
                 p.executeUpdate();
@@ -72,12 +73,12 @@ public class GMCommand {
                 return true;
             }
             player.message("Banned " + sub[1]);
-        } else if (sub[0].equalsIgnoreCase("bomb")) {
+        } else if (sub[0].equals("bomb")) {
             if (sub.length == 1) {
                 MapleMonster mob = MapleLifeFactory.getMonster(9300166);
                 player.getMap().spawnMonsterOnGroudBelow(mob, player.getPosition());
             } else {
-                if (sub[1].equalsIgnoreCase("map")) {
+                if (sub[1].equals("map")) {
                     for (MapleCharacter chr : player.getMap().getCharacters()) {
                         player.getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(9300166), chr.getPosition());
                     }
@@ -87,53 +88,64 @@ public class GMCommand {
                     victim.getMap().spawnMonsterOnGroundBelow(mob, victim.getPosition());
                 }
             }
-        } else if (sub[0].equalsIgnoreCase("cleardrops")) {
+        } else if (sub[0].equals("cleardrops")) {
             player.getMap().clearDrops(player);
-        } else if (sub[0].equalsIgnoreCase("dc")) {
+        } else if (sub[0].equals("dc")) {
             MapleCharacter chr = c.getWorldServer().getPlayerStorage().getCharacterByName(sub[1]);
             if (player.gmLevel() > chr.gmLevel()) {
                 chr.getClient().disconnect();
             }
-        } else if (sub[0].equalsIgnoreCase("dispose")) {
+        } else if (sub[0].equals("dispose")) {
             NPCScriptManager.getInstance().dispose(c);
             c.getSession().write(MaplePacketCreator.enableActions());
-        } else if (sub[0].equalsIgnoreCase("droprate")) {
+        } else if (sub[0].equals("droprate")) {
             c.getWorldServer().setDropRate((byte) (Byte.parseByte(sub[1]) % 128));
             cserv.broadcastPacket(MaplePacketCreator.serverNotice(6, "The Drop Rate has been changed to " + Integer.parseInt(sub[1]) + "x."));
             for (MapleCharacter mc : c.getWorldServer().getPlayerStorage().getAllCharacters()) {
                 mc.setRates();
             }
-        } else if (sub[0].equalsIgnoreCase("exprate")) {
+        } else if (sub[0].equals("exprate")) {
             c.getWorldServer().setExpRate((byte) (Byte.parseByte(sub[1]) % 128));
             cserv.broadcastPacket(MaplePacketCreator.serverNotice(6, "The EXP Rate has been changed to " + Integer.parseInt(sub[1]) + "x."));
             for (MapleCharacter mc : c.getWorldServer().getPlayerStorage().getAllCharacters()) {
                 mc.setRates();
             }
-        } else if (sub[0].equalsIgnoreCase("fame")) {
+        } else if (sub[0].equals("fame")) {
             MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[1]);
             victim.setFame(Integer.parseInt(sub[2]));
             victim.updateSingleStat(MapleStat.FAME, victim.getFame());
-        } else if (sub[0].equalsIgnoreCase("giftnx")) {
+        } else if (sub[0].equals("giftnx")) {
             cserv.getPlayerStorage().getCharacterByName(sub[1]).getCashShop().gainCash(1, Integer.parseInt(sub[2]));
             player.message("Done");
-        } else if (sub[0].equalsIgnoreCase("gmshop")) {
+        } else if (sub[0].equals("gmshop")) {
             MapleShopFactory.getInstance().getShop(1337).sendShop(c);
-        } else if (sub[0].equalsIgnoreCase("heal")) {
+        } else if (sub[0].equals("goto")) {
+            // change our 1st argument to lower to simplify things
+            sub[1] = sub[1].toLowerCase();
+            // moved the gigantic hashmap to MapleMap and set it to static so we aren't
+            // creating it every time a command is issued
+            if (MapleMap.MapList.containsKey(sub[1])) {
+                MapleMap map = cserv.getMapFactory().getMap(MapleMap.MapList.get(sub[1]));
+                player.changeMap(map, map.getPortal(0));
+            } else {
+                player.message("That map doesn't exist. You can find the map list with !maps.");
+            }
+        } else if (sub[0].equals("heal")) {
             player.setHpMp(30000);
-        } else if (sub[0].equalsIgnoreCase("hp")) {
+        } else if (sub[0].equals("hp")) {
             player.setMaxHp(Integer.parseInt(sub[0]));
             player.updateSingleStat(MapleStat.MAXHP, Integer.parseInt(sub[0]));
-        } else if (sub[0].equalsIgnoreCase("mp")) {
+        } else if (sub[0].equals("mp")) {
             player.setMaxMp(Integer.parseInt(sub[1]));
             player.updateSingleStat(MapleStat.MAXMP, Integer.parseInt(sub[1]));
-        } else if (sub[0].equalsIgnoreCase("item") || sub[0].equalsIgnoreCase("drop")) {
+        } else if (sub[0].equals("item") || sub[0].equals("drop")) {
             int itemId = Integer.parseInt(sub[1]);
             short quantity = 1;
             try {
                 quantity = Short.parseShort(sub[2]);
             } catch (Exception e) {
             }
-            if (sub[0].equalsIgnoreCase("item")) {
+            if (sub[0].equals("item")) {
                 int petid = -1;
                 if (ItemConstants.isPet(itemId)) {
                     petid = MaplePet.createPet(itemId);
@@ -148,10 +160,10 @@ public class GMCommand {
                 }
                 c.getPlayer().getMap().spawnItemDrop(c.getPlayer(), c.getPlayer(), toDrop, c.getPlayer().getPosition(), true, true);
             }
-        } else if (sub[0].equalsIgnoreCase("job")) {
+        } else if (sub[0].equals("job")) {
             player.changeJob(MapleJob.getById(Integer.parseInt(sub[1])));
             player.equipChanged();
-        } else if (sub[0].equalsIgnoreCase("jobperson")) {
+        } else if (sub[0].equals("jobperson")) {
             if (c.gmLevel() < 2) {
                 player.message("You need to be an admin for this silly.");
                 return false;
@@ -159,10 +171,10 @@ public class GMCommand {
             MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(sub[1]);
             victim.changeJob(MapleJob.getById(Integer.parseInt(sub[2])));
             player.equipChanged();
-        } else if (sub[0].equalsIgnoreCase("kill")) {
+        } else if (sub[0].equals("kill")) {
             cserv.getPlayerStorage().getCharacterByName(sub[1]).setHpMp(0);
             cserv.getPlayerStorage().getCharacterByName(sub[1]).updateSingleStat(MapleStat.HP, 0);
-        } else if (sub[0].equalsIgnoreCase("killall")) {
+        } else if (sub[0].equals("killall")) {
             List<MapleMapObject> monsters = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
             MapleMap map = player.getMap();
             for (MapleMapObject monstermo : monsters) {
@@ -171,16 +183,19 @@ public class GMCommand {
                 monster.giveExpToCharacter(player, monster.getExp() * c.getPlayer().getExpRate(), true, 1);
             }
             player.dropMessage("Killed " + monsters.size() + " monsters.");
-        } else if (sub[0].equalsIgnoreCase("level")) {
+        } else if (sub[0].equals("level")) {
             player.setLevel(Integer.parseInt(sub[1]));
             player.gainExp(-player.getExp(), false, false);
             player.updateSingleStat(MapleStat.LEVEL, player.getLevel());
-        } else if (sub[0].equalsIgnoreCase("levelperson")) {
+        } else if (sub[0].equals("levelperson")) {
             MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[1]);
             victim.setLevel(Integer.parseInt(sub[2]));
             victim.gainExp(-victim.getExp(), false, false);
             victim.updateSingleStat(MapleStat.LEVEL, victim.getLevel());
-        } else if (sub[0].equalsIgnoreCase("maxstat")) {
+        } else if (sub[0].equals("maps")) {
+            c.announce(MaplePacketCreator.getNPCTalk(9010000, (byte) 0, "!goto Maps\r\n" + 
+            MapleMap.MapTextList, "00 00", (byte) 0));
+        } else if (sub[0].equals("maxstat")) {
             // workaround here for !setall ~ Doctor
             final String[] s = {"setall", String.valueOf(Short.MAX_VALUE)};
             execute(c, s);
@@ -192,7 +207,7 @@ public class GMCommand {
             player.updateSingleStat(MapleStat.FAME, 13337);
 			player.updateSingleStat(MapleStat.MAXHP, 30000);
             player.updateSingleStat(MapleStat.MAXMP, 30000);
-        } else if (sub[0].equalsIgnoreCase("maxskills")) {
+        } else if (sub[0].equals("maxskills")) {
             for (MapleData skill_ : MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/" + "String.wz")).getData("Skill.img").getChildren()) {
                 try {
                     ISkill skill = SkillFactory.getSkill(Integer.parseInt(skill_.getName()));
@@ -203,18 +218,12 @@ public class GMCommand {
                     continue;
                 }
             }
-        } else if (sub[0].equalsIgnoreCase("mesoperson")) {
+        } else if (sub[0].equals("mesoperson")) {
             cserv.getPlayerStorage().getCharacterByName(sub[1]).gainMeso(Integer.parseInt(sub[2]), true);
-        } else if (sub[0].equalsIgnoreCase("meso")) {
+        } else if (sub[0].equals("meso")) {
             player.gainMeso(Integer.parseInt(sub[1]), true);
-        } else if (sub[0].equalsIgnoreCase("exprate")) {
-            c.getWorldServer().setMesoRate((byte) (Byte.parseByte(sub[1]) % 128));
-            cserv.broadcastPacket(MaplePacketCreator.serverNotice(6, "The Meso Rate has been changed to " + Integer.parseInt(sub[1]) + "x."));
-            for (MapleCharacter mc : c.getWorldServer().getPlayerStorage().getAllCharacters()) {
-                mc.setRates();
-            }
-        } else if (sub[0].equalsIgnoreCase("notice")) {
-            if (sub[1].equalsIgnoreCase("p")) {
+        } else if (sub[0].equals("notice")) {
+            if (sub[1].equals("p")) {
                 Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(1, joinStringFrom(sub, 2)));
             } else if (sub[1].equalsIgnoreCase("n")) {
                 Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(0, joinStringFrom(sub, 2)));
@@ -229,7 +238,7 @@ public class GMCommand {
             } else {
                 Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(6, "[Notice] " + joinStringFrom(sub, 1)));
             }
-        } else if (sub[0].equalsIgnoreCase("online")) {
+        } else if (sub[0].equals("online")) {
             for (Channel ch : srv.getChannelsFromWorld(player.getWorld())) {
                 String s = "Characters online (Channel " + ch.getId() + " Online: " + ch.getPlayerStorage().getAllCharacters().size() + ") : ";
                 if (ch.getPlayerStorage().getAllCharacters().size() < 50) {
@@ -239,20 +248,20 @@ public class GMCommand {
                     player.dropMessage(s.substring(0, s.length() - 2));
                 }
             }
-        } else if (sub[0].equalsIgnoreCase("search") || sub[0].equalsIgnoreCase("lookup")) {
+        } else if (sub[0].equals("search") || sub[0].equals("lookup")) {
             StringBuilder sb = new StringBuilder();
             if (sub.length > 2) {
                 String search = joinStringFrom(sub, 2);
                 MapleData data = null;
                 MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(new File("wz/String.wz"));
-                if (!sub[1].equalsIgnoreCase("ITEM")) {
-                    if (sub[1].equalsIgnoreCase("NPC")) {
+                if (!sub[1].equals("ITEM")) {
+                    if (sub[1].equals("NPC")) {
                         data = dataProvider.getData("Npc.img");
-                    } else if (sub[1].equalsIgnoreCase("MOB") || sub[1].equalsIgnoreCase("MONSTER")) {
+                    } else if (sub[1].equals("MOB") || sub[1].equals("MONSTER")) {
                         data = dataProvider.getData("Mob.img");
-                    } else if (sub[1].equalsIgnoreCase("SKILL")) {
+                    } else if (sub[1].equals("SKILL")) {
                         data = dataProvider.getData("Skill.img");
-                    } else if (sub[1].equalsIgnoreCase("MAP")) {
+                    } else if (sub[1].equals("MAP")) {
                         sb.append("#bUse the '/m' command to find a map. If it finds a map with the same name, it will warp you to it.");
                     } else {
                         sb.append("#bInvalid search.\r\nSyntax: '/search [type] [name]', where [type] is NPC, ITEM, MOB, or SKILL.");
@@ -286,7 +295,7 @@ public class GMCommand {
                 sb.append("#bInvalid search.\r\nSyntax: '/search [type] [name]', where [type] is NPC, ITEM, MOB, or SKILL.");
             }
             c.announce(MaplePacketCreator.getNPCTalk(9010000, (byte) 0, sb.toString(), "00 00", (byte) 0));
-        } else if (sub[0].equalsIgnoreCase("setall")) {
+        } else if (sub[0].equals("setall")) {
             final int x = Short.parseShort(sub[1]);
             player.setStr(x);
             player.setDex(x);
@@ -296,25 +305,25 @@ public class GMCommand {
             player.updateSingleStat(MapleStat.DEX, x);
             player.updateSingleStat(MapleStat.INT, x);
             player.updateSingleStat(MapleStat.LUK, x);
-        } else if (sub[0].equalsIgnoreCase("shutdown") || sub[0].equalsIgnoreCase("shutdownnow")) {
+        } else if (sub[0].equals("shutdown") || sub[0].equals("shutdownnow")) {
             if (c.gmLevel() < 2) {
                 player.message("You need to be an owner to do this silly.");
                 return false;
             }
             int time = 60000;
-            if (sub[0].equalsIgnoreCase("shutdownnow")) {
+            if (sub[0].equals("shutdownnow")) {
                 time = 1;
             } else if (sub.length > 1) {
                 time *= Integer.parseInt(sub[1]);
             }
             TimerManager.getInstance().schedule(Server.getInstance().shutdown(false), time);
-        } else if (sub[0].equalsIgnoreCase("sp")) {
+        } else if (sub[0].equals("sp")) {
             player.setRemainingSp(Integer.parseInt(sub[1]));
             player.updateSingleStat(MapleStat.AVAILABLESP, player.getRemainingSp());
-        } else if (sub[0].equalsIgnoreCase("suicide")) {
+        } else if (sub[0].equals("suicide")) {
             player.setHp(0);
             player.updateSingleStat(MapleStat.HP, 0);
-        } else if (sub[0].equalsIgnoreCase("unban")) {
+        } else if (sub[0].equals("unban")) {
             try {
                 PreparedStatement p = DatabaseConnection.getConnection().prepareStatement("UPDATE accounts SET banned = -1 WHERE id = " + MapleCharacter.getIdByName(sub[1]));
                 p.executeUpdate();
@@ -324,11 +333,11 @@ public class GMCommand {
                 return true;
             }
             player.message("Unbanned " + sub[1]);
-        } else if (sub[0].equalsIgnoreCase("warpto")) {
+        } else if (sub[0].equals("warpto")) {
             MapleCharacter warpUser = cserv.getPlayerStorage().getCharacterByName(sub[1]);
             MapleMap map = warpUser.getMap();
             player.changeMap(map, map.findClosestSpawnpoint(warpUser.getPosition()));
-        } else if (sub[0].equalsIgnoreCase("warphere")) {
+        } else if (sub[0].equals("warphere")) {
             MapleCharacter warpUser = cserv.getPlayerStorage().getCharacterByName(sub[1]);
             warpUser.message("You're being warped to " + player.getName() + ".");
             MapleMap map = player.getMap();

@@ -6,8 +6,7 @@ DROP TABLE IF EXISTS `accounts`;
 CREATE TABLE `accounts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(13) NOT NULL DEFAULT '',
-  `password` varchar(128) NOT NULL DEFAULT '',
-  `salt` varchar(128) DEFAULT NULL,
+  `password` char(32) NOT NULL DEFAULT '',
   `pin` varchar(10) DEFAULT NULL,
   `pic` varchar(26) DEFAULT NULL,
   `loggedin` tinyint(4) NOT NULL DEFAULT '0',

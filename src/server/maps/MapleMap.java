@@ -81,6 +81,52 @@ import tools.Pair;
 
 public class MapleMap {
 
+    // !goto - remember, WHEN YOU ADD A MAP, ADD IT TO THE TEXT LIST
+    public static final String MapTextList = "amherst, ariant, aqua, balrog" +
+    "dmap, ellinia, elnath, excavation, florina, fm, gm, griffey, guild, happy, " +
+    "headless, henesys, herb, horntail, kerning, korean, leafre, lith, ludi, " +
+    "manon, malong, mushmom, nlc, omega, orbis, papu, perion, pianus, showa, " +
+    "shrine, skelegon, sleepywood, southperry, zakum";
+    public static final Map<String, Integer> MapList = new HashMap<String, Integer>() {{
+        put("amherst", 1010000);
+        put("ariant", 260000100);
+        put("aqua", 230000000);
+        put("balrog", 105090900);
+        put("dmap", 100000203);
+        put("ellinia", 101000000);
+        put("elnath", 211000000);
+        put("excavation", 990000000);
+        put("florina", 110000000);
+        put("fm", 910000000);
+        put("gm", 180000000);
+        put("griffey", 240020101);
+        put("guild", 200000301);
+        put("happy", 209000000);
+        put("headless", 682000001);
+        put("henesys", 100000000);
+        put("herb", 251000000);
+        put("horntail", 240060200);
+        put("kerning", 103000000);
+        put("korean", 222000000);
+        put("leafre", 240000000);
+        put("lith", 104000000);
+        put("ludi", 220000000);
+        put("manon", 240020401);
+        put("mulung", 250000000);
+        put("mushmom", 100000005);
+        put("nlc", 600000000);
+        put("omega", 221000000);
+        put("orbis", 200000000);
+        put("papu", 220080001);
+        put("perion", 102000000);
+        put("pianus", 230040420);
+        put("showa", 801000000);
+        put("shrine", 800000000);
+        put("skelegon", 240040511);
+        put("sleepywood", 105040300);
+        put("southperry", 60000);
+        put("zakum", 280030000);
+    }};
     private static final List<MapleMapObjectType> rangedMapobjectTypes = Arrays.asList(MapleMapObjectType.SHOP, MapleMapObjectType.ITEM, MapleMapObjectType.NPC, MapleMapObjectType.MONSTER, MapleMapObjectType.DOOR, MapleMapObjectType.SUMMON, MapleMapObjectType.REACTOR);
     private Map<Integer, MapleMapObject> mapobjects = new LinkedHashMap<Integer, MapleMapObject>();
     private Collection<SpawnPoint> monsterSpawn = Collections.synchronizedList(new LinkedList<SpawnPoint>());

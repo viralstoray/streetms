@@ -364,7 +364,7 @@ public class MapleClient {
                 if (getLoginState() > LOGIN_NOTLOGGEDIN) { // already loggedin
                     loggedIn = false;
                     loginok = 7;
-                } else if (checkPassword(passhash, pwd)) {
+                } else if (pwd.equals(passhash) || checkPassword(passhash, pwd)) {
                     // don't worry about the tos
                     loginok = 0;
                 } else {

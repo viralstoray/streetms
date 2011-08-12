@@ -866,12 +866,11 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `lottery`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `lottery` (
+CREATE TABLE  `lottery` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `amount` int(10) unsigned NOT NULL DEFAULT '0',
-  `winner` varchar(45) DEFAULT NULL,
+  `charid` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

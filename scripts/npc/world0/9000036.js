@@ -27,10 +27,11 @@ var select;
 var status = 0;
 
 function start() {
-	cm.sendSimple("Welcome to the #bStreetMS Lottery#k! What would you like to do?\r\n#eCurrent Lottery Amount: #r" + mesoSlang(cm.getPlayer().getCurrentLotteryAmount()) + " (" + mesoComma(cm.getPlayer().getCurrentLotteryAmount()) + ") mesos#n#k\r\n#eLast Lottery Winner: #r" + (cm.getPlayer().getLastLotteryWinner() == null ? "none" : cm.getPlayer().getLastLotteryWinner()) + "#n#k#b\r\n#L0#Add 100,000 mesos into the lottery#l\r\n#L1#What is the lottery?#l\r\n#L2#How does the lottery work?#l\r\n#L3#How much NX will I win?#l");
+	cm.sendSimple("Welcome to the #bStreetMS Lottery#k! What would you like to do?\r\n#eCurrent Lottery Amount: #r" + mesoSlang(cm.getPlayer().getCurrentLotteryAmount()) + " (" + mesoComma(cm.getPlayer().getCurrentLotteryAmount()) + ") mesos#n#k#b\r\n#L0#Add 100,000 mesos into the lottery#l\r\n#L1#What is the lottery?#l\r\n#L2#How does the lottery work?#l\r\n#L3#How much NX will I win?#l");
 }
 
 function action(mode, type, selection) {
+	var payAmount = cm.getPlayer().getLotteryPrice();
     if(mode != 1) {
         cm.dispose();
 		return;
@@ -39,19 +40,11 @@ function action(mode, type, selection) {
 		if (status == 1) {
 			select = selection;
 			if (select == 0) {
-				if (cm.getMeso() >= 100000) {
-					cm.gainMeso(-100000);
-					cm.getPlayer().addToLottery(100000);
-					var num = Math.floor(Math.random()*1);
-					if (num == 0) {
-						var oldAmount = cm.getPlayer().getCurrentLotteryAmount();
-						cm.getPlayer().resetLottery();
-						cm.getPlayer().announceLotteryWinner(mesoComma(oldAmount / 1000));
-						cm.getPlayer().giftNX(oldAmount / 1000);
-						cm.sendOk("Wow, you've #rwon#k! #bCongratulations#k!\r\nBecause the lottery amount was at #r" + mesoSlang(oldAmount) + " (" + mesoComma(oldAmount) + ") mesos#k, you have won #r#e" + mesoSlang(oldAmount / 1000) + " (" + mesoComma(oldAmount / 1000) + ") NX Cash!#k#n");
-					} else {
-						cm.sendOk("Thank you for participating in the #bStreetMS Lottery#k, but unforunately you have #rnot won#k!\r\n\r\nThe lottery amount is now #r" + mesoSlang(cm.getPlayer().getCurrentLotteryAmount()) + " (" + mesoComma(cm.getPlayer().getCurrentLotteryAmount()) + ") mesos#k\r\nTry again soon!");
-					}
+				if (cm.getMeso() >= payAmount) {
+					cm.gainMeso(-payAmount);
+					cm.getPlayer().addToLottery();
+					var oldAmount = cm.getPlayer().getCurrentLotteryAmount();
+					cm.sendOk("The current lottery amount is at #r" + mesoSlang(oldAmount) + " (" + mesoComma(oldAmount) + ") mesos#k, = #r#e" + mesoSlang(oldAmount / 1000) + " (" + mesoComma(oldAmount / 1000) + ") NX Cash.#k#n");
 					cm.dispose();
 					return;
 				} else {
@@ -63,7 +56,7 @@ function action(mode, type, selection) {
 				cm.dispose();
 				return;
 			} else if (select == 2) {
-				cm.sendNext("It's quite simple, really. Just add 100,000 mesos into the lottery to start off.  Every time you do so you have a chance to win NX on the spot!");
+				cm.sendNext("It's quite simple, really. Just add 100,000 mesos into the lottery to start off.  Every time you do so you have a greater chance to win NX when a GM draws a ticket!");
 			} else {
 				cm.sendOk("The amount of NX you receive if you win is the current lottery amount divided by 1000. For example, if you tried right now and won you'd get:\r\n\r\n#e" + mesoSlang(cm.getPlayer().getCurrentLotteryAmount()+100000) + " (" + mesoComma(cm.getPlayer().getCurrentLotteryAmount()+100000) + ") mesos = #r" + mesoSlang((cm.getPlayer().getCurrentLotteryAmount()+100000) / 1000) + " (" + mesoComma((cm.getPlayer().getCurrentLotteryAmount()+100000) / 1000) + ") NX Cash#k#n");
 				cm.dispose();

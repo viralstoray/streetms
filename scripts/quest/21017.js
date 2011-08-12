@@ -59,37 +59,3 @@ function start(mode, type, selection) {
 		qm.dispose();
 	}
 }
-
-function end(mode, type, selection) {
-    status++;
-    if (mode != 1) {
-		if(type == 1 && mode == 0) {
-			qm.sendOk("Aran, you cannot turn away from your destiny!");
-			qm.dispose();
-			return;
-		}else{
-			qm.dispose();
-			return;
-		}
-	}
-	
-	if (status == 0) {
-		qm.sendNext("You were able to successfully defeat all the Murumurus. Were they enough for you to get some training done? I guess you'll need to take on about...300...of them now?\r\n#b#L0#(Oh heck no...)#l#k");
-	} else if (status == 1) {
-		qm.sendOk("Well, that was wishful thinking. You look like your stamina has significantly improved already. I don't think you'll need to go through 300 of them now.\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n#v2000022# 25 #t2000022#\r\n#v2000023# 25 #t2000023#\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 550 exp");
-	} else if (status == 1) {
-		if (qm.canHold(2000022) && qm.canHold(2000023)) {
-			qm.forceCompleteQuest();
-			if (qm.isQuestCompleted(21016)) {
-				qm.gainExp(550);
-				qm.gainItem(2000022, 25);
-				qm.gainItem(2000023, 25);
-			}
-			qm.sendOk("Now I want you to go through a physical fitness test to see if you're ready for more. Talk to me when you're ready.", 9);
-			qm.dispose();
-		} else {
-			qm.dropMessage(1,"Your inventory is full");   
-			qm.dispose();
-		}
-	}
-}

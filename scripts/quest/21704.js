@@ -38,10 +38,14 @@ function start(mode, type, selection) {
 	}
 	
 	if (status == 0) {
-		qm.sendAcceptDecline("Shall we continue with your Basic Training? Before accepting, please make sure you have properly equipped your sword and your skills and potions are readily accessible.");
+		qm.sendNext("How did the training go? The penguin Teacher Puo likes to exaggerate and it worried me knowing that he has bouts of Alzheimer's, but I'm sure he helped you. He's been studying the skills of heroes for a very long time.", 9);
 	} else if (status == 1) {
+		qm.sendNextPrev("#b(You tell her that you were able to remember the Combo Ability skill.)#k", 3);
+	} else if (status == 2) {
+		qm.sendAcceptDecline("That's great! Honestly, though, I think it has less to do with the method of Puo's training and more to do with your body remembering its old abilities. #bI'm sure your body will remember more skills as you continue to train!#k\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 500 exp");
+	} else if (status == 3) {
 		qm.forceStartQuest();
-		qm.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow3");
+		qm.forceCompleteQuest();
 		qm.dispose();
 	}
 }

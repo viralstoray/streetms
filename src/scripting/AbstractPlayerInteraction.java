@@ -426,4 +426,8 @@ public class AbstractPlayerInteraction {
     public Pyramid getPyramid() {
         return (Pyramid) getPlayer().getPartyQuest();
     }
+    
+    public void teachSkill(int id, int level, int masterlevel) {
+        c.getPlayer().changeSkillLevel(SkillFactory.getSkill(id), (byte) level, masterlevel, -1);
+    }
 }

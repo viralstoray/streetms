@@ -49,35 +49,3 @@ function start(mode, type, selection) {
 		qm.dispose();
 	}
 }
-
-function end(mode, type, selection) {
-    status++;
-    if (mode != 1) {
-		if(type == 1 && mode == 0) {
-			qm.sendOk("Aran, you cannot turn away from your destiny!");
-			qm.dispose();
-			return;
-		}else{
-			qm.dispose();
-			return;
-		}
-	}
-	
-	if (status == 0) {
-		qm.sendOk("Were you able to defeat the Murupas? I mean, those monsters are the easiest ones you can find around here. So easy that you can swing a sword around blindfolded and still defeat them. C'mon, a hero that's even slower than a penguin? That's embarrassing...\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n#v2000022# 15 #t2000022#\r\n#v2000023# 15 #t2000023#\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 320 exp");
-	} else if (status == 1) {
-		if (qm.canHold(2000022) && qm.canHold(2000023)) {
-			qm.forceCompleteQuest();
-			if (qm.isQuestCompleted(21015)) {
-				qm.gainExp(320);
-				qm.gainItem(2000022, 15);
-				qm.gainItem(2000023, 15);
-				qm.dispose();
-			}
-			qm.sendOk("That was a bit better than the penguins, but still not enough. Let's move to the next level. Talk to me when you're ready.", 9);
-		} else {
-			qm.dropMessage(1,"Your inventory is full");   
-			qm.dispose();
-		}
-	}
-}

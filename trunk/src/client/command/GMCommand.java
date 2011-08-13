@@ -14,6 +14,7 @@ import constants.ItemConstants;
 import java.io.File;
 import java.sql.PreparedStatement;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import net.server.Channel;
 import net.server.Server;
@@ -125,6 +126,10 @@ public class GMCommand {
         } else if (sub[0].equals("gmshop")) {
             MapleShopFactory.getInstance().getShop(1337).sendShop(c);
         } else if (sub[0].equals("gmtext")) {
+            if (sub.length == 0) {
+                player.message("Usage: !gmtext normal/whitebg/blue/pink/yellow/orange/purple/green");
+                return true;
+            }
             sub[1] = sub[1].toLowerCase();
             if (sub[1].equals("normal")) {
                 player.setGMText(0);
@@ -261,11 +266,11 @@ public class GMCommand {
                 Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(1, joinStringFrom(sub, 2)));
             } else if (sub[1].equalsIgnoreCase("n")) {
                 Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(0, joinStringFrom(sub, 2)));
-            } else if (sub[1].equalsIgnoreCase("m")) {
+            /*} else if (sub[1].equalsIgnoreCase("m")) {
                 Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(2, joinStringFrom(sub, 2)));
             } else if (sub[1].equalsIgnoreCase("s")) {
                 Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(3, joinStringFrom(sub, 2)));
-            } else if (sub[1].equalsIgnoreCase("r")) {
+            */} else if (sub[1].equalsIgnoreCase("r")) {
                 Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(5, joinStringFrom(sub, 2)));
             } else if (sub[1].equalsIgnoreCase("b")) {
                 Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(6, joinStringFrom(sub, 2)));
@@ -284,24 +289,26 @@ public class GMCommand {
             }
         } else if (sub[0].equals("search") || sub[0].equals("lookup")) {
             StringBuilder sb = new StringBuilder();
+            sub[1] = sub[1].toLowerCase();
             if (sub.length > 2) {
                 String search = joinStringFrom(sub, 2);
                 MapleData data = null;
                 MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(new File("wz/String.wz"));
-                if (!sub[1].equals("ITEM")) {
-                    if (sub[1].equals("NPC")) {
+                if (!sub[1].equals("item")) {
+                    if (sub[1].equals("npc")) {
                         data = dataProvider.getData("Npc.img");
-                    } else if (sub[1].equals("MOB") || sub[1].equals("MONSTER")) {
+                    } else if (sub[1].equals("mob") || sub[1].equals("monster")) {
                         data = dataProvider.getData("Mob.img");
-                    } else if (sub[1].equals("SKILL")) {
+                    } else if (sub[1].equals("skill")) {
                         data = dataProvider.getData("Skill.img");
-                    } else if (sub[1].equals("MAP")) {
-                        sb.append("#bUse the '/m' command to find a map. If it finds a map with the same name, it will warp you to it.");
+                    } else if (sub[1].equals("map")) {
+                        sb.append("#bUse the !maps command to find a map.");
                     } else {
-                        sb.append("#bInvalid search.\r\nSyntax: '/search [type] [name]', where [type] is NPC, ITEM, MOB, or SKILL.");
+                        sb.append("#bInvalid search.\r\nSyntax: '!search [type] [name]', where [type] is NPC, ITEM, MOB, or SKILL.");
                     }
                     if (data != null) {
                         String name;
+                        player.message("Searching...");
                         for (MapleData searchData : data.getChildren()) {
                             name = MapleDataTool.getString(searchData.getChildByPath("name"), "NO-NAME");
                             if (name.toLowerCase().contains(search.toLowerCase())) {
@@ -326,7 +333,7 @@ public class GMCommand {
                     sb.append("#bNo ").append(sub[1].toLowerCase()).append("s found.");
                 }
             } else {
-                sb.append("#bInvalid search.\r\nSyntax: '/search [type] [name]', where [type] is NPC, ITEM, MOB, or SKILL.");
+                sb.append("#bInvalid search.\r\nSyntax: '!search [type] [name]', where [type] is NPC, ITEM, MOB, or SKILL.");
             }
             c.announce(MaplePacketCreator.getNPCTalk(9010000, (byte) 0, sb.toString(), "00 00", (byte) 0));
         } else if (sub[0].equals("setall")) {
@@ -351,6 +358,44 @@ public class GMCommand {
                 time *= Integer.parseInt(sub[1]);
             }
             TimerManager.getInstance().schedule(Server.getInstance().shutdown(false), time);
+        } else if (sub[0].equals("smega")) {
+            if (sub.length == 0) {
+                player.message("Usage: !smega [love/cloud/diablo] text");
+                return true;
+            }
+            String[] lines = {"", "", "", ""};
+            String text = joinStringFrom(sub, 2);
+            int item = 0;
+            if (sub[1].equals("love")) {
+                item = 5390002;
+            } else if (sub[1].equals("cloud")) {
+                item = 5390001;
+            } else if (sub[1].equals("diablo")) {
+                item = 5390000;
+            } else {
+                player.message("Usage: !smega [love/cloud/diablo] text");
+            }
+            if (text.length() > 30) {
+                lines[0] = text.substring(0, 10);
+                lines[1] = text.substring(10, 20);
+                lines[2] = text.substring(20, 30);
+                lines[3] = text.substring(30);
+            } else if (text.length() > 20) {
+                lines[0] = text.substring(0, 10);
+                lines[1] = text.substring(10, 20);
+                lines[2] = text.substring(20);
+            } else if (text.length() > 10) {
+                lines[0] = text.substring(0, 10);
+                lines[1] = text.substring(10);
+            } else if (text.length() <= 10) {
+                lines[0] = text;
+            }
+            LinkedList<String> list = new LinkedList<String>();
+            list.add(lines[0]);
+            list.add(lines[1]);
+            list.add(lines[2]);
+            list.add(lines[3]);
+            Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.getAvatarMega(player, "", c.getChannel(), item, list, true));
         } else if (sub[0].equals("sp")) {
             player.setRemainingSp(Integer.parseInt(sub[1]));
             player.updateSingleStat(MapleStat.AVAILABLESP, player.getRemainingSp());

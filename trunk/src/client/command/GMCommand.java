@@ -13,6 +13,7 @@ import client.SkillFactory;
 import constants.ItemConstants;
 import java.io.File;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +30,7 @@ import server.MapleShopFactory;
 import server.TimerManager;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
+import server.life.MapleNPC;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -286,6 +288,77 @@ public class GMCommand {
                     }
                     player.dropMessage(s.substring(0, s.length() - 2));
                 }
+            }
+        } else if (sub[0].equals("pmob")) {
+            int npcId = Integer.parseInt(sub[1]);
+            int mobTime = Integer.parseInt(sub[2]);
+            int xpos = player.getPosition().x;
+            int ypos = player.getPosition().y;
+            int fh = player.getMap().getFootholds().findBelow(player.getPosition()).getId();
+            if (sub[2] == null) {
+                mobTime = 0;
+            }
+            MapleMonster mob = MapleLifeFactory.getMonster(npcId);
+            if (mob != null && !mob.getName().equals("MISSINGNO")) {
+                mob.setPosition(player.getPosition());
+                mob.setCy(ypos);
+                mob.setRx0(xpos + 50);
+                mob.setRx1(xpos - 50);
+                mob.setFh(fh);
+                try {
+                    PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("INSERT INTO spawns ( idd, f, fh, cy, rx0, rx1, type, x, y, mid, mobtime ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
+                    ps.setInt(1, npcId);
+                    ps.setInt(2, 0);
+                    ps.setInt(3, fh);
+                    ps.setInt(4, ypos);
+                    ps.setInt(5, xpos + 50);
+                    ps.setInt(6, xpos - 50);
+                    ps.setString(7, "m");
+                    ps.setInt(8, xpos);
+                    ps.setInt(9, ypos);
+                    ps.setInt(10, player.getMapId());
+                    ps.setInt(11, mobTime);
+                    ps.executeUpdate();
+                } catch (SQLException e) {
+                    player.dropMessage("Failed to save MOB to the database");
+                }
+                player.getMap().addMonsterSpawn(mob, mobTime, 0);
+            } else {
+                player.dropMessage("You have entered an invalid Mob-Id");
+            }
+        } else if (sub[0].equals("pnpc")) {
+            int npcId = Integer.parseInt(sub[1]);
+            MapleNPC npc = MapleLifeFactory.getNPC(npcId);
+            int xpos = player.getPosition().x;
+            int ypos = player.getPosition().y;
+            int fh = player.getMap().getFootholds().findBelow(player.getPosition()).getId();
+            if (npc != null && !npc.getName().equals("MISSINGNO")) {
+                npc.setPosition(player.getPosition());
+                npc.setCy(ypos);
+                npc.setRx0(xpos + 50);
+                npc.setRx1(xpos - 50);
+                npc.setFh(fh);
+                npc.setCustom(true);
+                try {
+                    PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("INSERT INTO spawns ( idd, f, fh, cy, rx0, rx1, type, x, y, mid ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
+                    ps.setInt(1, npcId);
+                    ps.setInt(2, 0);
+                    ps.setInt(3, fh);
+                    ps.setInt(4, ypos);
+                    ps.setInt(5, xpos + 50);
+                    ps.setInt(6, xpos - 50);
+                    ps.setString(7, "n");
+                    ps.setInt(8, xpos);
+                    ps.setInt(9, ypos);
+                    ps.setInt(10, player.getMapId());
+                    ps.executeUpdate();
+                } catch (SQLException e) {
+                    player.dropMessage("Failed to save NPC to the database");
+                }
+                player.getMap().addMapObject(npc);
+                player.getMap().broadcastMessage(MaplePacketCreator.spawnNPC(npc));
+            } else {
+                player.dropMessage("You have entered an invalid Npc-Id");
             }
         } else if (sub[0].equals("search") || sub[0].equals("lookup")) {
             StringBuilder sb = new StringBuilder();

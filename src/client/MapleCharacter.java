@@ -471,8 +471,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
 
     public void ban(String reason) {
         try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("UPDATE accounts SET banned = 1, banreason = ? WHERE id = ?");
+            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("UPDATE accounts SET banned = 1, banreason = ? WHERE id = ?");
             ps.setString(1, reason);
             ps.setInt(2, accountid);
             ps.executeUpdate();
@@ -485,18 +484,17 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     public static boolean ban(String id, String reason, boolean accountId) {
         PreparedStatement ps = null;
         try {
-            Connection con = DatabaseConnection.getConnection();
             if (id.matches("/[0-9]{1,3}\\..*")) {
-                ps = con.prepareStatement("INSERT INTO ipbans VALUES (DEFAULT, ?)");
+                ps = DatabaseConnection.getConnection().prepareStatement("INSERT INTO ipbans VALUES (DEFAULT, ?)");
                 ps.setString(1, id);
                 ps.executeUpdate();
                 ps.close();
                 return true;
             }
             if (accountId) {
-                ps = con.prepareStatement("SELECT id FROM accounts WHERE name = ?");
+                ps = DatabaseConnection.getConnection().prepareStatement("SELECT id FROM accounts WHERE name = ?");
             } else {
-                ps = con.prepareStatement("SELECT accountid FROM characters WHERE name = ?");
+                ps = DatabaseConnection.getConnection().prepareStatement("SELECT accountid FROM characters WHERE name = ?");
             }
 
             boolean ret = false;
@@ -919,8 +917,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             skills.remove(skill);
             this.client.announce(MaplePacketCreator.updateSkill(skill.getId(), newLevel, newMasterlevel, -1)); //Shouldn't use expiration anymore :)
             try {
-                Connection con = DatabaseConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement("DELETE FROM skills WHERE skillid = ? AND characterid = ?");
+                PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("DELETE FROM skills WHERE skillid = ? AND characterid = ?");
                 ps.setInt(1, skill.getId());
                 ps.setInt(2, id);
                 ps.execute();
@@ -1020,7 +1017,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     public void deleteGuild(int guildId) {
         try {
             Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("UPDATE characters SET guildid = 0, guildrank = 5 WHERE guildid = ?");
+            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("UPDATE characters SET guildid = 0, guildrank = 5 WHERE guildid = ?");
             ps.setInt(1, guildId);
             ps.execute();
             ps.close();
@@ -4756,8 +4753,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     
     public void addToLottery() {
         try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("INSERT INTO lottery (charid) VALUES(?)");
+            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("INSERT INTO lottery (charid) VALUES(?)");
             ps.setInt(1, client.getPlayer().getId());
             ps.execute();
             ps.close();
@@ -4769,8 +4765,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     public int getCurrentLotteryAmount() {
         try {
             int numRows = 0;
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM lottery");
+            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT * FROM lottery");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -4793,8 +4788,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     
     public int getLotteryWinner() {
         try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT charid FROM lottery ORDER BY RAND() LIMIT 1");
+            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT charid FROM lottery ORDER BY RAND() LIMIT 1");
             ResultSet rs = ps.executeQuery();
             int winner = rs.getInt("charid");
             rs.close();
@@ -4808,8 +4802,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     
     public void resetLottery() {
         try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("TRUNCATE TABLE lottery; ALTER TABLE lottery AUTO_INCREMENT = 1;");
+            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("TRUNCATE TABLE lottery; ALTER TABLE lottery AUTO_INCREMENT = 1;");
             ps.execute();
             ps.close();
         } catch (SQLException ex) {

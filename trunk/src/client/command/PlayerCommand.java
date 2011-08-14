@@ -20,9 +20,17 @@ public class PlayerCommand {
             NPCScriptManager.getInstance().dispose(c);
             c.announce(MaplePacketCreator.enableActions());
             player.message("[StreetSys] Done.");
+        } else if (sub[0].equalsIgnoreCase("fm")) {
+            if (player.getMapId() >= 910000000 && player.getMapId() <= 910000019)
+                player.message("[StreetSys] You are already in the Free Market.");
+            else {
+                player.saveLocation("FREE_MARKET");
+                player.setMap(910000000);
+            }
         } else if (sub[0].equalsIgnoreCase("help")) {
             player.message("**************************************************");
             player.message("@dispose - when you're stuck");
+            player.message("@fm - warps you to the Free Market");
             player.message("@rates - lists the current server rates");
             player.message("@save - saves your character information");
             player.message("@str/@dex/@int@luk - allocates AP into the desired stat");

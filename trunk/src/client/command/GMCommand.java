@@ -97,6 +97,15 @@ public class GMCommand {
             if (player.gmLevel() > chr.gmLevel()) {
                 chr.getClient().disconnect();
             }
+        } else if (sub[0].equals("!clearshops")) {
+            try {
+                player.message("Attempting to reload all shops. This may take awhile...");
+                MapleShopFactory.getInstance().reloadShops();
+                player.message("Completed.");
+            } catch (Exception re) {
+                player.message("RemoteException occurred while attempting to reload shops.");
+                System.out.println("RemoteException occurred while attempting to reload shops: " + re);
+            }
         } else if (sub[0].equals("dispose")) {
             NPCScriptManager.getInstance().dispose(c);
             c.getSession().write(MaplePacketCreator.enableActions());

@@ -23,11 +23,10 @@
  * By kevintjuh93
  */
 
-var status;
+var status = -1;
 
 function start() {
-    status = -1;
-    action(1, 0, 0);
+		cm.sendSimple("What would you like to do?\r\n#b#L0#Shop at FM Shop#l\r\n#L1#Retrieve items or mesos#l#k");
 } 
 
 function action(mode, type, selection) {
@@ -38,16 +37,21 @@ function action(mode, type, selection) {
         return;
     }
 	if (status == 0)
-		if (!cm.hasMerchant() && cm.hasMerchantItems()) {
-			cm.showFredrick();
+		if (selection == 0) {
+			cm.getPlayer().getShop(1338);
 			cm.dispose();
-		} else {
-			if (cm.hasMerchant()) {
-				cm.sendOk("You have a Merchant open.");
+		} else if (selection == 1) {
+			if (!cm.hasMerchant() && cm.hasMerchantItems()) {
+				cm.showFredrick();
 				cm.dispose();
 			} else {
-				cm.sendOk("You don't have any items or mesos to be retrieved.");
-				cm.dispose();
+				if (cm.hasMerchant()) {
+					cm.sendOk("You have a Merchant open.");
+					cm.dispose();
+				} else {
+					cm.sendOk("You don't have any items or mesos to be retrieved.");
+					cm.dispose();
+				}
 			}
 		}
 }

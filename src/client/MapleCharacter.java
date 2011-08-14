@@ -94,6 +94,7 @@ import server.MapleMiniGame;
 import server.MaplePlayerShop;
 import server.MaplePortal;
 import server.MapleShop;
+import server.MapleShopFactory;
 import server.MapleStatEffect;
 import server.MapleStorage;
 import server.MapleTrade;
@@ -2060,6 +2061,10 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
 
     public MapleShop getShop() {
         return shop;
+    }
+    
+    public void getShop(int id) {
+        MapleShopFactory.getInstance().getShop(id).sendShop(client);
     }
 
     public Map<ISkill, SkillEntry> getSkills() {

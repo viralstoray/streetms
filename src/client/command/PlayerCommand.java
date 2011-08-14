@@ -3,7 +3,6 @@ package client.command;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleStat;
-import constants.ServerConstants;
 import scripting.npc.NPCScriptManager;
 import tools.MaplePacketCreator;
 
@@ -16,30 +15,31 @@ public class PlayerCommand {
     
     public static boolean execute(MapleClient c, String[] sub) {
         MapleCharacter player = c.getPlayer();
-        if (sub[0].equalsIgnoreCase("dispose")) {
+        if (sub[0].equals("dispose")) {
             NPCScriptManager.getInstance().dispose(c);
             c.announce(MaplePacketCreator.enableActions());
             player.message("[StreetSys] Done.");
-        } else if (sub[0].equalsIgnoreCase("fm")) {
+        } else if (sub[0].equals("fm")) {
             if (player.getMapId() >= 910000000 && player.getMapId() <= 910000019)
                 player.message("[StreetSys] You are already in the Free Market.");
             else {
                 player.saveLocation("FREE_MARKET");
                 player.setMap(910000000);
             }
-        } else if (sub[0].equalsIgnoreCase("help")) {
+        } else if (sub[0].equals("help")) {
             player.message("**************************************************");
             player.message("@dispose - when you're stuck");
             player.message("@fm - warps you to the Free Market");
+            player.message("@gms - gives you a list of all the online GMs");
             player.message("@rates - lists the current server rates");
             player.message("@save - saves your character information");
             player.message("@str/@dex/@int@luk - allocates AP into the desired stat");
             player.message("**************************************************");
-        } else if (sub[0].equalsIgnoreCase("rates")) {
+        } else if (sub[0].equals("rates")) {
             player.message("[StreetSys] Current EXP Rate: " + c.getWorldServer().getExpRate() + "x");
             player.message("[StreetSys] Current MESO Rate: " + c.getWorldServer().getMesoRate() + "x");
             player.message("[StreetSys] Current DROP Rate: " + c.getWorldServer().getDropRate() + "x");
-        } else if (sub[0].equalsIgnoreCase("save")) {
+        } else if (sub[0].equals("save")) {
             if (player.canUrgentSave()) {
                 player.saveToDB(true);
                 player.message("[StreetSys] Your character information has been saved.");
@@ -49,22 +49,22 @@ public class PlayerCommand {
                 player.markPendingSave();
                 player.message("[StreetSys] You can only save once per session, so on logout your information will be saved");
             }
-        } else if (sub[0].equalsIgnoreCase("str") || sub[0].equalsIgnoreCase("int") || sub[0].equalsIgnoreCase("luk") || sub[0].equalsIgnoreCase("dex")) {
+        } else if (sub[0].equals("str") || sub[0].equals("int") || sub[0].equals("luk") || sub[0].equals("dex")) {
             int amount = Integer.parseInt(sub[1]);
             if (amount > 0 && amount <= player.getRemainingAp() && amount < 31997) { 
-                if (sub[0].equalsIgnoreCase("str") && amount + player.getStr() < 32001) {
+                if (sub[0].equals("str") && amount + player.getStr() < 32001) {
                     player.setStr(player.getStr() + amount); 
                     player.updateSingleStat(MapleStat.STR, player.getStr());
                     player.message("[StreetSys] " + amount + " STR has been added, making your total: " + player.getStr());
-                } else if (sub[0].equalsIgnoreCase("int") && amount + player.getInt() < 32001) {
+                } else if (sub[0].equals("int") && amount + player.getInt() < 32001) {
                     player.setInt(player.getInt() + amount); 
                     player.updateSingleStat(MapleStat.INT, player.getInt());
                     player.message("[StreetSys] " + amount + " INT has been added, making your total: " + player.getInt());
-                } else if (sub[0].equalsIgnoreCase("luk") && amount + player.getLuk() < 32001) {
+                } else if (sub[0].equals("luk") && amount + player.getLuk() < 32001) {
                     player.setLuk(player.getLuk() + amount); 
                     player.updateSingleStat(MapleStat.LUK, player.getLuk());
                     player.message("[StreetSys] " + amount + " LUK has been added, making your total: " + player.getLuk());
-                } else if (sub[0].equalsIgnoreCase("dex") && amount + player.getDex() < 32001) {
+                } else if (sub[0].equals("dex") && amount + player.getDex() < 32001) {
                     player.setDex(player.getDex() + amount); 
                     player.updateSingleStat(MapleStat.DEX, player.getDex());
                     player.message("[StreetSys] " + amount + " DEX has been added, making your total: " + player.getDex());

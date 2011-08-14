@@ -44,7 +44,7 @@ function action(mode, type, selection) {
 					cm.gainMeso(-payAmount);
 					cm.getPlayer().addToLottery();
 					var oldAmount = cm.getPlayer().getCurrentLotteryAmount();
-					cm.sendOk("The current lottery amount is at #r" + mesoSlang(oldAmount) + " (" + mesoComma(oldAmount) + ") mesos#k, = #r#e" + mesoSlang(oldAmount / 1000) + " (" + mesoComma(oldAmount / 1000) + ") NX Cash.#k#n");
+					cm.sendOk("The current lottery amount is now at #r" + mesoSlang(oldAmount) + " (" + mesoComma(oldAmount) + ") mesos#k = #r#e" + mesoSlang(oldAmount / 1000) + " (" + mesoComma(oldAmount / 1000) + ") NX Cash.#k#n");
 					cm.dispose();
 					return;
 				} else {

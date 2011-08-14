@@ -14,6 +14,7 @@ import constants.ItemConstants;
 import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -82,7 +83,7 @@ public class GMCommand {
             } else {
                 if (sub[1].equals("map")) {
                     for (MapleCharacter chr : player.getMap().getCharacters()) {
-                        player.getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(9300166), chr.getPosition());
+                        chr.getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(9300166), chr.getPosition());
                     }
                 } else {
                     MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[1]);
@@ -90,6 +91,18 @@ public class GMCommand {
                     victim.getMap().spawnMonsterOnGroundBelow(mob, victim.getPosition());
                 }
             }
+        } else if (sub[0].equals("checklottery")) {
+            int amount = player.getCurrentLotteryAmount();
+            String newAmount = "";
+            if (amount > 999999999)
+		newAmount = (amount / 1000000000) + "B";
+            else if (amount > 999999)
+		newAmount = (amount / 1000000) + "M";
+            else if (amount > 999)
+		newAmount = (amount / 1000) + "K";
+            else
+                newAmount = Integer.toString(amount);
+            player.message("The current lottery amount is " + newAmount + " mesos = " + (amount / 1000) + " NX.");
         } else if (sub[0].equals("cleardrops")) {
             player.getMap().clearDrops(player);
         } else if (sub[0].equals("dc")) {
@@ -97,7 +110,7 @@ public class GMCommand {
             if (player.gmLevel() > chr.gmLevel()) {
                 chr.getClient().disconnect();
             }
-        } else if (sub[0].equals("!clearshops")) {
+        } else if (sub[0].equals("clearshops")) {
             try {
                 player.message("Attempting to reload all shops. This may take awhile...");
                 MapleShopFactory.getInstance().reloadShops();
@@ -181,7 +194,19 @@ public class GMCommand {
                 player.message("That map doesn't exist. You can find the map list with !maps.");
             }
         } else if (sub[0].equals("heal")) {
-            player.setHpMp(30000);
+            if (sub.length == 2) {
+                if (sub[1].equals("map")) {
+                    for (MapleCharacter chr : player.getMap().getCharacters()) {
+                        chr.setHpMp(30000);
+                        chr.message("The map has been healed by " + player.getName());
+                    }
+                } else {
+                    cserv.getPlayerStorage().getCharacterByName(sub[1]).setHpMp(30000);
+                    cserv.getPlayerStorage().getCharacterByName(sub[1]).message("You have been healed by " + player.getName());
+                }
+            } else {
+                player.setHpMp(30000);
+            }
         } else if (sub[0].equals("hp")) {
             player.setMaxHp(Integer.parseInt(sub[0]));
             player.updateSingleStat(MapleStat.MAXHP, Integer.parseInt(sub[0]));
@@ -222,8 +247,17 @@ public class GMCommand {
             victim.changeJob(MapleJob.getById(Integer.parseInt(sub[2])));
             player.equipChanged();
         } else if (sub[0].equals("kill")) {
-            cserv.getPlayerStorage().getCharacterByName(sub[1]).setHpMp(0);
-            cserv.getPlayerStorage().getCharacterByName(sub[1]).updateSingleStat(MapleStat.HP, 0);
+            if (sub[0].equals("map")) {
+                for (MapleCharacter chr : player.getMap().getCharacters()) {
+                    if (chr != player) {
+                        chr.setHpMp(0);
+                        chr.message("The map has been killed by " + player.getName());
+                    }
+                }
+            } else {
+                cserv.getPlayerStorage().getCharacterByName(sub[1]).setHpMp(0);
+                cserv.getPlayerStorage().getCharacterByName(sub[1]).message("You have been killed by " + player.getName());
+            }
         } else if (sub[0].equals("killall")) {
             List<MapleMapObject> monsters = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
             MapleMap map = player.getMap();
@@ -298,6 +332,10 @@ public class GMCommand {
                     player.dropMessage(s.substring(0, s.length() - 2));
                 }
             }
+        } else if (sub[0].equals("pap")) {
+            player.getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(8500001), player.getPosition());
+        } else if (sub[0].equals("pianus")) {
+            player.getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(8510000), player.getPosition());
         } else if (sub[0].equals("pmob")) {
             int npcId = Integer.parseInt(sub[1]);
             int mobTime = Integer.parseInt(sub[2]);
@@ -482,8 +520,7 @@ public class GMCommand {
             player.setRemainingSp(Integer.parseInt(sub[1]));
             player.updateSingleStat(MapleStat.AVAILABLESP, player.getRemainingSp());
         } else if (sub[0].equals("suicide")) {
-            player.setHp(0);
-            player.updateSingleStat(MapleStat.HP, 0);
+            player.setHpMp(0);
         } else if (sub[0].equals("unban")) {
             try {
                 PreparedStatement p = DatabaseConnection.getConnection().prepareStatement("UPDATE accounts SET banned = -1 WHERE id = " + MapleCharacter.getIdByName(sub[1]));

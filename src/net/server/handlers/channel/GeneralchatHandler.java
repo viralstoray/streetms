@@ -40,11 +40,13 @@ public final class GeneralchatHandler extends net.AbstractMaplePacketHandler {
             sp[0] = sp[0].toLowerCase().substring(1);
             if (chr.isGM()) {
                 if (!GMCommand.execute(c, sp)) {
-                    chr.getMap().broadcastMessage(MaplePacketCreator.getGMChatText(chr, s, slea.readByte()));
+                    if (!PlayerCommand.execute(c, sp)) {
+                        chr.message(heading + sp[0] + " is not recognized as a command.");
+                    }
                 }
             } else {
                 if (!PlayerCommand.execute(c, sp)) {
-                    chr.getMap().broadcastMessage(MaplePacketCreator.getChatText(chr.getId(), s, false, slea.readByte()));
+                    chr.message(heading + sp[0] + " is not recognized as a command.");
                 }
             }
         // if not, pass it through

@@ -2049,7 +2049,7 @@ public class MaplePacketCreator {
         for (MapleShopItem item : items) {
             mplew.writeInt(item.getItemId());
             mplew.writeInt(item.getPrice());
-            mplew.writeInt(item.getPrice() == 0 ? item.getPitch() : 0); //Perfect Pitch
+            mplew.writeInt(0);
             mplew.writeInt(0); //Can be used x minutes after purchase
             mplew.writeInt(0); //Hmm
             if (!ItemConstants.isRechargable(item.getItemId())) {

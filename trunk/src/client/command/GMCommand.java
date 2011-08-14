@@ -109,7 +109,7 @@ public class GMCommand {
         } else if (sub[0].equals("drawlottery")) {
             MapleCharacter winner = c.getWorldServer().getPlayerStorage().getCharacterById(player.getLotteryWinner());
             winner.giftNX(player.getCurrentLotteryAmount() / 1000);
-            String message = "[Lottery] " + winner.getName() + "has just won " + (player.getCurrentLotteryAmount() / 1000) + " NX Cash by winning the lottery! Congratulations!";
+            String message = "[Lottery] " + winner.getName() + " has just won " + (player.getCurrentLotteryAmount() / 1000) + " NX Cash by winning the lottery! Congratulations!";
             Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(5, message));
             player.resetLottery();
         } else if (sub[0].equals("exprate")) {

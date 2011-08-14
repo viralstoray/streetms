@@ -4790,8 +4790,9 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         try {
             PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT charid FROM lottery ORDER BY RAND() LIMIT 1");
             ResultSet rs = ps.executeQuery();
+            int winner = 0;
             if (rs.next()) {
-                int winner = rs.getInt("charid");
+                winner = rs.getInt("charid");
             }
             rs.close();
             ps.close();
@@ -4804,7 +4805,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     
     public void resetLottery() {
         try {
-            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("TRUNCATE TABLE lottery; ALTER TABLE lottery AUTO_INCREMENT = 1;");
+            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("TRUNCATE TABLE lottery");
             ps.execute();
             ps.close();
         } catch (SQLException ex) {

@@ -4790,7 +4790,9 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         try {
             PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT charid FROM lottery ORDER BY RAND() LIMIT 1");
             ResultSet rs = ps.executeQuery();
-            int winner = rs.getInt("charid");
+            if (rs.next()) {
+                int winner = rs.getInt("charid");
+            }
             rs.close();
             ps.close();
             return winner;

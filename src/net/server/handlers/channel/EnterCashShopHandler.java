@@ -44,7 +44,11 @@ public class EnterCashShopHandler extends AbstractMaplePacketHandler {
                 mc.cancelBuffEffects();
                 mc.cancelExpirationTask();
 		c.announce(MaplePacketCreator.openCashShop(c, false));
-		mc.saveToDB(true);
+                if (mc.isPendingSave()) {
+                    mc.saveToDB(true);
+                } else {
+                    mc.saveEssentialToDB();
+                }
 		mc.getCashShop().open(true);
 		mc.getMap().removePlayer(mc);
 		c.announce(MaplePacketCreator.showCashInventory(c));                

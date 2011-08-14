@@ -76,25 +76,11 @@ public final class CreateCharHandler extends AbstractMaplePacketHandler {
         //CHECK FOR EQUIPS
         MapleInventory equip = newchar.getInventory(MapleInventoryType.EQUIPPED);
         if (newchar.isGM()) {
+            // coveted GM hat
             IItem eq_hat = MapleItemInformationProvider.getInstance().getEquipById(1002140);
             eq_hat.setPosition((byte) -1);
             equip.addFromDB(eq_hat);
-            top = 1042003;
-            bottom = 1062007;
-            weapon = 1322013;
         }
-        IItem eq_top = MapleItemInformationProvider.getInstance().getEquipById(top);
-        eq_top.setPosition((byte) -5);
-        equip.addFromDB(eq_top);
-        IItem eq_bottom = MapleItemInformationProvider.getInstance().getEquipById(bottom);
-        eq_bottom.setPosition((byte) -6);
-        equip.addFromDB(eq_bottom);
-        IItem eq_shoes = MapleItemInformationProvider.getInstance().getEquipById(shoes);
-        eq_shoes.setPosition((byte) -7);
-        equip.addFromDB(eq_shoes);
-        IItem eq_weapon = MapleItemInformationProvider.getInstance().getEquipById(weapon);
-        eq_weapon.setPosition((byte) -11);
-        equip.addFromDB(eq_weapon.copy());
         newchar.saveToDB(false);
         c.announce(MaplePacketCreator.addNewCharEntry(newchar));
     }

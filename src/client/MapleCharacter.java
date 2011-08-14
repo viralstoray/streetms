@@ -163,6 +163,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     private int omokwins, omokties, omoklosses, matchcardwins, matchcardties, matchcardlosses;
     private int married;
     private int gmtext;
+    private boolean urgentSave = true, pendingSave = false;
     private long dojoFinish, lastfametime, lastUsedCashItem, lastHealed;
     private transient int localmaxhp, localmaxmp, localstr, localdex, localluk, localint_, magic, watk;
     private boolean hidden, canDoor = true, Berserk, hasMerchant;
@@ -3602,6 +3603,162 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             } catch (Exception e) {
             }
         }
+        if (pendingSave) {
+            pendingSave = false;
+        } else {
+            urgentSave = false;
+        }
+    }
+    
+    public void saveEssentialToDB() {
+        Connection con = DatabaseConnection.getConnection();
+        try {
+            con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+            con.setAutoCommit(false);
+            PreparedStatement ps;
+            ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpMpUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
+            if (gmLevel < 1 && level > 199) {
+                ps.setInt(1, isCygnus() ? 120 : 200);
+            } else {
+                ps.setInt(1, level);
+            }
+            ps.setInt(2, fame);
+            ps.setInt(3, str);
+            ps.setInt(4, dex);
+            ps.setInt(5, luk);
+            ps.setInt(6, int_);
+            ps.setInt(7, Math.abs(exp.get()));
+            ps.setInt(8, Math.abs(gachaexp.get()));
+            ps.setInt(9, hp);
+            ps.setInt(10, mp);
+            ps.setInt(11, maxhp);
+            ps.setInt(12, maxmp);
+            ps.setInt(13, remainingSp);
+            ps.setInt(14, remainingAp);
+            ps.setInt(15, gmLevel);
+            ps.setInt(16, skinColor.getId());
+            ps.setInt(17, gender);
+            ps.setInt(18, job.getId());
+            ps.setInt(19, hair);
+            ps.setInt(20, face);
+            if (map == null) {
+                if (getJob() == MapleJob.BEGINNER) {
+                    ps.setInt(21, 0);
+                } else if (getJob() == MapleJob.NOBLESSE) {
+                    ps.setInt(21, 130030000);
+                } else if (getJob() == MapleJob.LEGEND) {
+                    ps.setInt(21, 914000000);
+                } else if (getJob() == MapleJob.GM || getJob() == MapleJob.SUPERGM) {
+                    ps.setInt(21, 180000000);
+                }
+            } else {
+                if (map.getForcedReturnId() != 999999999) {
+                    ps.setInt(21, map.getForcedReturnId());
+                } else {
+                    ps.setInt(21, map.getId());
+                }
+            }
+            ps.setInt(22, meso.get());
+            ps.setInt(23, hpMpApUsed);
+            if (map == null || map.getId() == 610020000 || map.getId() == 610020001) {
+                ps.setInt(24, 0);
+            } else {
+                MaplePortal closest = map.findClosestSpawnpoint(getPosition());
+                if (closest != null) {
+                    ps.setInt(24, closest.getId());
+                } else {
+                    ps.setInt(24, 0);
+                }
+            }
+            if (party != null) {
+                ps.setInt(25, party.getId());
+            } else {
+                ps.setInt(25, -1);
+            }
+            ps.setInt(26, buddylist.getCapacity());
+            if (messenger != null) {
+                ps.setInt(27, messenger.getId());
+                ps.setInt(28, messengerposition);
+            } else {
+                ps.setInt(27, 0);
+                ps.setInt(28, 4);
+            }
+            if (maplemount != null) {
+                ps.setInt(29, maplemount.getLevel());
+                ps.setInt(30, maplemount.getExp());
+                ps.setInt(31, maplemount.getTiredness());
+            } else {
+                ps.setInt(29, 1);
+                ps.setInt(30, 0);
+                ps.setInt(31, 0);
+            }
+            for (int i = 1; i < 5; i++) {
+                ps.setInt(i + 31, getSlots(i));
+            }
+            monsterbook.saveCards(getId());
+            ps.setInt(36, bookCover);
+            ps.setInt(37, vanquisherStage);
+            ps.setInt(38, dojoPoints);
+            ps.setInt(39, dojoStage);
+            ps.setInt(40, finishedDojoTutorial ? 1 : 0);
+            ps.setInt(41, vanquisherKills);
+            ps.setInt(42, matchcardwins);
+            ps.setInt(43, matchcardlosses);
+            ps.setInt(44, matchcardties);
+            ps.setInt(45, omokwins);
+            ps.setInt(46, omoklosses);
+            ps.setInt(47, omokties);
+            ps.setInt(48, id);
+            int updateRows = ps.executeUpdate();
+            if (updateRows < 1) {
+                throw new RuntimeException("Character not in database (" + id + ")");
+            }
+            deleteWhereCharacterId(con, "DELETE FROM skills WHERE characterid = ?");
+            ps = con.prepareStatement("INSERT INTO skills (characterid, skillid, skilllevel, masterlevel, expiration) VALUES (?, ?, ?, ?, ?)");
+            ps.setInt(1, id);
+            for (Entry<ISkill, SkillEntry> skill : skills.entrySet()) {
+                ps.setInt(2, skill.getKey().getId());
+                ps.setInt(3, skill.getValue().skillevel);
+                ps.setInt(4, skill.getValue().masterlevel);
+                ps.setLong(5, skill.getValue().expiration);
+                ps.addBatch();
+            }
+            ps.executeBatch();
+            deleteWhereCharacterId(con, "DELETE FROM buddies WHERE characterid = ? AND pending = 0");
+            ps = con.prepareStatement("INSERT INTO buddies (characterid, `buddyid`, `pending`, `group`) VALUES (?, ?, 0, ?)");
+            ps.setInt(1, id);
+            for (BuddylistEntry entry : buddylist.getBuddies()) {
+                if (entry.isVisible()) {
+                    ps.setInt(2, entry.getCharacterId());
+                    ps.setString(3, entry.getGroup());
+                    ps.addBatch();
+                }
+            }
+            ps.executeBatch();
+            if (cashshop != null) {
+                cashshop.save();
+            }
+            if (storage != null) {
+                storage.saveToDB();
+            }
+            ps.close();
+            con.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException se) {
+            }
+        } finally {
+            try {
+                con.setAutoCommit(true);
+                con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+            } catch (Exception e) {
+            }
+        }
+        if (pendingSave) {
+            pendingSave = false;
+        }
     }
 
     public void sendPolice(int greason, String reason, int duration) {
@@ -4817,4 +4974,17 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             System.out.print("Error resetting lottery: " + ex);
         }
     }
+    
+    public boolean canUrgentSave() {
+        return urgentSave;
+    }
+    
+    public void markPendingSave() {
+        if (!pendingSave) pendingSave = true;
+    }
+    
+    public boolean isPendingSave() {
+        return pendingSave;
+    }
+    
 }

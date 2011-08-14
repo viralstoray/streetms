@@ -107,24 +107,6 @@ public class MapleShop {
                 
             } else
                 c.getSession().write(MaplePacketCreator.shopTransaction((byte) 2));
-
-        } else if (item != null && item.getPitch() > 0) {
-                if (c.getPlayer().getInventory(MapleInventoryType.ETC).countById(4310000) >= (long) item.getPitch() * quantity) {
-                    if (MapleInventoryManipulator.checkSpace(c, itemId, quantity, "")) {
-                        if (!ItemConstants.isRechargable(itemId)) {
-                            MapleInventoryManipulator.addById(c, itemId, quantity);
-                            MapleInventoryManipulator.removeById(c, MapleInventoryType.ETC, 4310000, item.getPitch() * quantity, false, false);
-                        } else {
-                            short slotMax = ii.getSlotMax(c, item.getItemId());
-                            quantity = slotMax;
-                            MapleInventoryManipulator.addById(c, itemId, quantity);
-                            MapleInventoryManipulator.removeById(c, MapleInventoryType.ETC, 4310000, item.getPitch() * quantity, false, false);
-                        }
-                        c.getSession().write(MaplePacketCreator.shopTransaction((byte) 0));
-                    } else
-                        c.getSession().write(MaplePacketCreator.shopTransaction((byte) 3));
-                }
-
             } else if (c.getPlayer().getInventory(MapleInventoryType.CASH).countById(token) != 0) {
                 int amount = c.getPlayer().getInventory(MapleInventoryType.CASH).countById(token);
                 int value = amount * tokenvalue;
@@ -239,17 +221,17 @@ public class MapleShop {
             List<Integer> recharges = new ArrayList<Integer>(rechargeableItems);
             while (rs.next()) {
                 if (ItemConstants.isRechargable(rs.getInt("itemid"))) {
-                    MapleShopItem starItem = new MapleShopItem((short) 1, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch"));
+                    MapleShopItem starItem = new MapleShopItem((short) 1, rs.getInt("itemid"), rs.getInt("price"));
                     ret.addItem(starItem);
                     if (rechargeableItems.contains(starItem.getItemId())) {
                         recharges.remove(Integer.valueOf(starItem.getItemId()));
                     }
                 } else {
-                    ret.addItem(new MapleShopItem((short) 1000, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch")));
+                    ret.addItem(new MapleShopItem((short) 1000, rs.getInt("itemid"), rs.getInt("price")));
                 }
             }
             for (Integer recharge : recharges) {
-                ret.addItem(new MapleShopItem((short) 1000, recharge.intValue(), 0, 0));
+                ret.addItem(new MapleShopItem((short) 1000, recharge.intValue(), 0));
             }
             rs.close();
             ps.close();

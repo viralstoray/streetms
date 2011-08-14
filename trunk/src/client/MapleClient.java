@@ -595,7 +595,7 @@ public class MapleClient {
             if (player != null && isLoggedIn()) {
                 removePlayer();
                 player.saveToDB(true);
-
+                
                 World worlda = getWorldServer();
                 player.saveCooldowns();
                 player.unequipPendantOfSpirit();

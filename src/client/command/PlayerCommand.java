@@ -3,6 +3,9 @@ package client.command;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleStat;
+import java.util.ArrayList;
+import net.server.Channel;
+import net.server.Server;
 import scripting.npc.NPCScriptManager;
 import tools.MaplePacketCreator;
 
@@ -26,6 +29,19 @@ public class PlayerCommand {
                 player.saveLocation("FREE_MARKET");
                 player.setMap(910000000);
             }
+        } else if (sub[0].equals("gms")) {
+            String names = "";
+            for (Channel ch : Server.getInstance().getChannelsFromWorld(player.getWorld())) {
+                for (MapleCharacter chr : ch.getPlayerStorage().getAllCharacters()) {
+                    if (chr.isGM()) {
+                        names += chr.getName() + ", ";
+                    }
+                }
+            }
+            if (names == "")
+                player.message("Online GM's: none");
+            else
+                player.message("Online GM's:" + names);
         } else if (sub[0].equals("help")) {
             player.message("**************************************************");
             player.message("@dispose - when you're stuck");

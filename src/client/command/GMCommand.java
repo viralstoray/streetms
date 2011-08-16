@@ -24,6 +24,7 @@ import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import scripting.npc.NPCScriptManager;
+import scripting.portal.PortalScriptManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MapleShopFactory;
@@ -108,15 +109,6 @@ public class GMCommand {
             MapleCharacter chr = c.getWorldServer().getPlayerStorage().getCharacterByName(sub[1]);
             if (player.gmLevel() > chr.gmLevel()) {
                 chr.getClient().disconnect();
-            }
-        } else if (sub[0].equals("clearshops")) {
-            try {
-                player.message("Attempting to reload all shops. This may take awhile...");
-                MapleShopFactory.getInstance().reloadShops();
-                player.message("Completed.");
-            } catch (Exception re) {
-                player.message("RemoteException occurred while attempting to reload shops.");
-                System.out.println("RemoteException occurred while attempting to reload shops: " + re);
             }
         } else if (sub[0].equals("dispose")) {
             NPCScriptManager.getInstance().dispose(c);
@@ -235,16 +227,34 @@ public class GMCommand {
                 c.getPlayer().getMap().spawnItemDrop(c.getPlayer(), c.getPlayer(), toDrop, c.getPlayer().getPosition(), true, true);
             }
         } else if (sub[0].equals("job")) {
-            player.changeJob(MapleJob.getById(Integer.parseInt(sub[1])));
-            player.equipChanged();
+            MapleJob[] jobs = MapleJob.values();
+            for (int i = 0; i < jobs.length; i++) {
+                if (sub[1].toUpperCase().equals(jobs[i].toString())) {
+                    player.changeJob(jobs[i]);
+                    player.equipChanged();
+                }
+            }
+            try {
+                player.changeJob(MapleJob.getById(Integer.parseInt(sub[1])));
+                player.equipChanged();
+            } catch (java.lang.NumberFormatException job) {}
         } else if (sub[0].equals("jobperson")) {
             if (c.gmLevel() < 2) {
                 player.message("You need to be an admin for this silly.");
                 return false;
             }
             MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(sub[1]);
-            victim.changeJob(MapleJob.getById(Integer.parseInt(sub[2])));
-            player.equipChanged();
+            MapleJob[] jobs = MapleJob.values();
+            for (int i = 0; i < jobs.length; i++) {
+                if (sub[1].toUpperCase().equals(jobs[i].toString())) {
+                    victim.changeJob(jobs[i]);
+                    victim.equipChanged();
+                }
+            }
+            try {
+                victim.changeJob(MapleJob.getById(Integer.parseInt(sub[2])));
+                victim.equipChanged();
+            } catch (java.lang.NumberFormatException job) {}
         } else if (sub[0].equals("kill")) {
             if (sub[0].equals("map")) {
                 for (MapleCharacter chr : player.getMap().getCharacters()) {
@@ -401,6 +411,24 @@ public class GMCommand {
                 player.getMap().broadcastMessage(MaplePacketCreator.spawnNPC(npc));
             } else {
                 player.dropMessage("You have entered an invalid Npc-Id");
+            }
+            } else if (sub[0].equals("reloadshops")) {
+            try {
+                player.message("Attempting to reload all shops. This may take awhile...");
+                MapleShopFactory.getInstance().reloadShops();
+                player.message("Completed.");
+            } catch (Exception re) {
+                player.message("RemoteException occurred while attempting to reload shops.");
+                System.out.println("RemoteException occurred while attempting to reload shops: " + re);
+            }
+        } else if (sub[0].equals("reloadportals")) {
+            try {
+                player.message("Attempting to reload all portals. This may take awhile...");
+                PortalScriptManager.getInstance().clearScripts();
+                player.message("Completed.");
+            } catch (Exception re) {
+                player.message("RemoteException occurred while attempting to reload portals.");
+                System.out.println("RemoteException occurred while attempting to reload portalscripts: " + re);
             }
         } else if (sub[0].equals("search") || sub[0].equals("lookup")) {
             StringBuilder sb = new StringBuilder();

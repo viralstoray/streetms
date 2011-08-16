@@ -32,7 +32,6 @@ import client.Item;
 import client.MapleBuffStat;
 import client.MapleCharacter;
 import client.MapleInventoryType;
-import client.MapleJob;
 import client.MapleStat;
 import client.SkillFactory;
 import client.status.MonsterStatus;

@@ -50,7 +50,6 @@ import scripting.event.EventInstanceManager;
 import client.autoban.AutobanManager;
 import constants.ExpTable;
 import constants.ItemConstants;
-import constants.ServerConstants;
 import constants.skills.Bishop;
 import constants.skills.BlazeWizard;
 import constants.skills.Crusader;
@@ -579,7 +578,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         announce(MaplePacketCreator.showCombo(combocounter));
     }
 
-    public void setLastCombo(long time) {;
+    public void setLastCombo(long time) {
         lastcombo = time;
     }
 
@@ -4981,4 +4980,11 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         return pendingSave;
     }
     
+    public void clearDrops(int mapid) {
+        client.getChannelServer().getMapFactory().getMap(mapid).clearDrops();
+    }
+    
+    public void clearDrops() {
+        client.getPlayer().getMap().clearDrops();
+    }
 }

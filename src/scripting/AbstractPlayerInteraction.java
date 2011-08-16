@@ -430,4 +430,29 @@ public class AbstractPlayerInteraction {
     public void teachSkill(int id, int level, int masterlevel) {
         c.getPlayer().changeSkillLevel(SkillFactory.getSkill(id), (byte) level, masterlevel, -1);
     }
+    
+    public void getNpc(int id, String message, String type) {
+        if (type.equals("ok"))
+            c.announce(MaplePacketCreator.getNPCTalk(id, (byte) 0, message, "00 00", (byte) 0));
+        else if (type.equals("next"))
+            c.announce(MaplePacketCreator.getNPCTalk(id, (byte) 0, message, "00 01", (byte) 0));
+        else if (type.equals("prev"))
+            c.announce(MaplePacketCreator.getNPCTalk(id, (byte) 0, message, "10 00", (byte) 0));
+        else if (type.equals("nextPrev"))
+            c.announce(MaplePacketCreator.getNPCTalk(id, (byte) 0, message, "01 01", (byte) 0));
+        else if (type.equals("yesNo"))
+            c.announce(MaplePacketCreator.getNPCTalk(id, (byte) 1, message, "", (byte) 0));
+        else if (type.equals("acceptDecline"))
+            c.announce(MaplePacketCreator.getNPCTalk(id, (byte) 0x0C, message, "", (byte) 0));
+        else if (type.equals("simple"))
+            c.announce(MaplePacketCreator.getNPCTalk(id, (byte) 4, message, "", (byte) 0));
+    }
+    
+    public void clearDrops(int mapid) {
+        c.getChannelServer().getMapFactory().getMap(mapid).clearDrops();
+    }
+    
+    public void clearDrops() {
+        c.getPlayer().getMap().clearDrops();
+    }
 }

@@ -21,6 +21,7 @@
 */
 package scripting.event;
 
+import client.MapleCharacter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -155,6 +156,18 @@ public class EventManager {
         try {
             iv.invokeFunction("setup", eim);
             eim.setProperty("leader", leader);
+        } catch (ScriptException ex) {
+            Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    //REAL non-PQ method for starting instance - Biscuit
+    public void startInstance(MapleCharacter chr) {
+        try {
+            EventInstanceManager eim = (EventInstanceManager) (iv.invokeFunction("setup", (Object) null));
+            eim.registerPlayer(chr);
         } catch (ScriptException ex) {
             Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchMethodException ex) {

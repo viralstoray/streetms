@@ -256,7 +256,7 @@ public class GMCommand {
                 victim.equipChanged();
             } catch (java.lang.NumberFormatException job) {}
         } else if (sub[0].equals("kill")) {
-            if (sub[0].equals("map")) {
+            if (sub[1].equals("map")) {
                 for (MapleCharacter chr : player.getMap().getCharacters()) {
                     if (chr != player) {
                         chr.setHpMp(0);

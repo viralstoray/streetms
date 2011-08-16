@@ -91,6 +91,22 @@ CREATE TABLE `alliance` (
 /*!40000 ALTER TABLE `alliance` DISABLE KEYS */;
 /*!40000 ALTER TABLE `alliance` ENABLE KEYS */;
 
+--
+-- Table structure for table `banlog`
+--
+
+DROP TABLE IF EXISTS `banlog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `banlog` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `cid` int(10) NOT NULL,
+  `gm` int(10) NOT NULL,
+  `duration` varchar(50) NOT NULL,
+  `reason` varchar(100) NOT NULL
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Definition of table `bbs_replies`

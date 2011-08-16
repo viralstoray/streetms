@@ -65,7 +65,7 @@ function playerDisconnected(eim, player) {
 function playerExit(eim, player) {
     eim.unregisterPlayer(player);
     player.changeMap(exitMap, exitMap.getPortal(0));
-	player.clearDrops();
+	player.clearDrops(910000007);
 	em.setProperty("canEnter", "true");
 }
 
@@ -73,7 +73,7 @@ function removePlayer(eim, player) {
     eim.unregisterPlayer(player);
     player.getMap().removePlayer(player);
     player.setMap(exitMap);
-	player.clearDrops();
+	player.clearDrops(910000007);
 	em.setProperty("canEnter", "true");
 }
 

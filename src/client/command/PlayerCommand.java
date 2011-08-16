@@ -3,10 +3,10 @@ package client.command;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleStat;
-import java.util.ArrayList;
 import net.server.Channel;
 import net.server.Server;
 import scripting.npc.NPCScriptManager;
+import server.maps.MapleMap;
 import tools.MaplePacketCreator;
 
 /**
@@ -27,7 +27,8 @@ public class PlayerCommand {
                 player.message("[StreetSys] You are already in the Free Market.");
             else {
                 player.saveLocation("FREE_MARKET");
-                player.setMap(910000000);
+                MapleMap map = c.getChannelServer().getMapFactory().getMap(910000000);
+                player.changeMap(map, map.getPortal(0));
             }
         } else if (sub[0].equals("gms")) {
             String names = "";
@@ -38,7 +39,7 @@ public class PlayerCommand {
                     }
                 }
             }
-            if (names == "")
+            if (names.equals(""))
                 player.message("Online GM's: none");
             else
                 player.message("Online GM's:" + names);

@@ -91,4 +91,8 @@ public class PortalScriptManager {
         }
         return false;
     }
+    
+    public void clearScripts() {
+        scripts.clear();
+    }
 }

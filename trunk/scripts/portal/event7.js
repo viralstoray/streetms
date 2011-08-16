@@ -25,6 +25,6 @@ function enter(pi) {
 	if (pi.haveItem(4031545))
 		pi.openNpc(9010000);
 	else
-		pi.message("Sorry, but you don't have a Blue Wish Ticket.");
+		pi.message("Sorry, but you need a Blue Wish Ticket to enter.");
 	return false;
 }

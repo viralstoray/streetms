@@ -323,7 +323,11 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                             monster.applyStatus(player, new MonsterStatusEffect(attackEffect.getMonsterStati(), theSkill, null, false), attackEffect.isPoison(), attackEffect.getDuration());
                         }
                     }
-                    if (player.getJob().equals(MapleJob.LEGEND) || player.getJob().isA(MapleJob.ARAN4)) {
+                    short combo = 0;
+                    if (attack.skill == Aran.COMBO_SMASH || attack.skill == Aran.COMBO_PENRIL || attack.skill == Aran.COMBO_TEMPEST) { 
+                        player.setCombo(combo);//WHY NOT USE COMBO LOL
+                    }
+                    /*if (player.getJob().equals(MapleJob.LEGEND) || player.getJob().isA(MapleJob.ARAN4)) {
                         byte comboLevel = (byte) (player.getJob().equals(MapleJob.LEGEND) ? 10 : player.getSkillLevel(Aran.COMBO_ABILITY));
                         if (comboLevel > 0) {
                             final long currentTime = System.currentTimeMillis();
@@ -358,7 +362,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                             }
                             player.setLastCombo(currentTime);
                         }
-                    }
+                    }*/
                     if (attack.isHH && !monster.isBoss()) {
                         map.damageMonster(player, monster, monster.getHp() - 1);
                     } else if (attack.isHH) {

@@ -514,6 +514,14 @@ public class GMCommand {
         } else if (sub[0].equals("sp")) {
             player.setRemainingSp(Integer.parseInt(sub[1]));
             player.updateSingleStat(MapleStat.AVAILABLESP, player.getRemainingSp());
+        } else if (sub[0].equals("spawn")) {
+            if (sub.length > 2) {
+                for (int i = 0; i < Integer.parseInt(sub[2]); i++) {
+                    player.getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(Integer.parseInt(sub[1])), player.getPosition());
+	        }
+	    } else {
+                player.getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(Integer.parseInt(sub[1])), player.getPosition());
+	    }
         } else if (sub[0].equals("suicide")) {
             player.setHpMp(0);
         } else if (sub[0].equals("unban")) {

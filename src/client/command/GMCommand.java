@@ -571,6 +571,8 @@ public class GMCommand {
             warpUser.message("You're being warped to " + player.getName() + ".");
             MapleMap map = player.getMap();
             warpUser.changeMap(map, map.findClosestSpawnpoint(player.getPosition()));
+        } else if (sub[0].equals("whereami")) {
+            player.message(player.getMapId() + " - " + player.getMap().getMapName());
         } else {
             return false;
         }

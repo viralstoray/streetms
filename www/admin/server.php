@@ -19,14 +19,16 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-define('PAGE', 'Home');
+ 
+// initialize
+define('PAGE', 'server');
 require_once('global.php');
 
-if ($street->session->is_loggedin()) {
-    eval('print("' . fetch_template('userhome') . '");');
-} else {
-    eval('print("' . fetch_template('home') . '");');
-}
+$gms = $street->db->query_count('accounts', 'gm > 0 AND loggedin > 0');
+$users = $street->db->query_count('accounts', 'loggedin > 0');
+$usertotal = $street->db->query_count('accounts');
+print_header('Server Statistics');
+print_content('<strong>Statistics</strong><br /><br />Current GMs online: ' . $gms . '<br />Current users online: ' . $users . '<br />Current users: ' . $usertotal);
+print_footer();
 
 ?>

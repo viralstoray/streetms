@@ -24,6 +24,7 @@ require_once('config.php');
 require_once('class.error.php');
 require_once('class.input.php');
 require_once('class.pdo.php');
+require_once('class.session.php');
 require_once('class.template.php');
 
 /**
@@ -51,10 +52,10 @@ class street_Core {
     public $input;
     
     /**
-     * Contains our templater
+     * Contains our cookie handler
      * @var object
      */
-    public $template;
+    public $session;
     
     /**
      * Version tag
@@ -69,16 +70,26 @@ class street_Core {
         $this->db = new street_PDO();
         $this->error = new street_Error();
         $this->input = new street_Input();
-        $this->template = new street_Template();
+        $this->session = new street_Session();
     }
     
     /**
      * getJobs
      * Returns $config['jobs']
+     * @param boolean   should we reverse the array? (for display purposes)
      */
-    public function getJobs() {
+    public function getJobs($reverse = false) {
         global $config;
-        return $config['jobs'];
+        if ($reverse) { 
+            $j = $config['jobs'];
+            foreach ($j as $key => $value) {
+                $jobs[$value] = $key;
+            }
+            $j = $jobs;
+        } else {
+            $j = $config['jobs'];
+        }
+        return $j;
     }
  
 }

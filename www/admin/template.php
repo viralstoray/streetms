@@ -93,28 +93,17 @@ switch($_REQUEST['do']) {
     default:
         print_header('Template Manager', '<script type="text/javascript" src="../js/templater.js"></script>');
         print_content('Below you can pick the current templates available to edit or you can create a new template by typing in its name and start creating...');
-        print_form('edit_template', '?do=update');
         if ($street->db->query_count('templates') > 0) {
-            $q = $street->db->query("SELECT id,name,html FROM templates");
+            $q = $street->db->query("SELECT id,name FROM templates ORDER BY name");
             while ($t = $street->db->fetch_array($q)) {
-                if (empty($selected)) {
-                    $selected = $t;
-                }
-                $templates[$t['name']] = $t['id'];
+                $templates .= '<a href="?do=edit&t=' . $t['id'] . '">' . $t['name'] . '</a>, ';
             }
-            if (count($templates) == 1) {
-                foreach ($templates as $name => $id) {
-                    print_form_caption('You can edit your only template, <a href="?do=edit&t=' . $id . '">' . $name . '</a>...<br /><br />' .
-                    'OR<br /><br /><a href="?do=new">make a new one!</a>');
-                }
-            } else {
-                print_form_select('Choose a Template', 'chooser', $templates, 'selectTemplate();');
-                print_form_caption('OR<br /><br /><a href="?do=new">make a new one!</a>');
-            }
+            $templates = substr($templates, 0, -2);
+            print('<div class="content">You can edit your current templates:<br /><br />' . $templates . '<br /><br />OR<br /><br />' .
+            '<a href="?do=new">make a new one!</a></div>' . "\r\n    ");
         } else {
             header('Location:template.php?do=new');
         }
-        print('</form></div>');
         print_footer();
     break;
 }

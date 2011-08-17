@@ -78,6 +78,11 @@ switch ($_REQUEST['do']) {
         $street->input->clean('p', 'name', CLEAN_STR);
         $term = $street->input->cleaned['name'];
         print_header('Search Results');
+        if (empty($term)) {
+            print_content('You need to search for <em>something</em>...');
+            print_footer();
+            break;
+        }
         $accountcheck = $street->db->query_count('accounts', 'name LIKE "%' . $term . '%"');
         $charcheck = $street->db->query_count('characters', 'name LIKE "%' . $term . '%"');
         if ($accountcheck == 0 && $charcheck == 0) {
@@ -157,9 +162,12 @@ switch ($_REQUEST['do']) {
                 } else {
                     if (!empty($pass)) {
                         $pass = md5($pass);
+                        $street->db->query_write('UPDATE accounts SET name=?, password=?, loggedin=?, banned=?, banreason=?, gm=? WHERE id=?',
+                            array($name, $pass, $login, $banned, $banreason, $gm, $id));
+                    } else {
+                        $street->db->query_write('UPDATE accounts SET name=?, loggedin=?, banned=?, banreason=?, gm=? WHERE id=?',
+                            array($name, $login, $banned, $banreason, $gm, $id));
                     }
-                    $street->db->query_write('UPDATE accounts SET name=?, password=?, loggedin=?, banned=?, banreason=?, gm=? WHERE id=?',
-                        array($name, $pass, $login, $banned, $banreason, $gm, $id));
                     print_content($name . ' has been updated.');
                 }
                 print_footer();

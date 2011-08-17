@@ -31,6 +31,17 @@ $street = new street_Core();
 // and the admin functions
 require_once(DIR . 'includes/functions.admin.php');
 
+// and our general functions
+require_once(DIR . 'includes/functions.php');
+
 // and check to see if the user is logged in - if they aren't, force it, since we don't want anyone to admin this now do we~
+if ($street->session->is_loggedin()) {
+    $user = fetch_user();
+    if ($user['gm'] < 2) {
+        header('Location:home.php');
+    }
+} else {
+    header('Location:index.php');
+}
 
 ?>

@@ -20,35 +20,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
-// alright, let's define all of our wonderful variables and crap
-define('DIR', getcwd() . '/');
-define('TIME', time());
-
-// and grab our core class
-require_once(DIR . 'includes/class.core.php');
-$street = new street_Core();
-
-// and finally get our misc. functions
-require_once(DIR . 'includes/functions.php');
-
-// and load up our templates
-$title = 'StreetMS - ' . PAGE;
+define('PAGE', 'Home');
+require_once('global.php');
 
 if ($street->session->is_loggedin()) {
-    $user = fetch_user();
-    if ($user['gm'] == 1) {
-        $cp = '<a href="gm" title="GM CP">GM CP</a>';
-    } else if ($user['gm'] == 2) {
-        $cp = '<a href="admin" title="AdminCP">AdminCP</a>';
-    } else {
-        $cp = '';
-    }
-    eval('$navbar = "' . fetch_template('navbar') . '";');
+    eval('print("' . fetch_template('userhome') . '");');
 } else {
-    eval('$navbar = "' . fetch_template('navbar_guest') . '";');
+    $error = 'Sorry, you need to be logged in to view this page. <a href="login.php">Login here</a>?';
+    eval('print("' . fetch_template('general_error') . '");');
 }
-
-eval('$footer = "' . fetch_template('footer') . '";');
-eval('$header = "' . fetch_template('header') . '";');
 
 ?>

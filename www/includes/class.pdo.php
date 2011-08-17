@@ -51,7 +51,9 @@ class street_PDO {
         global $config;
         $this->error = new street_Error();
         try {
-            $this->db = new PDO('mysql:dbname=' . $config['db']['dbname'] . ';host=' . $config['db']['host'], $config['db']['username'], $config['db']['password']);
+            if (empty($this->db)) {
+                $this->db = new PDO('mysql:dbname=' . $config['db']['dbname'] . ';host=' . $config['db']['host'], $config['db']['username'], $config['db']['password']);
+            }
         } catch (PDOException $e) {
             $this->error->msg($e->getMessage());
         }

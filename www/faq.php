@@ -19,14 +19,10 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-define('PAGE', 'Home');
+ 
+define('PAGE', 'FAQ');
 require_once('global.php');
 
-if ($street->session->is_loggedin()) {
-    eval('print("' . fetch_template('userhome') . '");');
-} else {
-    eval('print("' . fetch_template('home') . '");');
-}
+eval('print("' . fetch_template('faq') . '");');
 
 ?>

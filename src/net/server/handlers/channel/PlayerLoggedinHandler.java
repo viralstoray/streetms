@@ -69,15 +69,17 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
         } else {
             player.newClient(c);
         }
-        if (player.isGM()) {
+        // TODO find out wtf the gm server is.
+        /*if (player.isGM()) {
             GMServer.getInstance().addInGame(player.getName(), c.getSession());
-        }
+        }*/
         c.setPlayer(player);
         c.setAccID(player.getAccountID());
         int state = c.getLoginState();
-        boolean allowLogin = true;
         Channel cserv = c.getChannelServer();
         synchronized (this) {
+            c.updateLoginState(MapleClient.LOGIN_LOGGEDIN);
+            /*
             if (state == MapleClient.LOGIN_SERVER_TRANSITION) {
                 for (String charName : c.loadCharacterNames(c.getWorld())) {
                     for (Channel ch : c.getWorldServer().getChannels()) {
@@ -99,8 +101,7 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
                 c.setPlayer(null);
                 c.announce(MaplePacketCreator.getAfterLoginError(7));
                 return;
-            }
-            c.updateLoginState(MapleClient.LOGIN_LOGGEDIN);
+            }*/
         }
         cserv.addPlayer(player);
         List<PlayerBuffValueHolder> buffs = server.getPlayerBuffStorage().getBuffsFromStorage(cid);

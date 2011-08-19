@@ -86,6 +86,7 @@ import net.server.PlayerDiseaseValueHolder;
 import net.server.Server;
 import net.server.World;
 import net.server.guild.MapleGuild;
+import scripting.npc.NPCScriptManager;
 import server.CashShop;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
@@ -238,6 +239,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     private int[] viptrockmaps = new int[10];
     private Map<String, MapleEvents> events = new LinkedHashMap<String, MapleEvents>();
     private PartyQuest partyQuest = null;
+    private MapleCharacter cpqChar = null;
 
     private MapleCharacter() {
         setStance(0);
@@ -4986,5 +4988,118 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     
     public void clearDrops() {
         client.getPlayer().getMap().clearDrops();
+    }
+    
+    public String getJobName(MaplePartyCharacter chr) {
+        return getJobName(client.getChannelServer().getPlayerStorage().getCharacterById(chr.getId()));
+    }
+    
+    public String getJobName(MapleCharacter chr) {
+        if (chr.getJob() == MapleJob.ARAN1 || chr.getJob() == MapleJob.ARAN2 || chr.getJob() == MapleJob.ARAN3 || chr.getJob() == MapleJob.ARAN4)
+            return "Aran";
+        else if (chr.getJob() == MapleJob.BLAZEWIZARD1 || chr.getJob() == MapleJob.BLAZEWIZARD2 || chr.getJob() == MapleJob.BLAZEWIZARD3 || chr.getJob() == MapleJob.BLAZEWIZARD4)
+            return "Blaze Wizard";
+        else if (chr.getJob() == MapleJob.DAWNWARRIOR1 || chr.getJob() == MapleJob.DAWNWARRIOR2 || chr.getJob() == MapleJob.DAWNWARRIOR3 || chr.getJob() == MapleJob.DAWNWARRIOR4)
+            return "Dawn Warrior";
+        else if (chr.getJob() == MapleJob.NIGHTWALKER1 || chr.getJob() == MapleJob.NIGHTWALKER2 || chr.getJob() == MapleJob.NIGHTWALKER3 || chr.getJob() == MapleJob.NIGHTWALKER4)
+            return "Night Walker";
+        else if (chr.getJob() == MapleJob.THUNDERBREAKER1 || chr.getJob() == MapleJob.THUNDERBREAKER2 || chr.getJob() == MapleJob.THUNDERBREAKER3 || chr.getJob() == MapleJob.THUNDERBREAKER4)
+            return "Thunder Breaker";
+        else if (chr.getJob() == MapleJob.WINDARCHER1 || chr.getJob() == MapleJob.WINDARCHER2 || chr.getJob() == MapleJob.WINDARCHER3 || chr.getJob() == MapleJob.WINDARCHER4)
+            return "Wind Archer";
+        else if (chr.getJob() == MapleJob.ASSASSIN)
+            return "Assassain";
+        else if (chr.getJob() == MapleJob.BANDIT)
+            return "Bandit";
+        else if (chr.getJob() == MapleJob.BEGINNER)
+            return "Beginner";
+        else if (chr.getJob() == MapleJob.BISHOP)
+            return "Bishop";
+        else if (chr.getJob() == MapleJob.BOWMAN)
+            return "Bowman";
+        else if (chr.getJob() == MapleJob.BOWMASTER)
+            return "Bow Master";
+        else if (chr.getJob() == MapleJob.BRAWLER)
+            return "Brawler";
+        else if (chr.getJob() == MapleJob.BUCCANEER)
+            return "Buccaneer";
+        else if (chr.getJob() == MapleJob.CHIEFBANDIT)
+            return "Chief Bandit";
+        else if (chr.getJob() == MapleJob.CLERIC)
+            return "Cleric";
+        else if (chr.getJob() == MapleJob.CORSAIR)
+            return "Corsair";
+        else if (chr.getJob() == MapleJob.CROSSBOWMAN)
+            return "Crossbow Man";
+        else if (chr.getJob() == MapleJob.CRUSADER)
+            return "Crusader";
+        else if (chr.getJob() == MapleJob.DARKKNIGHT)
+            return "Dark Knight";
+        else if (chr.getJob() == MapleJob.DRAGONKNIGHT)
+            return "Dragon Knight";
+        else if (chr.getJob() == MapleJob.FIGHTER)
+            return "Fighter";
+        else if (chr.getJob() == MapleJob.FP_ARCHMAGE)
+            return "Arch Mage (Fire/Poison)";
+        else if (chr.getJob() == MapleJob.FP_MAGE)
+            return "Mage (Fire/Poison)";
+        else if (chr.getJob() == MapleJob.FP_WIZARD)
+            return "Wizard (Fire/Poison)";
+        else if (chr.getJob() == MapleJob.LEGEND)
+            return "Legend";
+        else if (chr.getJob() == MapleJob.MAGICIAN)
+            return "Magician";
+        else if (chr.getJob() == MapleJob.MARAUDER)
+            return "Marauder";
+        else if (chr.getJob() == MapleJob.MARKSMAN)
+            return "Marksman";
+        else if (chr.getJob() == MapleJob.NIGHTLORD)
+            return "Night Lord";
+        else if (chr.getJob() == MapleJob.NOBLESSE)
+            return "Noblesse";
+        else if (chr.getJob() == MapleJob.OUTLAW)
+            return "Outlaw";
+        else if (chr.getJob() == MapleJob.PAGE)
+            return "Page";
+        else if (chr.getJob() == MapleJob.PALADIN)
+            return "Paladin";
+        else if (chr.getJob() == MapleJob.PIRATE)
+            return "Pirate";
+        else if (chr.getJob() == MapleJob.PRIEST)
+            return "Priest";
+        else if (chr.getJob() == MapleJob.RANGER)
+            return "Ranger";
+        else if (chr.getJob() == MapleJob.SHADOWER)
+            return "Shadower";
+        else if (chr.getJob() == MapleJob.SNIPER)
+            return "Sniper";
+        else if (chr.getJob() == MapleJob.SPEARMAN)
+            return "Spearman";
+        else if (chr.getJob() == MapleJob.THIEF)
+            return "Thief";
+        else if (chr.getJob() == MapleJob.WARRIOR)
+            return "Warrior";
+        else if (chr.getJob() == MapleJob.WHITEKNIGHT)
+            return "White Knight";
+        else
+            return null;
+    }
+    
+    public void sendClock(int time) {
+        client.getPlayer().getClient().announce(MaplePacketCreator.getClock(time));
+    }
+    
+    public void sendCPQInvitation(MapleCharacter chr) {
+        cpqChar = chr;
+        NPCScriptManager.getInstance().dispose(client);
+        NPCScriptManager.getInstance().start(client, 2042000, null, null);
+    }
+    
+    public MapleCharacter getCpqChar() {
+        return cpqChar;
+    }
+    
+    public void resetCpqChar() {
+        cpqChar = null;
     }
 }

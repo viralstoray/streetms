@@ -35,6 +35,7 @@ import client.MapleQuestStatus;
 import client.SkillFactory;
 import constants.ItemConstants;
 import java.awt.Point;
+import java.util.Collection;
 import net.server.MapleParty;
 import net.server.Server;
 import net.server.guild.MapleGuild;
@@ -454,5 +455,22 @@ public class AbstractPlayerInteraction {
     
     public void clearDrops() {
         c.getPlayer().getMap().clearDrops();
+    }
+    
+    public int getAverageUserLevel(int mapid) {
+        int average = 0;
+        for (MapleCharacter chr : c.getChannelServer().getMapFactory().getMap(mapid).getCharacters()) {
+            average += chr.getLevel();
+        }
+        return average / c.getChannelServer().getMapFactory().getMap(mapid).getCharacters().size();
+    }
+    
+    public MapleCharacter getPartyLeader(int mapid) {
+        for (MapleCharacter chr : c.getChannelServer().getMapFactory().getMap(mapid).getCharacters()) {
+            if (chr.isPartyLeader()) {
+                return chr;
+            }
+        }
+        return null;
     }
 }

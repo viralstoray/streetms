@@ -24,15 +24,19 @@ var status = -1;
 function start() {
     if (cm.getParty() != null) {
 		if (cm.isLeader()) {
-			if (cm.getMapId() == 980000100) {
-				var party = cm.getPlayer().getCpqChar().getParty().getMembers();
-				var message = "#b";
-				for (var i = 0; i < party.size(); i++) {
-					message += party.get(i).getName() + " / Level " + party.get(i).getLevel() + " / " + cm.getPlayer().getJobName(party.get(i)) + "\r\n";
+			for (var i = 0; i < 5; i++) {
+				var map = 980000100 + i*100;
+				if (cm.getMapId() == map) {
+					var party = cm.getPlayer().getCpqChar().getParty().getMembers();
+					var message = "#b";
+					for (var i = 0; i < party.size(); i++) {
+						message += party.get(i).getName() + " / Level " + party.get(i).getLevel() + " / " + cm.getPlayer().getJobName(party.get(i)) + "\r\n";
+					}
+					message += "#k\r\nWould you like to battle this party at the Monster Carnival?";
+					cm.sendAcceptDecline(message);
 				}
-				message += "#k\r\nWould you like to battle this party at the Monster Carnival?";
-				cm.sendAcceptDecline(message);
-			} else {
+			}
+			if (cm.getMapId() == 980000000) {
 				var message = "Sign up for Monster Carnival!\r\n#b";
 				if (cm.getPlayerCount(980000101) == 0)
 					message += "#L0#Carnival Field 1(" + (cm.getPlayerCount(980000100) > 0 ? cm.getPartyLeader(980000100) + "/" + cm.getPlayerCount(980000100) + "user" + (cm.getPlayerCount(980000100) == 1 ? "" : "s") + "/" + cm.getAverageUserLevel(980000100) : "2~4 ppl") + ")#l\r\n";
@@ -65,54 +69,66 @@ function action(mode, type, selection) {
     else {
         status++;
 		if (status == 0) {
-			if (cm.getMapId() == 980000100) {
-				var em = cm.getEventManager("monsterCarnivalPQLobby");
-				em.setProperty("toLobby", 1);
-				em.setProperty("lobbyOpen1", "false");
-				em.startInstance(cm.getPlayer().getCpqChar().getParty(), cm.getPlayer().getCpqChar().getMap());
-				cm.getPlayer().resetCpqChar();
-				cm.dispose();
-			} else {
+			for (var i = 0; i < 6; i++) {
+				var map = 980000100 + i*100;
+				if (cm.getMapId() == map) {
+					var em = cm.getEventManager("monsterCarnivalPQLobby");
+					em.setProperty("toLobby", (i+1));
+					em.setProperty("lobbyOpen" + (i+1), "false");
+					em.startInstance(cm.getPlayer().getCpqChar().getParty(), cm.getPlayer().getCpqChar().getMap());
+					cm.getPlayer().resetCpqChar();
+					cm.dispose();
+				}
+			}
+			if (cm.getMapId() == 980000000) {
 				select = selection;
-				if (select == 0) {
-					if (cm.getPlayerCount(980000100) > 0) {
-						if (cm.getPartyLeader(980000100).getParty().getMembers().size() != cm.getPlayer().getParty().getMembers().size()) {
-							cm.sendOk("The two parties participating in Monster Carnival must have an equal number of party members.");
-							cm.dispose();
-						} else {
-							var party = cm.getPartyLeader(980000100).getParty().getMembers();
-							var message = "#b";
-							for (var i = 0; i < party.size(); i++) {
-							message += party.get(i).getName() + " / Level " + party.get(i).getLevel() + " / " + cm.getPlayer().getJobName(party.get(i)) + "\r\n";
-						}
-						message += "#k\r\nWould you like to battle this party at the Monster Carnival?";
-						cm.sendAcceptDecline(message);
-						}
-					} else {
-						if (cm.getPlayer().getParty().getMembers().size() < 2 || cm.getPlayer().getParty().getMembers().size() > 4) {
-							cm.sendOk("Carnival Field 1 can only be opened to a party of 2~4. Please organize your party to meet this requirement.");
-							cm.dispose();
-						} else {
-							var em = cm.getEventManager("monsterCarnivalPQLobby");
-							if (em == null) {
-								cm.sendOk("Sorry, but this PQ is currently undergoing maintenance. Try again soon!");
+				for (var i = 0; i < 6; i++) {
+					if (select == i) {
+						var map = 980000100 + i*100;
+						if (cm.getPlayerCount(map) > 0) {
+							if (cm.getPartyLeader(map).getParty().getMembers().size() != cm.getPlayer().getParty().getMembers().size()) {
+								cm.sendOk("The two parties participating in Monster Carnival must have an equal number of party members.");
+								cm.dispose();
 							} else {
-								em.setProperty("toLobby", 1);
-								em.startInstance(cm.getParty(), cm.getPlayer().getMap());
+								var party = cm.getPartyLeader(map).getParty().getMembers();
+								var message = "#b";
+								for (var i = 0; i < party.size(); i++) {
+								message += party.get(i).getName() + " / Level " + party.get(i).getLevel() + " / " + cm.getPlayer().getJobName(party.get(i)) + "\r\n";
 							}
-							cm.dispose();
+							message += "#k\r\nWould you like to battle this party at the Monster Carnival?";
+							cm.sendAcceptDecline(message);
+							}
+						} else {
+							if (cm.getPlayer().getParty().getMembers().size() < (i < 4 ? 2 : 3) || cm.getPlayer().getParty().getMembers().size() > (i < 4 ? 4 : 6)) {
+								cm.sendOk("Carnival Field " + (i+1) + " can only be opened to a party of " + (i < 4 ? "2~4" : "3~6") + ". Please organize your party to meet this requirement.");
+								cm.dispose();
+							} else {
+								var em = cm.getEventManager("monsterCarnivalPQLobby");
+								if (em == null) {
+									cm.sendOk("Sorry, but this PQ is currently undergoing maintenance. Try again soon!");
+								} else {
+									em.setProperty("toLobby", (i+1));
+									em.startInstance(cm.getParty(), cm.getPlayer().getMap());
+								}
+								cm.dispose();
+							}
 						}
 					}
-				} else if (select == 6) {
+				}
+				if (select == 6) {
 					cm.sendSimple("What do you want to know?\r\n#b#L0#What's the Monster Carnival?#l\r\n#L1#General Overview of the Monster Carnival#l\r\n#L2#Detailed instructions about the Monster Carnival#l\r\n#L3#Nothing, really. I've changed my mind.#l#k");
 				}
 			}
 		} else if (status == 1) {
 			howtoplay = selection;
-			if (select == 0) {
-				cm.getPartyLeader(980000100).sendCPQInvitation(cm.getPlayer());
-				cm.dispose();
-			} else if (howtoplay == 0) {
+			for (var i = 0; i < 6; i++) {
+				if (select == i) {
+					var map = 980000100 + i*100;
+					cm.getPartyLeader(map).sendCPQInvitation(cm.getPlayer());
+					cm.dispose();
+				}
+			}
+			if (howtoplay == 0) {
 				cm.sendNext("Haha! I'm Spiegelmann, the leader of this traveling carnival. I started the 1st ever #bMonster Carnival#k here, waiting for travelers like you to participate in this extravaganza!");
 			} else if (howtoplay == 1) {
 				cm.sendNext("#bMonster Carnival#k consists of 2 parties entering the battleground, and hunting the monsters summoned by the other party. It's a #bcombat quest that determines the victor by the amount of Carnival Points (CP) earned#k.");

@@ -100,7 +100,7 @@ function action(mode, type, selection) {
 							cm.sendAcceptDecline(message);
 							}
 						} else {
-							if (cm.getPlayer().getParty().getMembers().size() < (i < 4 ? 1 : 1) || cm.getPlayer().getParty().getMembers().size() > (i < 4 ? 1 : 1)) {
+							if (cm.getPlayer().getParty().getMembers().size() < (i < 4 ? 2 : 3) || cm.getPlayer().getParty().getMembers().size() > (i < 4 ? 4 : 6)) {
 								cm.sendOk("Carnival Field " + (i+1) + " can only be opened to a party of " + (i < 4 ? "2~4" : "3~6") + ". Please organize your party to meet this requirement.");
 								cm.dispose();
 							} else {

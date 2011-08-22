@@ -452,19 +452,27 @@ public class GMCommand {
                     if (data != null) {
                         String name;
                         player.message("Searching...");
+                        int i = 0;
                         for (MapleData searchData : data.getChildren()) {
                             name = MapleDataTool.getString(searchData.getChildByPath("name"), "NO-NAME");
                             if (name.toLowerCase().contains(search.toLowerCase())) {
-                                sb.append("#b").append(Integer.parseInt(searchData.getName())).append("#k - #r").append(name).append("\r\n");
+                                if (!sub[1].equals("mob") && !sub[1].equals("monster")) {
+                                    sb.append("#b").append(Integer.parseInt(searchData.getName())).append("#k - #r").append(name).append("\r\n");
+                                } else {
+                                    sb.append("#L").append(i).append("##b").append(Integer.parseInt(searchData.getName())).append("#k").append(i).append(" - #r").append(name).append("#l\r\n");
+                                    i++;
+                                }
                             }
                         }
                     }
                 } else {
+                    int i = 0;
                     for (Pair<Integer, String> itemPair : MapleItemInformationProvider.getInstance().getAllItems()) {
                         if (sb.length() < 32654) {//ohlol
                             if (itemPair.getRight().toLowerCase().contains(search.toLowerCase())) {
                                 //#v").append(id).append("# #k- 
-                                sb.append("#b").append(itemPair.getLeft()).append("#k - #r").append(itemPair.getRight()).append("\r\n");
+                                sb.append("#L").append(i).append("##b").append(itemPair.getLeft()).append("#k").append(i).append(" - #r").append(itemPair.getRight()).append("#l\r\n");
+                                i++;
                             }
                         } else {
                             sb.append("#bCouldn't load all items, there are too many results.");
@@ -478,7 +486,14 @@ public class GMCommand {
             } else {
                 sb.append("#bInvalid search.\r\nSyntax: '!search [type] [name]', where [type] is NPC, ITEM, MOB, or SKILL.");
             }
-            c.announce(MaplePacketCreator.getNPCTalk(9010000, (byte) 0, sb.toString(), "00 00", (byte) 0));
+            if (!sub[1].equals("mob") && !sub[1].equals("monster") && !sub[1].equals("item")) {
+                c.announce(MaplePacketCreator.getNPCTalk(9010000, (byte) 0, sb.toString(), "00 00", (byte) 0));
+            } else {
+                c.getPlayer().setPlayerVariable("search_list", sb.toString());
+                c.getPlayer().setPlayerVariable("search_type", sub[1].toLowerCase());
+                NPCScriptManager.getInstance().dispose(c);
+                NPCScriptManager.getInstance().start(c, 9010000, null, null);
+            }
         } else if (sub[0].equals("setall")) {
             final int x = Short.parseShort(sub[1]);
             player.setStr(x);

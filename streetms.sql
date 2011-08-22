@@ -17592,6 +17592,26 @@ CREATE TABLE `pets` (
 /*!40000 ALTER TABLE `pets` DISABLE KEYS */;
 /*!40000 ALTER TABLE `pets` ENABLE KEYS */;
 
+--
+-- Definition of table `player_variables`
+--
+
+DROP TABLE IF EXISTS `player_variables`;
+CREATE TABLE  `street`.`player_variables` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `characterid` int(11) unsigned NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `value` varchar(4000) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `player_variables`
+--
+
+/*!40000 ALTER TABLE `player_variables` DISABLE KEYS */;
+/*!40000 ALTER TABLE `player_variables` ENABLE KEYS */;
+
 
 --
 -- Definition of table `playernpcs`

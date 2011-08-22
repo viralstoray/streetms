@@ -27,7 +27,7 @@ function start() {
 			for (var i = 0; i < 5; i++) {
 				var map = 980000100 + i*100;
 				if (cm.getMapId() == map) {
-					var party = cm.getPlayer().getCpqChar().getParty().getMembers();
+					var party = cm.getClient().getChannelServer().getPlayerStorage().getCharacterById(cm.getPlayer().getPlayerVariable("mc_invitation")).getParty().getMembers();
 					var message = "#b";
 					for (var i = 0; i < party.size(); i++) {
 						message += party.get(i).getName() + " / Level " + party.get(i).getLevel() + " / " + cm.getPlayer().getJobName(party.get(i)) + "\r\n";
@@ -75,8 +75,9 @@ function action(mode, type, selection) {
 					var em = cm.getEventManager("monsterCarnivalPQLobby");
 					em.setProperty("toLobby", (i+1));
 					em.setProperty("lobbyOpen" + (i+1), "false");
-					em.startInstance(cm.getPlayer().getCpqChar().getParty(), cm.getPlayer().getCpqChar().getMap());
-					cm.getPlayer().resetCpqChar();
+					var cpqChar = cm.getClient().getChannelServer().getPlayerStorage().getCharacterById(cm.getPlayer().getPlayerVariable("mc_invitation"));
+					em.startInstance(cpqChar.getParty(), cpqChar.getMap());
+					cm.getPlayer().deletePlayerVariable("mc_invitation");
 					cm.dispose();
 				}
 			}
@@ -99,7 +100,7 @@ function action(mode, type, selection) {
 							cm.sendAcceptDecline(message);
 							}
 						} else {
-							if (cm.getPlayer().getParty().getMembers().size() < (i < 4 ? 2 : 3) || cm.getPlayer().getParty().getMembers().size() > (i < 4 ? 4 : 6)) {
+							if (cm.getPlayer().getParty().getMembers().size() < (i < 4 ? 1 : 1) || cm.getPlayer().getParty().getMembers().size() > (i < 4 ? 1 : 1)) {
 								cm.sendOk("Carnival Field " + (i+1) + " can only be opened to a party of " + (i < 4 ? "2~4" : "3~6") + ". Please organize your party to meet this requirement.");
 								cm.dispose();
 							} else {

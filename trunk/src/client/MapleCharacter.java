@@ -239,7 +239,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     private int[] viptrockmaps = new int[10];
     private Map<String, MapleEvents> events = new LinkedHashMap<String, MapleEvents>();
     private PartyQuest partyQuest = null;
-    private MapleCharacter cpqChar = null;
 
     private MapleCharacter() {
         setStance(0);
@@ -5090,16 +5089,78 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     }
     
     public void sendCPQInvitation(MapleCharacter chr) {
-        cpqChar = chr;
+        setPlayerVariable("mc_invitation", Integer.toString(chr.getId()));
         NPCScriptManager.getInstance().dispose(client);
         NPCScriptManager.getInstance().start(client, 2042000, null, null);
     }
     
-    public MapleCharacter getCpqChar() {
-        return cpqChar;
+    public void setPlayerVariable(String name, String value) {
+        try {
+            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT * FROM player_variables WHERE name = ? AND characterid = ?");
+            ps.setString(1, name);
+            ps.setInt(2, id);
+            ResultSet rs = ps.executeQuery();
+            PreparedStatement ps2;
+            if (rs.next()) {
+                ps2 = DatabaseConnection.getConnection().prepareStatement("UPDATE player_variables SET name = ?, value = ? WHERE characterid = ?");
+                ps2.setString(1, name);
+                ps2.setString(2, value);
+                ps2.setInt(3, id);
+            } else {
+                ps2 = DatabaseConnection.getConnection().prepareStatement("INSERT INTO player_variables (characterid, name, value) VALUES (?, ?, ?)");
+                ps2.setInt(1, id);
+                ps2.setString(2, name);
+                ps2.setString(3, value);
+            }
+            ps.close();
+            rs.close();
+            ps2.execute();
+            ps2.close();
+        } catch (SQLException ex) {
+            System.out.println("Error setting player variable: " + ex);
+        }
     }
     
-    public void resetCpqChar() {
-        cpqChar = null;
+    public String getPlayerVariable(String name) {
+        try {
+            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT * FROM player_variables WHERE name = ? AND characterid = ?");
+            ps.setString(1, name);
+            ps.setInt(2, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                String value = rs.getString("value");
+                ps.close();
+                rs.close();
+                return value;
+            } else {
+                ps.close();
+                rs.close();
+                return null;
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error getting player variable: " + ex);
+            return null;
+        }
+    }
+    
+    public void deletePlayerVariable(String name) {
+        try {
+            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT * FROM player_variables WHERE name = ? AND characterid = ?");
+            ps.setString(1, name);
+            ps.setInt(2, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                ps.close();
+                rs.close();
+                ps = DatabaseConnection.getConnection().prepareStatement("DELETE FROM player_variables WHERE name = ? AND characterid = ?");
+                ps.setString(1, name);
+                ps.setInt(2, id);
+                ps.execute();
+            }
+            ps.close();
+            rs.close();
+        } catch (SQLException ex) {
+            System.out.println("Error deleting player variable: " + ex);
+        }
     }
 }

@@ -344,6 +344,12 @@ public class AbstractPlayerInteraction {
         monster.setPosition(new Point(x,y));
         getPlayer().getMap().spawnMonster(monster);
     }
+    
+    public void spawnMonster(int id) {
+        MapleMonster monster = MapleLifeFactory.getMonster(id);
+        monster.setPosition(c.getPlayer().getPosition());
+        getPlayer().getMap().spawnMonster(monster);
+    }
 
     public void spawnGuide() {
         c.announce(MaplePacketCreator.spawnGuide(true));

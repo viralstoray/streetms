@@ -622,8 +622,7 @@ public class MaplePacketCreator {
         mplew.write(2);
         mplew.write0(5);
         mplew.write(reason);
-        mplew.writeLong(timestampTill); // Tempban date is handled as a 64-bit long, number of 100NS intervals since 1/1/1601. Lulz.
-
+        mplew.writeLong(timestampTill);
         return mplew.getPacket();
     }
 

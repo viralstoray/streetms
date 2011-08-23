@@ -45,6 +45,9 @@ public final class GeneralchatHandler extends net.AbstractMaplePacketHandler {
                     }
                 }
             } else {
+                if (chr.getMapId() == 980000404) {
+                    chr.message("You're jailed, you can't use player commands.");
+                }
                 if (!PlayerCommand.execute(c, sp)) {
                     chr.message(heading + sp[0] + " is not recognized as a command.");
                 }

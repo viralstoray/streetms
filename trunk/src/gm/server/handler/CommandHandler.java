@@ -66,7 +66,8 @@ public class CommandHandler implements GMPacketHandler {
                 session.write(GMPacketCreator.commandResponse((byte) 0));
                 break;
             }
-            case 4: {
+            // TODO fix this handling
+            /*case 4: {
                 String user = slea.readMapleAsciiString();
                 for (World world : Server.getInstance().getWorlds()) {
                     if (world.isConnected(user)) {
@@ -79,7 +80,7 @@ public class CommandHandler implements GMPacketHandler {
                 }
                 session.write(GMPacketCreator.commandResponse((byte) 0));
                 break;
-            }
+            }*/
             case 5: {
                 String user = slea.readMapleAsciiString();
                 for (World world : Server.getInstance().getWorlds()) {

@@ -23,7 +23,9 @@ public class PlayerCommand {
             c.announce(MaplePacketCreator.enableActions());
             player.message("[StreetSys] Done.");
         } else if (sub[0].equals("fm")) {
-            if (player.getMapId() >= 910000000 && player.getMapId() <= 910000022)
+            if (player.getPlayerVariable("jail") != null) {
+                player.message("[StreetSys] You cannot go to the FM while you're jailed.");
+            } else if (player.getMapId() >= 910000000 && player.getMapId() <= 910000022)
                 player.message("[StreetSys] You are already in the Free Market.");
             else {
                 player.saveLocation("FREE_MARKET");

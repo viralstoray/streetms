@@ -506,7 +506,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             );
             ps.setLong(1, banlength);
             ps.setString(2, reason);
-            ps.setInt(2, getAccountID());
+            ps.setInt(3, getAccountID());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

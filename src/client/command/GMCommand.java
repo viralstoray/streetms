@@ -230,6 +230,7 @@ public class GMCommand {
         } else if (sub[0].equals("jail")) {
             MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[1]);
             MapleMap jail = cserv.getMapFactory().getMap(980000404);
+            victim.setPlayerVariable("jail", victim.getMapId()+"");
             victim.changeMap(jail);
             victim.message("You've been jailed by " + player.getName() + ".");
         } else if (sub[0].equals("job")) {
@@ -582,6 +583,16 @@ public class GMCommand {
                 return true;
             }
             player.message("Unbanned " + sub[1]);
+        } else if (sub[0].equals("unjail")) {
+            MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[1]);
+            if (victim.getPlayerVariable("jail") != null) {
+                MapleMap unjail = cserv.getMapFactory().getMap(Integer.parseInt(victim.getPlayerVariable("jail")));
+                victim.changeMap(unjail);
+                victim.deletePlayerVariable("jail");
+                victim.message("You've been unjailed by " + player.getName() + ". Please follow the rules.");
+            } else {
+                player.message(sub[1] + " is not currently jailed.");
+            }
         } else if (sub[0].equals("warpto")) {
             MapleCharacter warpUser = cserv.getPlayerStorage().getCharacterByName(sub[1]);
             MapleMap map = warpUser.getMap();

@@ -76,7 +76,7 @@ function action(mode, type, selection) {
         } else if (status == 2) {
 			qty = selection;
 			var searchList = cm.getPlayer().getPlayerVariable("search_list")
-			if (cm.getPlayer().getPlayerVariable("search_type") == "mob" || cm.getPlayer().getPlayerVariable("search_type")) {
+			if (cm.getPlayer().getPlayerVariable("search_type") == "mob" || cm.getPlayer().getPlayerVariable("search_type") == "monster") {
 				for (var i = 0; i < qty; i++) {
 					cm.spawnMonster(parseInt(searchList.substring(searchList.indexOf("#L" + select) + (5 + (select + "").length), searchList.indexOf("#k" + select))));
 				}

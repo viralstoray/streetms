@@ -925,4 +925,16 @@ public class MapleClient {
         return banlength;
     }
     
+    public void unban() {
+        try {
+            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(
+                "UPDATE accounts SET banned=0, banlength=0, banreason='' WHERE id = ?"
+            );
+            ps.setInt(1, accId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
 }

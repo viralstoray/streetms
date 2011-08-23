@@ -486,13 +486,12 @@ public class GMCommand {
                         }
                     }
                 }
-                if (sb.length() == 0) {
-                    sb.append("#bNo ").append(sub[1].toLowerCase()).append("s found.");
-                }
             } else {
                 sb.append("#bInvalid search.\r\nSyntax: '!search [type] [name]', where [type] is NPC, ITEM, MOB, or SKILL.");
             }
-            if (!sub[1].equals("mob") && !sub[1].equals("monster") && !sub[1].equals("item")) {
+            if (sb.length() == 0) {
+                c.announce(MaplePacketCreator.getNPCTalk(9010000, (byte) 0, ("#bNo " + sub[1].toLowerCase() + "s found.#k"), "00 00", (byte) 0));
+            } else if (!sub[1].equals("mob") && !sub[1].equals("monster") && !sub[1].equals("item")) {
                 c.announce(MaplePacketCreator.getNPCTalk(9010000, (byte) 0, sb.toString(), "00 00", (byte) 0));
             } else {
                 c.getPlayer().setPlayerVariable("search_list", sb.toString());

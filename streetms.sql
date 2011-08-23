@@ -37,6 +37,7 @@ CREATE TABLE `accounts` (
   `createdat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `birthday` date NOT NULL DEFAULT '0000-00-00',
   `banned` tinyint(1) NOT NULL DEFAULT '0',
+  `banlength` long NOT NULL DEFAULT '0',
   `banreason` text,
   `gm` tinyint(1) NOT NULL DEFAULT '0',
   `macs` tinytext,
@@ -45,7 +46,6 @@ CREATE TABLE `accounts` (
   `nxPrepaid` int(11) DEFAULT NULL,
   `characterslots` tinyint(2) NOT NULL DEFAULT '5',
   `gender` tinyint(2) NOT NULL DEFAULT '10',
-  `tempban` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `greason` tinyint(4) NOT NULL DEFAULT '0',
   `tos` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -103,7 +103,7 @@ CREATE TABLE `banlog` (
   `cid` int(10) NOT NULL,
   `gm` int(10) NOT NULL,
   `duration` varchar(50) NOT NULL,
-  `reason` varchar(100) NOT NULL
+  `reason` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;

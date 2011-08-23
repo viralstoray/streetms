@@ -470,59 +470,48 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     public void addVisibleMapObject(MapleMapObject mo) {
         visibleMapObjects.add(mo);
     }
-
-    public void ban(String reason) {
-        try {
-            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("UPDATE accounts SET banned = 1, banreason = ? WHERE id = ?");
-            ps.setString(1, reason);
-            ps.setInt(2, accountid);
-            ps.executeUpdate();
-            ps.close();
-        } catch (Exception e) {
-        }
-
-    }
-
-    public static boolean ban(String id, String reason, boolean accountId) {
-        PreparedStatement ps = null;
-        try {
-            if (id.matches("/[0-9]{1,3}\\..*")) {
-                ps = DatabaseConnection.getConnection().prepareStatement("INSERT INTO ipbans VALUES (DEFAULT, ?)");
-                ps.setString(1, id);
-                ps.executeUpdate();
-                ps.close();
-                return true;
-            }
-            if (accountId) {
-                ps = DatabaseConnection.getConnection().prepareStatement("SELECT id FROM accounts WHERE name = ?");
+    
+    public boolean ban(String length, String duration, String reason, MapleCharacter gm) {
+        int amount = Integer.parseInt(length);
+        duration = duration.toLowerCase();
+        long banlength = 0L;
+        final int hour = 3600000;
+        final int day = 86400000;
+        final int week = 604800000;
+        final long month = 2419200000L;
+        final long year = 29030400000L;
+        if (amount == 0) {
+            gm.message("You need to enter a length above 0, aka: 1 year");
+            return false;
+        } else {
+            if (duration.equals("hour")) {
+                banlength = hour * amount;
+            } else if (duration.equals("day")) {
+                banlength = day * amount;
+            } else if (duration.equals("week")) {
+                banlength = week * amount;
+            } else if (duration.equals("month")) {
+                banlength = month * amount;
+            } else if (duration.equals("year")) {
+                banlength = year * amount;
             } else {
-                ps = DatabaseConnection.getConnection().prepareStatement("SELECT accountid FROM characters WHERE name = ?");
-            }
-
-            boolean ret = false;
-            ps.setString(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                PreparedStatement psb = DatabaseConnection.getConnection().prepareStatement("UPDATE accounts SET banned = 1, banreason = ? WHERE id = ?");
-                psb.setString(1, reason);
-                psb.setInt(2, rs.getInt(1));
-                psb.executeUpdate();
-                psb.close();
-                ret = true;
-            }
-            rs.close();
-            ps.close();
-            return ret;
-        } catch (SQLException ex) {
-        } finally {
-            try {
-                if (ps != null && !ps.isClosed()) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
+                gm.message("Available durations: hour, day, week, month, year");
+                return false;
             }
         }
-        return false;
+        banlength = banlength - System.currentTimeMillis();
+        try {
+            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(
+                    "UPDATE accounts SET banned = 1, banlength = ? WHERE userid = ?"
+            );
+            ps.setLong(1, banlength);
+            ps.setInt(2, getAccountID());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        getClient().disconnect();
+        return true;
     }
 
     public int calculateMaxBaseDamage(int watk) {

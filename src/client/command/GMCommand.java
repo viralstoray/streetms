@@ -67,15 +67,16 @@ public class GMCommand {
                 SkillFactory.getSkill(i).getEffect(SkillFactory.getSkill(i).getMaxLevel()).applyTo(player);
             }
 	} else if (sub[0].equals("ban")) {
-            try {
-                PreparedStatement p = DatabaseConnection.getConnection().prepareStatement("UPDATE accounts SET banned = 1 WHERE id = " + MapleCharacter.getIdByName(sub[1]));
-                p.executeUpdate();
-                p.close();
-            } catch (Exception e) {
-                player.message("Failed to ban " + sub[1]);
-                return true;
+            if (sub.length < 2) {
+                player.message("Syntax: !ban player length duration reason");
+            } else {
+                MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[1]);
+                if (victim.ban(sub[2], sub[3], joinStringFrom(sub, 3), player)) {
+                    player.message(victim.getName() + " has been banned. Be sure to log this.");
+                } else {
+                    player.message("Something went wrong.");
+                }
             }
-            player.message("Banned " + sub[1]);
         } else if (sub[0].equals("bomb")) {
             if (sub.length == 1) {
                 MapleMonster mob = MapleLifeFactory.getMonster(9300166);
@@ -226,6 +227,11 @@ public class GMCommand {
                 }
                 c.getPlayer().getMap().spawnItemDrop(c.getPlayer(), c.getPlayer(), toDrop, c.getPlayer().getPosition(), true, true);
             }
+        } else if (sub[0].equals("jail")) {
+            MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[1]);
+            MapleMap jail = cserv.getMapFactory().getMap(980000404);
+            victim.changeMap(jail);
+            victim.message("You've been jailed by " + player.getName() + ".");
         } else if (sub[0].equals("job")) {
             MapleJob[] jobs = MapleJob.values();
             for (int i = 0; i < jobs.length; i++) {

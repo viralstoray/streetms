@@ -46,17 +46,11 @@ public final class LoginPasswordHandler implements MaplePacketHandler {
         if (c.hasBannedIP() || c.hasBannedMac()) {
             c.announce(MaplePacketCreator.getLoginFailed(3));
         }
-        Calendar tempban = c.getTempBanCalendar();
-        if (tempban != null) {
-            if (tempban.getTimeInMillis() > System.currentTimeMillis()) {
-                long till = DateUtil.getFileTimestamp(tempban.getTimeInMillis());
-                c.announce(MaplePacketCreator.getTempBan(till, c.getGReason()));
-                return;
-            }
-        }
+        
+        // banned
         if (loginok == 3) {
-            c.announce(MaplePacketCreator.getPermBan(c.getGReason()));//crashes but idc :D
-            return;
+            long till = DateUtil.getFileTimestamp(c.getBanEnding());
+            c.announce(MaplePacketCreator.getTempBan(till, (byte) 0));
         } else if (loginok != 0) {
             c.announce(MaplePacketCreator.getLoginFailed(loginok));
             return;

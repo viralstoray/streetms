@@ -396,41 +396,6 @@ public class MapleClient {
         return loginok;
     }
 
-    public Calendar getTempBanCalendar() {
-        Connection con = DatabaseConnection.getConnection();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        final Calendar lTempban = Calendar.getInstance();
-        try {
-            ps = con.prepareStatement("SELECT `tempban` FROM accounts WHERE id = ?");
-            ps.setInt(1, getAccID());
-            rs = ps.executeQuery();
-            long blubb = rs.getLong("tempban");
-            if (blubb == 0) { // basically if timestamp in db is 0000-00-00
-                return null;
-            }
-            final Calendar today = Calendar.getInstance();
-            lTempban.setTimeInMillis(rs.getTimestamp("tempban").getTime());
-            if (today.getTimeInMillis() < lTempban.getTimeInMillis()) {
-                return lTempban;
-            }
-            return null;
-        } catch (SQLException e) {
-            //idc
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (rs != null) {
-                    rs.close();
-                }
-            } catch (SQLException e) {
-            }
-        }
-        return null;//why oh why!?!
-    }
-
     public static long dottedQuadToLong(String dottedQuad) throws RuntimeException {
         String[] quads = dottedQuad.split("\\.");
         if (quads.length != 4) {
@@ -942,4 +907,22 @@ public class MapleClient {
     public void announce(MaplePacket packet) {
         session.write(packet);
     }
+    
+    public long getBanEnding() {
+        long banlength = 0;
+        try {
+            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(
+                "SELECT banlength FROM accounts WHERE id = ?"
+            );
+            ps.setInt(1, accId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                banlength = rs.getLong("banlength");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return banlength;
+    }
+    
 }

@@ -73,7 +73,8 @@ public final class AdminCommandHandler extends AbstractMaplePacketHandler {
                 c.getPlayer().setExp(slea.readInt());
                 break;
             case 0x03: // Ban
-                victim = slea.readMapleAsciiString();
+                // we don't want to use this
+                /*victim = slea.readMapleAsciiString();
                 String reason = victim + " permanent banned by " + c.getPlayer().getName();
                 target = c.getChannelServer().getPlayerStorage().getCharacterByName(victim);
                 if (target != null) {
@@ -87,14 +88,14 @@ public final class AdminCommandHandler extends AbstractMaplePacketHandler {
                     c.announce(MaplePacketCreator.getGMEffect(4, (byte) 0));
                 } else {
                     c.announce(MaplePacketCreator.getGMEffect(6, (byte) 1));
-                }
+                }*/
                 break;
             case 0x04: // Block
-                victim = slea.readMapleAsciiString();
+                /*victim = slea.readMapleAsciiString();
                 slea.readByte(); //type
                 int duration = slea.readInt();
                 String description = slea.readMapleAsciiString();
-                reason = c.getPlayer().getName() + " used /ban to ban";
+                String reason = c.getPlayer().getName() + " used /ban to ban";
                 target = c.getChannelServer().getPlayerStorage().getCharacterByName(victim);
                 if (target != null) {
                     String readableTargetName = MapleCharacter.makeMapleReadable(target.getName());
@@ -110,7 +111,7 @@ public final class AdminCommandHandler extends AbstractMaplePacketHandler {
                     c.announce(MaplePacketCreator.getGMEffect(4, (byte) 0));
                 } else {
                     c.announce(MaplePacketCreator.getGMEffect(6, (byte) 1));
-                }
+                }*/
                 break;
             case 0x10: // /h, information by vana
                 StringBuilder sb = new StringBuilder("USERS ON THIS MAP: ");

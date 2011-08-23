@@ -502,7 +502,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         banlength = banlength - System.currentTimeMillis();
         try {
             PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(
-                    "UPDATE accounts SET banned = 1, banlength = ?, banreason = ? WHERE userid = ?"
+                    "UPDATE accounts SET banned = 1, banlength = ?, banreason = ? WHERE id = ?"
             );
             ps.setLong(1, banlength);
             ps.setString(2, reason);

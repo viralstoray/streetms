@@ -471,49 +471,30 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         visibleMapObjects.add(mo);
     }
     
-    public boolean ban(String length, String duration, String reason, MapleCharacter gm) {
-        int amount = Integer.parseInt(length);
-        duration = duration.toLowerCase();
-        long banlength = 0L;
-        final int hour = 3600000;
-        final int day = 86400000;
-        final int week = 604800000;
-        final long month = 2419200000L;
-        final long year = 29030400000L;
-        if (amount == 0) {
-            gm.message("You need to enter a length above 0, aka: 1 year");
-            return false;
-        } else {
-            if (duration.equals("hour")) {
-                banlength = hour * amount;
-            } else if (duration.equals("day")) {
-                banlength = day * amount;
-            } else if (duration.equals("week")) {
-                banlength = week * amount;
-            } else if (duration.equals("month")) {
-                banlength = month * amount;
-            } else if (duration.equals("year")) {
-                banlength = year * amount;
-            } else {
-                gm.message("Available durations: hour, day, week, month, year");
-                return false;
-            }
-        }
-        banlength = banlength - System.currentTimeMillis();
+    public boolean ban(String reason) {
         try {
             PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(
-                    "UPDATE accounts SET banned = 1, banlength = ?, banreason = ? WHERE id = ?"
+                    "UPDATE accounts SET banned = 1, banreason = ? WHERE id = ?"
             );
-            ps.setLong(1, banlength);
-            ps.setString(2, reason);
-            ps.setInt(3, getAccountID());
+            ps.setString(1, reason);
+            ps.setInt(2, accountid);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
         }
+        message("You've been banned by " + name + ". You will be disconnected.");
         getClient().disconnect();
         return true;
+    }
+    
+    public void unban() {
+        try {
+            PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(
+                    "UPDATE accounts SET banned = 0, banreason = '' WHERE id = ?"
+            );
+            ps.setInt(1, accountid);
+            ps.executeUpdate();
+        } catch (SQLException e) {}
     }
 
     public int calculateMaxBaseDamage(int watk) {

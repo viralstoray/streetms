@@ -71,7 +71,7 @@ public class GMCommand {
                 player.message("Syntax: !ban player length duration reason");
             } else {
                 MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[1]);
-                if (victim.ban(sub[2], sub[3], joinStringFrom(sub, 3), player)) {
+                if (victim.ban(joinStringFrom(sub, 3))) {
                     player.message(victim.getName() + " has been banned. Be sure to log this.");
                 } else {
                     player.message("Something went wrong.");
@@ -574,15 +574,8 @@ public class GMCommand {
         } else if (sub[0].equals("suicide")) {
             player.setHpMp(0);
         } else if (sub[0].equals("unban")) {
-            try {
-                PreparedStatement p = DatabaseConnection.getConnection().prepareStatement("UPDATE accounts SET banned = -1 WHERE id = " + MapleCharacter.getIdByName(sub[1]));
-                p.executeUpdate();
-                p.close();
-            } catch (Exception e) {
-                player.message("Failed to unban " + sub[1]);
-                return true;
-            }
-            player.message("Unbanned " + sub[1]);
+            cserv.getPlayerStorage().getCharacterByName(sub[1]).unban();
+            player.message(sub[1] + " has been unbanned.");
         } else if (sub[0].equals("unjail")) {
             MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[1]);
             if (victim.getPlayerVariable("jail") != null) {

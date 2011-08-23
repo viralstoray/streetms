@@ -47,15 +47,7 @@ public final class LoginPasswordHandler implements MaplePacketHandler {
             c.announce(MaplePacketCreator.getLoginFailed(3));
         }
         
-        // banned
-        if (loginok == 3) {
-            long banends = c.getBanEnding();
-            if (System.currentTimeMillis() >= banends) {
-                c.unban();
-            } else {
-                c.announce(MaplePacketCreator.getPermBan((byte) 0));
-            }
-        } else if (loginok != 0) {
+        if (loginok != 0) {
             c.announce(MaplePacketCreator.getLoginFailed(loginok));
             return;
         }

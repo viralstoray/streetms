@@ -24,7 +24,9 @@ var setupTask;
 var tips = new Array(
     "Find a bug? Post it on the forums so we can get it fixed!",
     "Use @fm to warp to the free market.",
-    "Need something? Use @gms to find the nearest GM."
+    "Need something? Use @gms to find the nearest GM.",
+	"Did you know you can use player commands? Type @help to see them!",
+	"Visit our forums at www.streetsidegaming.com and our website at street.ariact.org."
 );
 
 function init() {

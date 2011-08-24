@@ -39,8 +39,6 @@ public final class MovePlayerHandler extends AbstractMovementPacketHandler {
             } else {
                 c.getPlayer().getMap().broadcastMessage(c.getPlayer(), MaplePacketCreator.movePlayer(c.getPlayer().getId(), res), false);
             }            
-        } else if (!c.getPlayer().canMove()) {
-            c.getPlayer().sendMoveError();
         }
     }
 }

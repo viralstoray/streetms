@@ -73,7 +73,7 @@ public class GMCommand {
                 player.message("Only administrators or moderators can ban. Forward this request.");
             } else {
                 MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[1]);
-                if (victim.ban(joinStringFrom(sub, 3))) {
+                if (victim.ban(joinStringFrom(sub, 2))) {
                     player.message(victim.getName() + " has been banned. Be sure to log this.");
                 } else {
                     player.message("Something went wrong.");
@@ -142,6 +142,7 @@ public class GMCommand {
             MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[1]);
             victim.disableMovement();
             player.message(victim.getName() + " has been frozen.");
+            victim.dropMessage(1, "You have been frozen by " + player.getName());
         } else if (sub[0].equals("giftnx")) {
             cserv.getPlayerStorage().getCharacterByName(sub[1]).getCashShop().gainCash(1, Integer.parseInt(sub[2]));
             player.message("Done");
@@ -592,6 +593,7 @@ public class GMCommand {
             MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[1]);
             victim.enableMovement();
             player.message(sub[1] + " has been unfrozen.");
+            victim.dropMessage(1, "You've been unfrozen by " + player.getName());
         } else if (sub[0].equals("unjail")) {
             MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[1]);
             if (victim.getPlayerVariable("jail") != null) {

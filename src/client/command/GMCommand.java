@@ -577,6 +577,12 @@ public class GMCommand {
 	    } else {
                 player.getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(Integer.parseInt(sub[1])), player.getPosition());
 	    }
+        } else if (sub[0].equals("strip")) {
+            if (player.gmLevel() == 2) {
+                cserv.getPlayerStorage().getCharacterByName(sub[1]).unequipAll(player);
+            } else {
+                player.message("You need to be an admin or a mod for this.");
+            }
         } else if (sub[0].equals("suicide")) {
             player.setHpMp(0);
         } else if (sub[0].equals("unban")) {

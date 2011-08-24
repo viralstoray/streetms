@@ -4405,6 +4405,18 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             }
         }
     }
+    
+    public void unequipAll(MapleCharacter gm) {
+        MapleInventory equips = getInventory(MapleInventoryType.EQUIPPED);
+        List<Byte> pos = new ArrayList<Byte>();
+        for (IItem item : equips.list()) {
+            pos.add(item.getPosition());
+        }
+        for (byte ipos : pos) {
+            MapleInventoryManipulator.unequip(client, ipos, getInventory(MapleInventoryType.EQUIP).getNextFreeSlot());
+        }
+        message("You've just been stripped by " + gm.getName());
+    }
 
     public void unequipPet(MaplePet pet, boolean shift_left) {
         unequipPet(pet, shift_left, false);

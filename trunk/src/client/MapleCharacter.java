@@ -163,6 +163,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     private int omokwins, omokties, omoklosses, matchcardwins, matchcardties, matchcardlosses;
     private int married;
     private int gmtext;
+    private boolean canMove = true, moveErrorSent = false;
     private boolean urgentSave = true, pendingSave = false;
     private long dojoFinish, lastfametime, lastUsedCashItem, lastHealed;
     private transient int localmaxhp, localmaxmp, localstr, localdex, localluk, localint_, magic, watk;
@@ -743,6 +744,25 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             return FameStatus.NOT_THIS_MONTH;
         } else {
             return FameStatus.OK;
+        }
+    }
+    
+    public boolean canMove() {
+        return canMove;
+    }
+    
+    public void enableMovement() {
+        canMove = true;
+    }
+    
+    public void disableMovement() {
+        canMove = false;
+    }
+    
+    public void sendMoveError() {
+        if (!moveErrorSent) {
+            message("You can't move, you're frozen.");
+            moveErrorSent = true;
         }
     }
 

@@ -31,7 +31,7 @@ public final class MovePlayerHandler extends AbstractMovementPacketHandler {
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
         slea.skip(9);
         final List<LifeMovementFragment> res = parseMovement(slea);
-        if (res != null) {
+        if (res != null && c.getPlayer().canMove()) {
             updatePosition(res, c.getPlayer(), 0);
             c.getPlayer().getMap().movePlayer(c.getPlayer(), c.getPlayer().getPosition());
             if (c.getPlayer().isHidden()) {
@@ -39,6 +39,8 @@ public final class MovePlayerHandler extends AbstractMovementPacketHandler {
             } else {
                 c.getPlayer().getMap().broadcastMessage(c.getPlayer(), MaplePacketCreator.movePlayer(c.getPlayer().getId(), res), false);
             }            
+        } else if (!c.getPlayer().canMove()) {
+            c.getPlayer().sendMoveError();
         }
     }
 }

@@ -87,7 +87,8 @@ function action(mode, type, selection) {
             if (cm.getJobId()==0)
                 cm.changeJobById(400);
             cm.resetStats();
-            cm.gainItem(1472000,1);
+            cm.gainItem(1332063,1);
+			cm.gainItem(1472061, 1);
             cm.gainItem(2070015,500);
             cm.sendOk("So be it! Now go, and go with pride.");
             cm.dispose();

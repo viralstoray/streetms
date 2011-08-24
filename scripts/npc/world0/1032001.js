@@ -90,7 +90,7 @@ function action(mode, type, selection) {
         } else if (status == 3) {
             if (cm.getJobId()==0)
                 cm.changeJobById(200);
-            cm.gainItem(1372005, 1);
+            cm.gainItem(1372043, 1);
             cm.sendOk("So be it! Now go, and go with pride.");
             cm.resetStats();
             cm.dispose();

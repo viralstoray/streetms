@@ -23,7 +23,7 @@ package constants;
 
 public class ServerConstants {
     public static short VERSION = 83;
-    public static String[] WORLD_NAMES = {"Scania", "Bera", "Broa", "Windia", "Khaini", "Bellocan", "Mardia", "Kradia", "Yellonde", "Demethos", "Galicia", "El Nido", "Zenith", "Arcenia", "Kastia", "Judis", "Plana", "Kalluna", "Stius", "Croa", "Medere"};;
+    public static String[] WORLD_NAMES = {"Street"};;
     // Rate Configuration
     public static final byte QUEST_EXP_RATE = 4;
     public static final byte QUEST_MESO_RATE = 3;
@@ -31,7 +31,7 @@ public class ServerConstants {
     public static final int CHANNEL_LOAD = 150;//Players per channel
     public static final long RANKING_INTERVAL = 3600000;
     //Event Configuration
-    public static final String EVENTS = "KerningPQ Boats Subway AirPlane elevator slimeRoom";
+    public static final String EVENTS = "LudiPQ StreetTip Boats Subway AirPlane elevator slimeRoom";
     // IP Configuration
     public static final String HOST = "69.197.181.162";
     //public static final String HOST = "127.0.0.1";

@@ -62,7 +62,7 @@ function start(mode, type, selection) {
 		qm.forceStartQuest();
 		qm.forceCompleteQuest();
 	} else if (status == 2) {
-		//qm.warp(914090100); - bugged
+		qm.warp(914090100);
 		qm.dispose();
 	}
 }

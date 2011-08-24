@@ -3205,7 +3205,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             case 1100:
             case 2100://?
                 tstr = 35;
-                tap = ((getLevel() - 10) * levelap) + 14;
+                tap = ((getLevel() - 10) * levelap) + 21;
                 tsp += ((getLevel() - 10) * 3);
                 break;
             case 200:
@@ -5159,5 +5159,15 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         } catch (SQLException ex) {
             System.out.println("Error deleting player variable: " + ex);
         }
+    }
+    
+    public void lockUI() {
+        client.announce(MaplePacketCreator.disableUI(true));
+	client.announce(MaplePacketCreator.lockUI(true));
+    }
+    
+    public void unlockUI() {
+        client.announce(MaplePacketCreator.disableUI(false));
+	client.announce(MaplePacketCreator.lockUI(false));
     }
 }

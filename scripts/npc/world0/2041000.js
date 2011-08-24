@@ -25,20 +25,8 @@
 -- By ---------------------------------------------------------------------------------------------
 	Biscuit
 **/
-var status = 0;
 
 function start() {
-    cm.sendYesNo("Hello, would you like to go back to #bOrbis#k?");
-}
-
-function action(mode, type, selection) {
-    if(mode != 1)
-        cm.dispose();
-    else {
-        status++;
-        if(status == 1) {
-            cm.warp(200000100);
-			cm.dispose();
-        }
-    }
+    cm.sendOk("If you would like to go back to Orbis, just talk to #bMel#k to the left.");
+	cm.dispose();
 }

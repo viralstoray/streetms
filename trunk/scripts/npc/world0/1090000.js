@@ -62,6 +62,10 @@ function action(mode, type, selection) {
         else if (status == 3) {
             if (cm.getJobId() == 0)
                 cm.changeJobById(500);
+				cm.resetStats();
+				cm.gainItem(1482014, 1);
+				cm.gainItem(1492014, 1);
+				cm.gainItem(2330006, 600);
             cm.sendOk("So be it! Now go with pride.");
             cm.dispose();
         } else if (status == 11)

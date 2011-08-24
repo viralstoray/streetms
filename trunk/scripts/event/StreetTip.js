@@ -21,6 +21,12 @@
 */
 var setupTask;
 
+var tips = new Array(
+    "Find a bug? Post it on the forums so we can get it fixed!",
+    "Use @fm to warp to the free market.",
+    "Need something? Use @gms to find the nearest GM."
+);
+
 function init() {
     scheduleNew();
 }
@@ -42,6 +48,5 @@ function cancelSchedule() {
 
 function start() {
     scheduleNew();
-    var Message = new Array("Please refrain from using foul language in this game.", "Verbal and other forms of abuse will NOT be tolerated. Abusers will be blocked from the game.");
-    em.getChannelServer().yellowWorldMessage("[MapleTip] " + Message[Math.floor(Math.random() * Message.length)]);
+    em.getChannelServer().yellowWorldMessage("[StreetTip] " + tips[Math.floor(Math.random() * tips.length)]);
 }

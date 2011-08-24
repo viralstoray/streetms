@@ -25,6 +25,7 @@ import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import scripting.npc.NPCScriptManager;
 import scripting.portal.PortalScriptManager;
+import scripting.quest.QuestScriptManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MapleShopFactory;
@@ -443,6 +444,15 @@ public class GMCommand {
             } catch (Exception re) {
                 player.message("RemoteException occurred while attempting to reload portals.");
                 System.out.println("RemoteException occurred while attempting to reload portalscripts: " + re);
+            }
+        } else if (sub[0].equals("reloadquests")) {
+            try {
+                player.message("Attempting to reload all quests. This may take awhile...");
+                QuestScriptManager.getInstance().clearScripts();
+                player.message("Completed.");
+            } catch (Exception re) {
+                player.message("RemoteException occurred while attempting to reload quests.");
+                System.out.println("RemoteException occurred while attempting to reload questscripts: " + re);
             }
         } else if (sub[0].equals("search") || sub[0].equals("lookup")) {
             StringBuilder sb = new StringBuilder();

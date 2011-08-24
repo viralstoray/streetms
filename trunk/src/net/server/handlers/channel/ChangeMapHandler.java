@@ -81,6 +81,7 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
                 } else if (targetid != -1 && chr.isGM()) {
                     MapleMap to = c.getChannelServer().getMapFactory().getMap(targetid);
                     chr.changeMap(to, to.getPortal(0));
+                    chr.unlockUI();
                 } else if (targetid != -1 && !chr.isGM()) {//Thanks celino for saving me some time (:
                     final int divi = chr.getMapId() / 100;
                     boolean warp = false;
@@ -100,6 +101,10 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
                         if (targetid == 914090011 || targetid == 914090012 || targetid == 914090013 || targetid == 140090000) {
                             warp = true;
                         }
+                    } else if (divi == 914090100) { // Aran 1st Job Advancement Clip
+                        if (targetid == 140000000) {
+                            warp = true;
+                        }
                     } else if (divi / 10 == 1020) { // Adventurer movie clip Intro
                         if (targetid == 1020000) {
                             warp = true;
@@ -108,6 +113,7 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
                     if (warp) {
                         final MapleMap to = c.getChannelServer().getMapFactory().getMap(targetid);
                         chr.changeMap(to, to.getPortal(0));
+                        chr.unlockUI();
                     }
                 }
                 if (portal != null && !portal.getPortalStatus()) {

@@ -19,26 +19,29 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Mel
--- By ---------------------------------------------------------------------------------------------
-	Biscuit
-**/
-var status = 0;
+/*	
+	Author : Biscuit
+*/
+var status = -1;
 
-function start() {
-    cm.sendYesNo("Hello, would you like to go back to #bOrbis#k?");
-}
-
-function action(mode, type, selection) {
-    if(mode != 1)
-        cm.dispose();
-    else {
-        status++;
-        if(status == 1) {
-            cm.warp(200000100);
-			cm.dispose();
-        }
-    }
+function start(mode, type, selection) {
+    status++;
+    if (mode != 1) {
+		if(type == 1 && mode == 0) {
+			qm.sendOk("Aran, you cannot turn away from your destiny!");
+			qm.dispose();
+			return;
+		}else{
+			qm.dispose();
+			return;
+		}
+	}
+	
+	if (status == 0) {
+		qm.sendNext("These aggressive changes to the Orange Mushrooms must be from this faint noise coming out of the #t4032315#.");
+	else if (status == 1) {
+		qm.sendAcceptDecline("This is all we can gather for now, you'd better report these results to #bTru#k.");
+		qm.forceStartQuest();
+		qm.dispose();
+	}
 }

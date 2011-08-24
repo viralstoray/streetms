@@ -39,7 +39,7 @@ function start(mode, type, selection) {
 	
 	if (status == 0) {
 		qm.sendNext("These aggressive changes to the Orange Mushrooms must be from this faint noise coming out of the #t4032315#.");
-	else if (status == 1) {
+	} else if (status == 1) {
 		qm.sendAcceptDecline("This is all we can gather for now, you'd better report these results to #bTru#k.");
 		qm.forceStartQuest();
 		qm.dispose();

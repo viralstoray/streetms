@@ -21,7 +21,8 @@
 */
 function enter(pi) {
     try { 
-        pi.warp(pi.getPlayer().getSavedLocation("FREE_MARKET"), "market00");
+        pi.warp(pi.getPlayerVariable("FREE_MARKET"));
+		pi.deletePlayerVariable("FREE_MARKET");
     } catch(err) {
         pi.warp(100000000);
     }

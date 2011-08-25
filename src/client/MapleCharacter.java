@@ -5091,10 +5091,10 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ResultSet rs = ps.executeQuery();
             PreparedStatement ps2;
             if (rs.next()) {
-                ps2 = DatabaseConnection.getConnection().prepareStatement("UPDATE player_variables SET name = ?, value = ? WHERE characterid = ?");
-                ps2.setString(1, name);
-                ps2.setString(2, value);
-                ps2.setInt(3, id);
+                ps2 = DatabaseConnection.getConnection().prepareStatement("UPDATE player_variables SET value = ? WHERE characterid = ? AND name = ?");
+                ps2.setString(1, value);
+                ps2.setInt(2, id);
+                ps2.setString(3, name);
             } else {
                 ps2 = DatabaseConnection.getConnection().prepareStatement("INSERT INTO player_variables (characterid, name, value) VALUES (?, ?, ?)");
                 ps2.setInt(1, id);

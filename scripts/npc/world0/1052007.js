@@ -34,6 +34,8 @@ function start() {
     for (var i = 0; i < 3; i++)
         if (cm.haveItem(4031036 + i))
             text += "\r\n#L" + i + "##t" + (4031036 + i) +"#";
+	text += "\r\n#b#L4#Kerning Square Station#l#k";
+	close = false;
     if (close) {
         cm.sendOk(text);
         cm.dispose();
@@ -50,14 +52,9 @@ function action(mode, type, selection) {
         return;
     }
     if (status == 0) {
-        if (selection == 3) {
-            var em = cm.getEventManager("Subway");
-            if (em.getProperty("entry") == "true")
-                cm.sendYesNo("It looks like there's plenty of room for this ride. Please have your ticket ready so I can let you in. The ride will be long, but you'll get to your destination just fine. What do you think? Do you wants to get on this ride?");
-            else {
-                cm.sendNext("We will begin boarding 1 minute before the takeoff. Please be patient and wait for a few minutes. Be aware that the subway will take off right on time, and we stop receiving tickets 1 minute before that, so please make sure to be here on time.");
-                cm.dispose();
-            }
+        if (selection == 3 || selection == 4) {
+            cm.warp(103000310);
+			cm.dispose();
         }else{
             cm.sendNext("Good Luck!"); //Not GMS-like
         }

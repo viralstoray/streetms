@@ -137,7 +137,7 @@ function action(mode, type, selection) {
                         if (cm.getPlayer().getItemQuantity(belts[i], true) > 0) {
                             selStr += "\r\n     #i" + belts[i] + "# #t" + belts[i] + "#(Obtain)";
                         } else
-                            selStr += "\r\n#L" + i + "##i" + belts[i] + "# #t" + belts[i] + "#l";
+                            selStr += "\r\n#L" + i + "##i" + belts[i] + "# #t" + belts[i] + "#";
                     }
                     cm.sendSimple(selStr);
                 } else if (status == 1) {

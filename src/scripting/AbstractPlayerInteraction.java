@@ -30,12 +30,12 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleInventory;
 import client.MapleInventoryType;
+import client.MapleJob;
 import client.MaplePet;
 import client.MapleQuestStatus;
 import client.SkillFactory;
 import constants.ItemConstants;
 import java.awt.Point;
-import java.util.Collection;
 import net.server.MapleParty;
 import net.server.Server;
 import net.server.guild.MapleGuild;
@@ -490,5 +490,17 @@ public class AbstractPlayerInteraction {
     
     public void deletePlayerVariable(String name) {
         c.getPlayer().deletePlayerVariable(name);
+    }
+    
+    public boolean forceStartQuest(int id, int npcid) {
+        return MapleQuest.getInstance(id).forceStart(getPlayer(), npcid);
+    }
+    
+    public boolean forceCompleteQuest(int id, int npcid) {
+        return MapleQuest.getInstance(id).forceComplete(getPlayer(), npcid);
+    }
+    
+    public MapleJob getJob() {
+        return c.getPlayer().getJob();
     }
 }

@@ -55,6 +55,9 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
                 lockUI();
                 c.announce(MaplePacketCreator.showIntro("Effect/Direction1.img/aranTutorial/HandedPoleArm" + c.getPlayer().getGender()));
                 break;
+            case 914090200:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction1.img/aranTutorial/Maha"));
         }
     }
 

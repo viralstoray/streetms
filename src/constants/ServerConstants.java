@@ -31,7 +31,7 @@ public class ServerConstants {
     public static final int CHANNEL_LOAD = 150;//Players per channel
     public static final long RANKING_INTERVAL = 3600000;
     //Event Configuration
-    public static final String EVENTS = "LudiPQ StreetTip Boats Subway AirPlane elevator slimeRoom";
+    public static final String EVENTS = "LudiPQ StreetTip Boats Subway AirPlane elevator slimeRoom Aran2ndJob";
     // IP Configuration
     public static final String HOST = "69.197.181.162";
     //public static final String HOST = "127.0.0.1";

@@ -427,7 +427,7 @@ public class GMCommand {
             } else {
                 player.dropMessage("You have entered an invalid Npc-Id");
             }
-            } else if (sub[0].equals("reloadshops")) {
+        } else if (sub[0].equals("reloadshops")) {
             try {
                 player.message("Attempting to reload all shops. This may take awhile...");
                 MapleShopFactory.getInstance().reloadShops();
@@ -435,24 +435,6 @@ public class GMCommand {
             } catch (Exception re) {
                 player.message("RemoteException occurred while attempting to reload shops.");
                 System.out.println("RemoteException occurred while attempting to reload shops: " + re);
-            }
-        } else if (sub[0].equals("reloadportals")) {
-            try {
-                player.message("Attempting to reload all portals. This may take awhile...");
-                PortalScriptManager.getInstance().clearScripts();
-                player.message("Completed.");
-            } catch (Exception re) {
-                player.message("RemoteException occurred while attempting to reload portals.");
-                System.out.println("RemoteException occurred while attempting to reload portalscripts: " + re);
-            }
-        } else if (sub[0].equals("reloadquests")) {
-            try {
-                player.message("Attempting to reload all quests. This may take awhile...");
-                QuestScriptManager.getInstance().clearScripts();
-                player.message("Completed.");
-            } catch (Exception re) {
-                player.message("RemoteException occurred while attempting to reload quests.");
-                System.out.println("RemoteException occurred while attempting to reload questscripts: " + re);
             }
         } else if (sub[0].equals("search") || sub[0].equals("lookup")) {
             StringBuilder sb = new StringBuilder();

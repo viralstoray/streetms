@@ -38,10 +38,17 @@ function start(mode, type, selection) {
 	}
 	
 	if (status == 0) {
-		qm.sendNext("These changes to the Green Mushrooms must be connected with the kid carrying the puppets, you'd better be careful! Either way, you've done a good job.");
+		qm.sendNext("So what did #Talking Tree# say?", 9);
 	} else if (status == 1) {
-		qm.sendAcceptDecline("For now, you'd better go report your findings to #bTru#k.");
+		qm.sendNextPrev("#b(You tell him what you heard from Talking Tree)#k", 3);
+	} else if (status == 2) {
+		qm.sendAcceptDecline("A kid with a puppet? This seems very suspicious. I'm sure the kid is the reason why the Green Mushrooms have turned violent all of a sudden.", 9);
+	} else if (status == 3) {
 		qm.forceStartQuest();
+		qm.sendOk("How dare that kid wreak havoc on the #bForest Down South#k. This is really a serious matter. Restoring the #bForest Down South#k will take years... Which means I'll have to devote my time to restoring that area now.");
+	} else if (status == 4) {
+		qm.sendNext("#b(I was able to find out what caused the changes to the Green Mushrooms. Now I should gather up the information and hand it over to Tru.)#k", 3);
+	} else if (status == 5) {
 		qm.dispose();
 	}
 }

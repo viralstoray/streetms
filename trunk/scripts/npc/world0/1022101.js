@@ -19,19 +19,24 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/* Rupi by Moogra
-Happyville Warp NPC
+/*
+	Author: Biscuit
 */
+var status = 0;
 
 function start() {
-    cm.sendYesNo("Do you want to leave #bHappyville#k?");
+	cm.sendYesNo("Hello, I can take you to #bHappyville#k. Would you like to go now?");
 }
 
 function action(mode, type, selection) {
-    if (mode < 1)
+    if(mode != 1)
         cm.dispose();
-    else
-        cm.warp(cm.getPlayerVariable("HV_map"), 0);
-		cm.deletePlayerVariable("HV_map");
-    cm.dispose();
+    else {
+        status++;
+        if(status == 1) {
+			cm.setPlayerVariable("HV_map", cm.getMapId()+"");
+            cm.warp(209000000);
+			cm.dispose();
+        }
+    }
 }

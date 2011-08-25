@@ -28,7 +28,7 @@ public class PlayerCommand {
             } else if (player.getMapId() >= 910000000 && player.getMapId() <= 910000022)
                 player.message("[StreetSys] You are already in the Free Market.");
             else {
-                player.saveLocation("FREE_MARKET");
+                player.setPlayerVariable("FREE_MARKET", player.getMapId()+"");
                 MapleMap map = c.getChannelServer().getMapFactory().getMap(910000000);
                 player.changeMap(map, map.getPortal(0));
             }

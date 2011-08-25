@@ -479,4 +479,16 @@ public class AbstractPlayerInteraction {
         }
         return null;
     }
+    
+    public void setPlayerVariable(String name, String value) {
+        c.getPlayer().setPlayerVariable(name, value);
+    }
+    
+    public String getPlayerVariable(String name) {
+        return c.getPlayer().getPlayerVariable(name);
+    }
+    
+    public void deletePlayerVariable(String name) {
+        c.getPlayer().deletePlayerVariable(name);
+    }
 }

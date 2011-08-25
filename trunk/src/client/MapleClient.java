@@ -91,8 +91,7 @@ public class MapleClient {
     private byte loginattempt = 0;
     private String pin = null;
     private int pinattempt = 0;
-    private String pic = null;
-    private int picattempt = 0;
+    private String pic = "00000";
     private byte gender = -1;
 
     public MapleClient(MapleAESOFB send, MapleAESOFB receive, IoSession session) {
@@ -321,15 +320,7 @@ public class MapleClient {
     }
 
     public boolean checkPic(String other) {
-        picattempt++;
-        if (picattempt > 5) {
-            getSession().close(true);
-        }
-        if (pic.equals(other)) {
-            picattempt = 0;
-            return true;
-        }
-        return false;
+        return true;
     }
 
     public int login(String login, String pwd) {
@@ -342,7 +333,7 @@ public class MapleClient {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            ps = con.prepareStatement("SELECT id, password, gender, banned, gm, pin, pic, characterslots FROM accounts WHERE name = ?");
+            ps = con.prepareStatement("SELECT id, password, gender, banned, gm, pin, characterslots FROM accounts WHERE name = ?");
             ps.setString(1, login);
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -352,7 +343,6 @@ public class MapleClient {
                 accId = rs.getInt("id");
                 gmlevel = rs.getInt("gm");
                 pin = rs.getString("pin");
-                pic = rs.getString("pic");
                 gender = rs.getByte("gender");
                 characterSlots = rs.getByte("characterslots");
                 String passhash = rs.getString("password");

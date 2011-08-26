@@ -178,14 +178,14 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return getPlayer().getJob().getId();
     }
 
-    public void startQuest(short id) {
+    public void startQuest(int id) {
         try {
             MapleQuest.getInstance(id).forceStart(getPlayer(), npc);
         } catch (NullPointerException ex) {
         }
     }
 
-    public void completeQuest(short id) {
+    public void completeQuest(int id) {
         try {
             MapleQuest.getInstance(id).forceComplete(getPlayer(), npc);
         } catch (NullPointerException ex) {

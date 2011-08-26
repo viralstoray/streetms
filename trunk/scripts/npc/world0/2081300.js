@@ -19,22 +19,49 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*
- *@Author:  Moogra
- *@NPC:     4th Job Advancement NPC
- *@Purpose: Handles 4th job.
- */
+
+var status = 0;
+var job;
 
 function start() {
-    if (cm.getLevel() < 120) {
-        cm.sendOk("Sorry, but you have to be at least level 120 to make the 4th Job Advancement.");
-        cm.dispose();
-    } else if (cm.getLevel() >=120)
-        cm.sendNext("Do you want to get your 4th Job Advancement?");
+    status = -1;
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode > 1)
-        cm.getPlayer().changeJob(MapleJob.getById(jobId + 1));
-    cm.dispose();
-}
+    if (mode == -1) {
+        cm.dispose();
+    } else {
+        if (mode == 0 && status == 1) {
+            cm.sendOk("Make up your mind and visit me again.");
+            cm.dispose();
+            return;
+        }
+        if (mode == 1)
+            status++;
+        else
+            status--;
+        if (status == 0) {
+            if (cm.getJobId() < 300 || cm.getJobId() >= 400) {
+                cm.sendOk("May #rOdin#k be with you!");
+                cm.dispose();
+                return;
+            }
+			if (cm.getJobId() % 10 > 1) {
+				cm.sendOk("Your abilities are now at their maximum. Train hard and one day you may become one of the Greats.");
+				cm.dispose();
+			} else if ((cm.getJobId() >= 300 && cm.getJobId() < 400) && cm.getLevel() >= 120) {
+                cm.sendNext("It seems you have advanced quite far, young one.");
+            } else {
+                cm.sendOk("You must train harder and come back when you are ready.");
+                cm.dispose();
+            }
+        } else if (status == 1) {
+            cm.sendAcceptDecline("Are you ready to take the final step into your destiny?");
+        } else if (status == 2) {
+			cm.changeJobById(cm.getJobId() + 1);
+			cm.sendOk("You are now a #b"+cm.getPlayer().getJobName()+"#k. Wear it proudly!");
+			cm.dispose();
+		}
+    }
+}	

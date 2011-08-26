@@ -512,36 +512,14 @@ public class Server implements Runnable {
                     w.shutdown();
                 }
                 for (World w : getWorlds()) {
-                    while (w.getPlayerStorage().getAllCharacters().size() > 0) {
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ie) {
-                            System.err.println("FUCK MY LIFE");
-                        }
-                    }
-                }
-                for (Channel ch : getAllChannels()) {
-                    while (ch.getConnectedClients() > 0) {
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ie) {
-                            System.err.println("FUCK MY LIFE");
-                        }
+                    for (MapleCharacter chr : w.getPlayerStorage().getAllCharacters()) {
+                        chr.getClient().disconnect();
                     }
                 }
 
                 TimerManager.getInstance().purge();
                 TimerManager.getInstance().stop();
 
-                for (Channel ch : getAllChannels()) {
-                    while (!ch.finishedShutdown()) {
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ie) {
-                            System.err.println("FUCK MY LIFE");
-                        }
-                    }
-                }
                 worlds.clear();
                 worlds = null;
                 channels.clear();

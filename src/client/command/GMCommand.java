@@ -24,8 +24,6 @@ import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import scripting.npc.NPCScriptManager;
-import scripting.portal.PortalScriptManager;
-import scripting.quest.QuestScriptManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MapleShopFactory;
@@ -254,7 +252,7 @@ public class GMCommand {
                 player.equipChanged();
             } catch (java.lang.NumberFormatException job) {}
         } else if (sub[0].equals("jobperson")) {
-            if (c.gmLevel() < 2) {
+            if (c.getPlayer().gmLevel() < 2) {
                 player.message("You need to be an admin for this silly.");
                 return false;
             }
@@ -510,7 +508,7 @@ public class GMCommand {
             player.updateSingleStat(MapleStat.INT, x);
             player.updateSingleStat(MapleStat.LUK, x);
         } else if (sub[0].equals("shutdown") || sub[0].equals("shutdownnow")) {
-            if (c.gmLevel() < 2) {
+            if (c.getPlayer().gmLevel() < 2) {
                 player.message("You need to be an owner to do this silly.");
                 return false;
             }
@@ -520,6 +518,7 @@ public class GMCommand {
             } else if (sub.length > 1) {
                 time *= Integer.parseInt(sub[1]);
             }
+            Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(6, "[Notice] The server will be shut down in " + (time/60000) + " minute" + ((time/60000) == 1 ? "" : "s") + ". Please log off safely."));
             TimerManager.getInstance().schedule(Server.getInstance().shutdown(false), time);
         } else if (sub[0].equals("smega")) {
             if (sub.length == 0) {

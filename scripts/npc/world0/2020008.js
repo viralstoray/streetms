@@ -19,8 +19,6 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-importPackage(Packages.client);
-importPackage(Packages.server.quest);
 
 var status = 0;
 var job;
@@ -44,49 +42,26 @@ function action(mode, type, selection) {
         else
             status--;
         if (status == 0) {
-            if (cm.getJob().getId() >= 200 || cm.getJob().getId() % 10 != 1) {
+            if (cm.getJobId() >= 200) {
                 cm.sendOk("May #rOdin#k be with you!");
                 cm.dispose();
                 return;
             }
-            cm.completeQuest(100100);
-            cm.completeQuest(100102);
-            if (cm.getQuestStatus(100102).equals(MapleQuestStatus.Status.COMPLETED)) {
-                cm.sendNext("#rBy Odin's ring!#k Indeed, you have proven to be worthy of the strength I will now bestow upon you.");
-            } else if (cm.getQuestStatus(100102).equals(MapleQuestStatus.Status.STARTED)) {
-                cm.sendOk("Go and find me the #rNecklace of Wisdom#k which is hidden on the Holy Ground at the Snowfield.");
-                cm.dispose();
-            } else if (cm.getQuestStatus(100100).equals(MapleQuestStatus.Status.COMPLETED)) {
-                cm.sendNext("#rBy Odin's raven!#k I was right, your strength is truly excellent.");
-            } else if (cm.getQuestStatus(100100).equals(MapleQuestStatus.Status.STARTED)) {
-                cm.sendOk("Well, well. Now go and see #bDances with Balrog#k. He will show you the way.");
-                cm.dispose();
-            } else if (cm.getJob().getId() < 200 && cm.getJob().getId() % 10 == 1 && cm.getLevel() >= 70) {
+			if (cm.getJobId() % 10 > 0) {
+				cm.sendOk("You have chosen wisely.");
+				cm.dispose();
+			} else if (cm.getJobId() < 200 && cm.getLevel() >= 70) {
                 cm.sendNext("#rBy Odin's beard!#k You are a strong one.");
             } else {
                 cm.sendOk("Your time has yet to come...");
                 cm.dispose();
             }
         } else if (status == 1) {
-            if (cm.getQuestStatus(100102).equals(MapleQuestStatus.Status.COMPLETED)) {
-                cm.changeJobById(cm.getPlayer().getJob().getId() + 1);
-                cm.sendOk("You are now a #b"+cm.getJobName()+"#k. May #rOdin#k be with you!");
-                cm.dispose();
-            } else if (cm.getQuestStatus(100100).equals(MapleQuestStatus.Status.COMPLETED)) {
-                cm.sendAcceptDecline("Is your mind ready to undertake the final test?");
-            } else {
-                cm.sendAcceptDecline("But I can make you even stronger. Although you will have to prove not only your strength but your knowledge. Are you ready for the challenge?");
-            }
+            cm.sendAcceptDecline("Is your mind ready to undertake this new power?");
         } else if (status == 2) {
-            if (cm.getQuestStatus(100100).equals(MapleQuestStatus.Status.COMPLETED)) {
-                cm.startQuest(100102);
-                cm.sendOk("Go and find me the #rNecklace of Wisdom#k which is hidden on the Holy Ground at the Snowfield.");
-                cm.dispose();
-            } else {
-                cm.startQuest(100100);
-                cm.sendOk("Well, well. Now go and see #bDances with Balrog#k. He will show you the way.");
-                cm.dispose();
-            }
-        }
+			cm.changeJobById(cm.getJobId() + 1);
+			cm.sendOk("You are now a #b"+cm.getPlayer().getJobName()+"#k. May #rOdin#k be with you!");
+			cm.dispose();
+		}
     }
 }	

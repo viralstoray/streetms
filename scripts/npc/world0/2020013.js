@@ -42,25 +42,25 @@ function action(mode, type, selection) {
         else
             status--;
         if (status == 0) {
-            if (cm.getJobId() >= 200) {
+            if (cm.getJobId() < 500 || cm.getJobId() >= 600) {
                 cm.sendOk("May #rOdin#k be with you!");
                 cm.dispose();
                 return;
             }
-			if (cm.getJobId() % 10 > 1) {
-				cm.sendOk("Your abilities are now at their maximum. Train hard and one day you may become one of the Greats.");
+			if (cm.getJobId() % 10 > 0) {
+				cm.sendOk("You have chosen wisely.");
 				cm.dispose();
-			} else if (cm.getJobId() < 200 && cm.getLevel() >= 120) {
-                cm.sendNext("It seems you have advanced quite far, young one.");
+			} else if ((cm.getJobId() >= 500 && cm.getJobId() < 600) && cm.getLevel() >= 70) {
+                cm.sendNext("#rBy Odin's beard!#k You are a strong one.");
             } else {
-                cm.sendOk("You must train harder and come back when you are ready.");
+                cm.sendOk("Your time has yet to come...");
                 cm.dispose();
             }
         } else if (status == 1) {
-            cm.sendAcceptDecline("Are you ready to take the final step into your destiny?");
+            cm.sendAcceptDecline("Is your mind ready to undertake this new power?");
         } else if (status == 2) {
 			cm.changeJobById(cm.getJobId() + 1);
-			cm.sendOk("You are now a #b"+cm.getPlayer().getJobName()+"#k. Wear it proudly!");
+			cm.sendOk("You are now a #b"+cm.getPlayer().getJobName()+"#k. May #rOdin#k be with you!");
 			cm.dispose();
 		}
     }

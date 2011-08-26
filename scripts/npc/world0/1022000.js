@@ -70,7 +70,7 @@ function action(mode, type, selection) {
 						slx = 1;
 					}
 				} else {
-					cm.sendNext("To be continued...");
+					cm.sendOk("You have chosen wisely.");
 					cm.dispose();
 				}
 			}

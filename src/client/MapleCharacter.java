@@ -4982,6 +4982,10 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         client.getPlayer().getMap().clearDrops();
     }
     
+    public String getJobName() {
+        return getJobName(client.getPlayer());
+    }
+    
     public String getJobName(MaplePartyCharacter chr) {
         return getJobName(client.getChannelServer().getPlayerStorage().getCharacterById(chr.getId()));
     }
@@ -5037,6 +5041,16 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             return "Mage (Fire/Poison)";
         else if (chr.getJob() == MapleJob.FP_WIZARD)
             return "Wizard (Fire/Poison)";
+        else if (chr.getJob() == MapleJob.HERMIT)
+            return "Hermit";
+        else if (chr.getJob() == MapleJob.HERO)
+            return "Hero";
+        else if (chr.getJob() == MapleJob.IL_ARCHMAGE)
+            return "Arch Mage (Ice/Lightning)";
+        else if (chr.getJob() == MapleJob.IL_MAGE)
+            return "Mage (Ice/Lightning)";
+        else if (chr.getJob() == MapleJob.IL_WIZARD)
+            return "Wizard (Ice/Lightning)";
         else if (chr.getJob() == MapleJob.LEGEND)
             return "Legend";
         else if (chr.getJob() == MapleJob.MAGICIAN)

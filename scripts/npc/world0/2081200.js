@@ -42,7 +42,7 @@ function action(mode, type, selection) {
         else
             status--;
         if (status == 0) {
-            if (cm.getJobId() >= 200) {
+            if (cm.getJobId() < 200 || cm.getJobId() >= 300) {
                 cm.sendOk("May #rOdin#k be with you!");
                 cm.dispose();
                 return;
@@ -50,7 +50,7 @@ function action(mode, type, selection) {
 			if (cm.getJobId() % 10 > 1) {
 				cm.sendOk("Your abilities are now at their maximum. Train hard and one day you may become one of the Greats.");
 				cm.dispose();
-			} else if (cm.getJobId() < 200 && cm.getLevel() >= 120) {
+			} else if ((cm.getJobId() >= 200 && cm.getJobId() < 300) && cm.getLevel() >= 120) {
                 cm.sendNext("It seems you have advanced quite far, young one.");
             } else {
                 cm.sendOk("You must train harder and come back when you are ready.");

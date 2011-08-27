@@ -119,6 +119,7 @@ function action(mode, type, selection) {
         } else if (status == 15) {
             cm.changeJobById(job);
             cm.sendOk("So be it! Now go, and go with pride.");
+			cm.dispose();
         }
     }
 }	

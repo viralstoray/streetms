@@ -50,6 +50,7 @@ import scripting.event.EventInstanceManager;
 import client.autoban.AutobanManager;
 import constants.ExpTable;
 import constants.ItemConstants;
+import constants.ServerConstants;
 import constants.skills.Bishop;
 import constants.skills.BlazeWizard;
 import constants.skills.Crusader;
@@ -247,9 +248,9 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         savedLocations = new SavedLocation[SavedLocationType.values().length];
 
         for (MapleInventoryType type : MapleInventoryType.values()) {
-            byte b = 24;
+            byte b = ServerConstants.INV_SLOTS;
             if (type == MapleInventoryType.CASH) {
-                b = 96;
+                b = ServerConstants.CASH_INV_SLOTS;
             }
             inventory[type.ordinal()] = new MapleInventory(type, (byte) b);
         }
@@ -278,10 +279,10 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         ret.accountid = c.getAccID();
         ret.buddylist = new BuddyList(20);
         ret.maplemount = null;
-        ret.getInventory(MapleInventoryType.EQUIP).setSlotLimit(24);
-        ret.getInventory(MapleInventoryType.USE).setSlotLimit(24);
-        ret.getInventory(MapleInventoryType.SETUP).setSlotLimit(24);
-        ret.getInventory(MapleInventoryType.ETC).setSlotLimit(24);
+        ret.getInventory(MapleInventoryType.EQUIP).setSlotLimit(ServerConstants.INV_SLOTS);
+        ret.getInventory(MapleInventoryType.USE).setSlotLimit(ServerConstants.INV_SLOTS);
+        ret.getInventory(MapleInventoryType.SETUP).setSlotLimit(ServerConstants.INV_SLOTS);
+        ret.getInventory(MapleInventoryType.ETC).setSlotLimit(ServerConstants.INV_SLOTS);
         int[] key = {18, 65, 2, 23, 3, 4, 5, 6, 16, 17, 19, 25, 26, 27, 31, 34, 35, 37, 38, 40, 43, 44, 45, 46, 50, 56, 59, 60, 61, 62, 63, 64, 57, 48, 29, 7, 24, 33, 41, 39};
         int[] type = {4, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 4, 4, 5, 6, 6, 6, 6, 6, 6, 5, 4, 5, 4, 4, 4, 4, 4};
         int[] action = {0, 106, 10, 1, 12, 13, 18, 24, 8, 5, 4, 19, 14, 15, 2, 17, 11, 3, 20, 16, 9, 50, 51, 6, 7, 53, 100, 101, 102, 103, 104, 105, 54, 22, 52, 21, 25, 26, 23, 27};
@@ -4191,7 +4192,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     }
 
     public byte getSlots(int type) {
-        return type == MapleInventoryType.CASH.getType() ? 96 : inventory[type].getSlotLimit();
+        return type == MapleInventoryType.CASH.getType() ? ServerConstants.CASH_INV_SLOTS
+                : inventory[type].getSlotLimit();
     }
 
     public boolean gainSlots(int type, int slots) {

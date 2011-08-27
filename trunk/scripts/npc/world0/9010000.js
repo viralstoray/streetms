@@ -39,9 +39,11 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if(mode != 1)
+    if(mode != 1) {
+		cm.getPlayer().deletePlayerVariable("search_list")
+		cm.getPlayer().deletePlayerVariable("search_type")
         cm.dispose();
-    else {
+    } else {
         status++;
         if(status == 1) {
 			if (cm.getPlayer().getPlayerVariable("search_list") != null) {

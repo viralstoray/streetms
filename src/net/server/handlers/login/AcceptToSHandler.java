@@ -13,7 +13,7 @@ public final class AcceptToSHandler extends AbstractMaplePacketHandler {
 
     @Override
     public boolean validateState(MapleClient c) {
-        return false;
+        return !c.isLoggedIn();
     }
 
     @Override
@@ -22,6 +22,10 @@ public final class AcceptToSHandler extends AbstractMaplePacketHandler {
             c.disconnect();//Client dc's but just because I am cool I do this (:
             return;
         }
-        c.announce(MaplePacketCreator.getAuthSuccess(c));
+        if (c.finishLogin() == 0) {
+            c.announce(MaplePacketCreator.getAuthSuccess(c));
+        } else {
+            c.announce(MaplePacketCreator.getLoginFailed(9));//shouldn't happen XD
+        }
     }
 }

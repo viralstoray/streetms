@@ -36,7 +36,6 @@ public class ViewAllCharSelectedWithPicHandler extends AbstractMaplePacketHandle
 			if (c.getIdleTask() != null) {
 				c.getIdleTask().cancel(true);
 			}
-			c.updateLoginState(MapleClient.LOGIN_SERVER_TRANSITION);
 
 			String channelServerIP = MapleClient.getChannelServerIPFromSubnet(c.getSession().getRemoteAddress().toString().replace("/", "").split(":")[0], channel);
 			if(channelServerIP.equals("0.0.0.0")) {

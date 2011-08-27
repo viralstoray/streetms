@@ -36,6 +36,6 @@ public final class LoginRequiringNoOpHandler implements MaplePacketHandler {
     }
 
     public boolean validateState(MapleClient c) {
-        return c.isLoggedIn();
+        return false;
     }
 }

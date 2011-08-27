@@ -32,7 +32,7 @@ import tools.data.input.SeekableLittleEndianAccessor;
 public final class LoginPasswordHandler implements MaplePacketHandler {
     @Override
     public boolean validateState(MapleClient c) {
-        return !c.isLoggedIn();
+        return false;
     }
 
     @Override
@@ -46,22 +46,17 @@ public final class LoginPasswordHandler implements MaplePacketHandler {
         if (c.hasBannedIP() || c.hasBannedMac()) {
             c.announce(MaplePacketCreator.getLoginFailed(3));
         }
-        
         if (loginok != 0) {
             c.announce(MaplePacketCreator.getLoginFailed(loginok));
             return;
         }
-        if (c.finishLogin() == 0) {
-            c.announce(MaplePacketCreator.getAuthSuccess(c));//why the fk did I do c.getAccountName()?
-            final MapleClient client = c;
-            c.setIdleTask(TimerManager.getInstance().schedule(new Runnable() {
-                @Override
-                public void run() {
-                    client.disconnect();
-                }
-            }, 600000));
-        } else {
-            c.announce(MaplePacketCreator.getLoginFailed(7));
-        }
+        c.announce(MaplePacketCreator.getAuthSuccess(c));
+        final MapleClient client = c;
+        c.setIdleTask(TimerManager.getInstance().schedule(new Runnable() {
+            @Override
+            public void run() {
+                client.disconnect();
+            }
+        }, 600000));
     }
 }

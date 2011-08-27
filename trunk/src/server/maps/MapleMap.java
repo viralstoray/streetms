@@ -594,7 +594,7 @@ public class MapleMap {
             if (killed && monster != null) {
                 killMonster(monster, chr, true);
                 monster.empty();
-                nullifyObject(monster);
+                //nullifyObject(monster);
             }
             return true;
         }
@@ -623,7 +623,7 @@ public class MapleMap {
             broadcastMessage(MaplePacketCreator.killMonster(monster.getObjectId(), animation), monster.getPosition());
             removeMapObject(monster);
             monster.empty();
-            nullifyObject(monster);
+            //nullifyObject(monster);
             return;
         }
         /*if (chr.getQuest(MapleQuest.getInstance(29400)).getStatus().equals(MapleQuestStatus.Status.STARTED)) {
@@ -723,7 +723,7 @@ public class MapleMap {
             broadcastMessage(MaplePacketCreator.killMonster(monster.getObjectId(), true), monster.getPosition());
             removeMapObject(monster);
             monster.empty();
-            nullifyObject(monster);
+            //nullifyObject(monster);
         }
     }
 
@@ -1779,10 +1779,10 @@ public class MapleMap {
 
     }
 
-    public void nullifyObject(MapleMapObject mmobj) {//nice one Simon (: thanks <3
-        mmobj.nullifyPosition();
-        mmobj = null;
-    }
+    //public void nullifyObject(MapleMapObject mmobj) {//nice one Simon (: thanks <3
+        //mmobj.nullifyPosition();
+        //mmobj = null;
+    //}
 
     private class ExpireMapItemJob implements Runnable {
 

@@ -124,7 +124,7 @@ public class MapleServerHandler extends IoHandlerAdapter {
         MapleClient client = (MapleClient) session.getAttribute(MapleClient.CLIENT_KEY);
         MaplePacketHandler packetHandler = processor.getHandler(packetId);
 
-        if (packetHandler != null && packetHandler.validateState(client)) {
+        if (client != null && packetHandler != null && packetHandler.validateState(client)) {
             try {
                 packetHandler.handlePacket(slea, client);
             } catch (Throwable t) {

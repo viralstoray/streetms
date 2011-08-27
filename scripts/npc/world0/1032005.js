@@ -32,10 +32,9 @@
 **/
 
 var status = 0;
-var cost = 10000;
 
 function start() {
-    cm.sendNext("Hi there! This cab is for VIP customers only. Instead of just taking you to different towns like the regular cabs, we offer a much better service worthy of VIP class. It's a bit pricey, but... for only 10,000 mesos, we'll take you safely to the \r\n#bAnt Tunnel#k.");
+    cm.sendNext("Hi there! This cab is for VIP customers only. Instead of just taking you to different towns like the regular cabs, we offer a much better service worthy of VIP class. We'll take you safely to the \r\n#bAnt Tunnel#k.");
 }
 
 function action(mode, type, selection) {
@@ -49,19 +48,11 @@ function action(mode, type, selection) {
         }
         status++;
         if (status == 0) 
-            cm.sendNext("Hi there! This cab is for VIP customers only. Instead of just taking you to different towns like the regular cabs, we offer a much better service worthy of VIP class. It's a bit pricey, but... for only 10,000 mesos, we'll take you safely to the \r\n#bAnt Tunnel#k.");
+            cm.sendNext("Hi there! This cab is for VIP customers only. Instead of just taking you to different towns like the regular cabs, we offer a much better service worthy of VIP class. We'll take you safely to the \r\n#bAnt Tunnel#k.");
         else if (status == 1) {
-            var string = cm.getJobId() == 0 ? "We have a special 90% discount for beginners. " : "The regular fee applies for all non-beginners. ";
-            string += "The Ant Tunnel is located deep inside in the dungeon that's placed at the center of the Victoria Island, where the 24 Hr Mobile Store is. Would you like to go there for #b1,000 mesos#k?";
-            if (cm.getJobId() == 0)
-                cost = 1000;
+            cm.sendYesNo("The Ant Tunnel is located deep inside in the dungeon that's placed at the center of the Victoria Island, where the 24 Hr Mobile Store is. Would you like to go there?");
         } else if (status == 2) {
-            if (cm.getMeso() < cost)
-                cm.sendNext("It looks like you don't have enough mesos. Sorry but you won't be able to use this without it.");
-            else {
-                cm.gainMeso(-cost);
-                cm.warp(105070001, 0);
-            }
+            cm.warp(105070001, 0);
             cm.dispose();
         }
     }

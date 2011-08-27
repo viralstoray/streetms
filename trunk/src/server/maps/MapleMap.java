@@ -1779,10 +1779,10 @@ public class MapleMap {
 
     }
 
-    //public void nullifyObject(MapleMapObject mmobj) {//nice one Simon (: thanks <3
-        //mmobj.nullifyPosition();
-        //mmobj = null;
-    //}
+    /*public void nullifyObject(MapleMapObject mmobj) {//nice one Simon (: thanks <3
+        mmobj.nullifyPosition();
+        mmobj = null;
+    }*/
 
     private class ExpireMapItemJob implements Runnable {
 

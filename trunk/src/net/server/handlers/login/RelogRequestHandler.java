@@ -29,7 +29,7 @@ import tools.data.input.SeekableLittleEndianAccessor;
 public final class RelogRequestHandler extends AbstractMaplePacketHandler {
     @Override
     public boolean validateState(MapleClient c) {
-        return !c.isLoggedIn();
+        return false;
     }
 
     @Override

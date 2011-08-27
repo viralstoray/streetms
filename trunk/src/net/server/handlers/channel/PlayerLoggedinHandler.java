@@ -52,7 +52,7 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
 
     @Override
     public final boolean validateState(MapleClient c) {
-        return !c.isLoggedIn();
+        return false;
     }
 
     @Override
@@ -75,11 +75,8 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
         }*/
         c.setPlayer(player);
         c.setAccID(player.getAccountID());
-        int state = c.getLoginState();
         Channel cserv = c.getChannelServer();
-        synchronized (this) {
-            c.updateLoginState(MapleClient.LOGIN_LOGGEDIN);
-            /*
+        /*synchronized (this) {
             if (state == MapleClient.LOGIN_SERVER_TRANSITION) {
                 for (String charName : c.loadCharacterNames(c.getWorld())) {
                     for (Channel ch : c.getWorldServer().getChannels()) {
@@ -101,8 +98,8 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
                 c.setPlayer(null);
                 c.announce(MaplePacketCreator.getAfterLoginError(7));
                 return;
-            }*/
-        }
+            }
+        }*/
         cserv.addPlayer(player);
         List<PlayerBuffValueHolder> buffs = server.getPlayerBuffStorage().getBuffsFromStorage(cid);
         if (buffs != null) {

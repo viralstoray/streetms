@@ -67,9 +67,6 @@ import tools.PrintError;
 
 public class MapleClient {
 
-    public static final int LOGIN_NOTLOGGEDIN = 0;
-    public static final int LOGIN_SERVER_TRANSITION = 1;
-    public static final int LOGIN_LOGGEDIN = 2;
     public static final String CLIENT_KEY = "CLIENT";
     private MapleAESOFB send;
     private MapleAESOFB receive;
@@ -77,7 +74,6 @@ public class MapleClient {
     private MapleCharacter player;
     private byte channel = 1;
     private int accId = 1;
-    private boolean loggedIn = false;
     private boolean serverTransition = false;
     private Calendar birthday = null;
     private String accountName = null;
@@ -160,10 +156,6 @@ public class MapleClient {
             e.printStackTrace();
         }
         return chars;
-    }
-
-    public boolean isLoggedIn() {
-        return loggedIn;
     }
 
     public boolean hasBannedIP() {
@@ -264,17 +256,6 @@ public class MapleClient {
         }
     }
 
-    public int finishLogin() {
-        synchronized (MapleClient.class) {
-            if (getLoginState() > LOGIN_NOTLOGGEDIN) {
-                loggedIn = false;
-                return 7;
-            }
-            updateLoginState(LOGIN_LOGGEDIN);
-        }
-        return 0;
-    }
-
     public void setPin(String pin) {
         this.pin = pin;
         try {
@@ -350,14 +331,10 @@ public class MapleClient {
                 //we do not unban
                 ps.close();
                 rs.close();
-                if (getLoginState() > LOGIN_NOTLOGGEDIN) { // already loggedin
-                    loggedIn = false;
-                    loginok = 7;
-                } else if (checkPassword(passhash, pwd)) {
+                if (checkPassword(passhash, pwd)) {
                     // don't worry about the tos
                     loginok = 0;
                 } else {
-                    loggedIn = false;
                     loginok = 4;
                 }
 
@@ -466,56 +443,6 @@ public class MapleClient {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        if (newstate == LOGIN_NOTLOGGEDIN) {
-            loggedIn = false;
-            serverTransition = false;
-        } else {
-            serverTransition = (newstate == LOGIN_SERVER_TRANSITION);
-            loggedIn = !serverTransition;
-        }
-    }
-
-    public int getLoginState() {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT loggedin, lastlogin, UNIX_TIMESTAMP(birthday) as birthday FROM accounts WHERE id = ?");
-            ps.setInt(1, getAccID());
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                rs.close();
-                ps.close();
-                throw new RuntimeException("getLoginState - MapleClient");
-            }
-            birthday = Calendar.getInstance();
-            long blubb = rs.getLong("birthday");
-            if (blubb > 0) {
-                birthday.setTimeInMillis(blubb * 1000);
-            }
-            int state = rs.getInt("loggedin");
-            if (state == LOGIN_SERVER_TRANSITION) {
-                if (rs.getTimestamp("lastlogin").getTime() + 30000 < System.currentTimeMillis()) {
-                    state = LOGIN_NOTLOGGEDIN;
-                    updateLoginState(LOGIN_NOTLOGGEDIN);
-                }
-            }
-            rs.close();
-            ps.close();
-            if (state == LOGIN_LOGGEDIN) {
-                loggedIn = true;
-            } else if (state == LOGIN_SERVER_TRANSITION) {
-                ps = con.prepareStatement("UPDATE accounts SET loggedin = 0 WHERE id = ?");
-                ps.setInt(1, getAccID());
-                ps.executeUpdate();
-                ps.close();
-            } else {
-                loggedIn = false;
-            }
-            return state;
-        } catch (SQLException e) {
-            loggedIn = false;
-            e.printStackTrace();
-            throw new RuntimeException("login state");
-        }
     }
 
     public boolean checkBirthDate(Calendar date) {
@@ -547,7 +474,7 @@ public class MapleClient {
 
     public final void disconnect() {//once per MapleClient instance
         try {
-            if (player != null && isLoggedIn()) {
+            if (player != null) {
                 removePlayer();
                 player.saveToDB(true);
                 
@@ -604,11 +531,7 @@ public class MapleClient {
                     chrp.setOnline(false);
                     worlda.updateParty(player.getParty().getId(), PartyOperation.LOG_ONOFF, chrp);
                 }
-                if (!this.serverTransition && isLoggedIn()) {
-                    worlda.loggedOff(player.getName(), player.getId(), channel, player.getBuddylist().getBuddyIds());
-                } else {
-                    worlda.loggedOn(player.getName(), player.getId(), channel, player.getBuddylist().getBuddyIds());
-                }
+                worlda.loggedOff(player.getName(), player.getId(), channel, player.getBuddylist().getBuddyIds());
                 if (player.getGuildId() > 0) {
                     Server.getInstance().setGuildMemberOnline(player.getMGC(), false, (byte) -1);
                     int allianceId = player.getGuild().getAllianceId();
@@ -620,9 +543,6 @@ public class MapleClient {
         } finally {
             player = null;
             session.close();
-        }
-        if (!this.serverTransition) {
-            this.updateLoginState(LOGIN_NOTLOGGEDIN);
         }
     }
 

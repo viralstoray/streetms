@@ -1499,18 +1499,23 @@ public class MaplePacketCreator {
     /**
      * Determines the type of packet to send for a GM talking.
      * 
-     * @param int The choice chat type the GM chose.
+     * @param chr   MapleChar
+     * @param text  Text to send
+     * @param show
      * @return packet
      */
     public static MaplePacket getGMChatText(MapleCharacter chr, String text, int show) {
         MaplePacket p;
+        boolean fake = true;
         switch (chr.getGMText()) {
             // normal
             case 0:
+                fake = false;
                 p = getChatText(chr.getId(), text, false, show);
             break;
             // white bg
             case 1:
+                fake = false;
                 p = getChatText(chr.getId(), text, true, show);
             break;
             // blue
@@ -1538,10 +1543,28 @@ public class MaplePacketCreator {
                 p = multiChat(chr.getName(), text, 3);
             break;
             default:
-                p = getChatText(chr.getId(), text, false, 1);
+                p = getChatText(chr.getId(), text, false, show);
             break;
         }
+        if (fake) {
+            sendFakeGMText(chr, text, show);
+        }
         return p;
+    }
+    
+    /**
+     * Sends a fake getChat packet to show the chat bubble above a player's head
+     * @param cidfrom
+     * @param text 
+     */
+    private static void sendFakeGMText(MapleCharacter chr, String text, int show) {
+        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+        mplew.writeShort(SendOpcode.CHATTEXT.getValue());
+        mplew.writeInt(chr.getId());
+        mplew.write(0);
+        mplew.writeMapleAsciiString("");
+        mplew.write(show);
+        chr.getMap().broadcastMessage(mplew.getPacket());
     }
 
     /**

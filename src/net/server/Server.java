@@ -24,7 +24,6 @@ package net.server;
 import client.MapleCharacter;
 import client.SkillFactory;
 import constants.ServerConstants;
-import gm.GMPacketCreator;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -46,7 +45,6 @@ import net.mina.MapleCodecFactory;
 import net.server.guild.MapleAlliance;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
-import gm.server.GMServer;
 import server.TimerManager;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.core.buffer.IoBuffer;
@@ -193,9 +191,6 @@ public class Server implements Runnable {
         SkillFactory.loadAllSkills();
         CashItemFactory.getSpecialCashItems();//just load who cares o.o
         MapleItemInformationProvider.getInstance().getAllItems();
-        if (Boolean.parseBoolean(p.getProperty("gmserver"))) {
-            GMServer.getInstance();
-        }
         loldot.cancel(true);
         System.out.println("\r\nServer is now online.");
         online = true;
@@ -494,12 +489,6 @@ public class Server implements Runnable {
 
     public List<World> getWorlds() {
         return worlds;
-    }
-
-    public void gmChat(String message, String exclude) {
-        GMServer server = GMServer.getInstance();
-        server.broadcastInGame(MaplePacketCreator.serverNotice(6, message));
-        server.broadcastOutGame(GMPacketCreator.chat(message), exclude);
     }
 
     public final Runnable shutdown(final boolean restart) {//only once :D

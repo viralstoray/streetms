@@ -30,7 +30,6 @@ import client.MapleClient;
 import client.MapleFamily;
 import client.MapleInventoryType;
 import client.SkillFactory;
-import gm.server.GMServer;
 import java.sql.SQLException;
 import java.util.List;
 import tools.DatabaseConnection;

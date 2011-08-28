@@ -21,7 +21,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package client;
 
-import gm.server.GMServer;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -527,9 +526,6 @@ public class MapleClient {
             }            
             if (player.getTrade() != null) {
                 MapleTrade.cancelTrade(player);
-            }
-            if (gmlevel > 0) {
-                GMServer.getInstance().removeInGame(player.getName());
             }
             player.cancelAllBuffs(true);
             if (player.getEventInstance() != null) {

@@ -48,7 +48,32 @@ function action(mode, type, selection) {
                 return;
             }
 			if (cm.getJobId() % 10 > 1) {
-				cm.sendOk("Your abilities are now at their maximum. Train hard and one day you may become one of the Greats.");
+				if (cm.getPlayer().getMasterLevel(cm.getJobId == 412 ? 4121000 : 4221000) < 30) {
+					if (cm.getJobId() == 412) {
+						cm.changeMastery(4121000, 30);
+						cm.changeMastery(4121002, 30);
+						cm.changeMastery(4121003, 30);
+						cm.changeMastery(4121004, 30);
+						cm.changeMastery(4121005, 30);
+						cm.changeMastery(4121006, 30);
+						cm.changeMastery(4121007, 30);
+						cm.changeMastery(4121008, 30);
+						cm.changeMastery(4121009, 5);
+					} else if (cm.getJobId() == 422) {
+						cm.changeMastery(4221000, 30);
+						cm.changeMastery(4221001, 30);
+						cm.changeMastery(4221002, 30);
+						cm.changeMastery(4221003, 30);
+						cm.changeMastery(4221004, 30);
+						cm.changeMastery(4221005, 30);
+						cm.changeMastery(4221006, 30);
+						cm.changeMastery(4221007, 30);
+						cm.changeMastery(4221008, 5);
+					}
+					cm.sendOk("It seems you were not properly advanced and were missing some skills. That has been fixed now.");
+				} else {
+					cm.sendOk("Your abilities are now at their maximum. Train hard and one day you may become one of the Greats.");
+				}
 				cm.dispose();
 			} else if ((cm.getJobId() >= 400 && cm.getJobId() < 500) && cm.getLevel() >= 120) {
                 cm.sendNext("It seems you have advanced quite far, young one.");
@@ -60,6 +85,27 @@ function action(mode, type, selection) {
             cm.sendAcceptDecline("Are you ready to take the final step into your destiny?");
         } else if (status == 2) {
 			cm.changeJobById(cm.getJobId() + 1);
+			if (cm.getJobId() == 412) {
+				cm.teachSkill(4121000, 0, 30);
+				cm.teachSkill(4121002, 0, 30);
+				cm.teachSkill(4121003, 0, 30);
+				cm.teachSkill(4121004, 0, 30);
+				cm.teachSkill(4121005, 0, 30);
+				cm.teachSkill(4121006, 0, 30);
+				cm.teachSkill(4121007, 0, 30);
+				cm.teachSkill(4121008, 0, 30);
+				cm.teachSkill(4121009, 0, 5);
+			} else if (cm.getJobId() == 422) {
+				cm.teachSkill(4221000, 0, 30);
+				cm.teachSkill(4221001, 0, 30);
+				cm.teachSkill(4221002, 0, 30);
+				cm.teachSkill(4221003, 0, 30);
+				cm.teachSkill(4221004, 0, 30);
+				cm.teachSkill(4221005, 0, 30);
+				cm.teachSkill(4221006, 0, 30);
+				cm.teachSkill(4221007, 0, 30);
+				cm.teachSkill(4221008, 0, 5);
+			}
 			cm.sendOk("You are now a #b"+cm.getPlayer().getJobName()+"#k. Wear it proudly!");
 			cm.dispose();
 		}

@@ -36,12 +36,12 @@ public class ServerConstants {
     //Event Configuration
     public static final String EVENTS = "LudiPQ StreetTip Boats Subway AirPlane elevator slimeRoom Aran2ndJob";
     // IP Configuration
-    //public static final String HOST = "69.197.181.162";
-    public static final String HOST = "127.0.0.1";
+    public static final String HOST = "69.197.181.162";
+    //public static final String HOST = "127.0.0.1";
     //Database Configuration
     public static final String DB_URL = "jdbc:mysql://localhost:3306/street?autoReconnect=true";
-    public static final String DB_USER = "root";
-    //public static final String DB_USER = "street";
-    public static final String DB_PASS = "";
-    //public static final String DB_PASS = "jflkfi40df84rkf";
+    //public static final String DB_USER = "root";
+    public static final String DB_USER = "street";
+    //public static final String DB_PASS = "";
+    public static final String DB_PASS = "jflkfi40df84rkf";
 }

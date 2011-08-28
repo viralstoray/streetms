@@ -4892,7 +4892,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         events = null;
         party = null;
         family = null;
-        client = null;
+        //client = null;
     }
 	
     public void giftNX(int amount) {

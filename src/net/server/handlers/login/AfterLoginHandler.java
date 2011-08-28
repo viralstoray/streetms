@@ -36,8 +36,7 @@ public final class AfterLoginHandler extends AbstractMaplePacketHandler {
         }
         if (c2 == 0 && c3 == 5) {
             c.updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
-        } else {
-            c.announce(MaplePacketCreator.pinAccepted());
+            System.out.println("Problem with updateLoginState");
         }
      }
    }

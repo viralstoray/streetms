@@ -56,6 +56,7 @@ public final class GeneralchatHandler extends net.AbstractMaplePacketHandler {
         } else {
             if (chr.isGM()) {
                 chr.getMap().broadcastMessage(MaplePacketCreator.getGMChatText(chr, s, slea.readByte()));
+                chr.getMap().broadcastMessage(MaplePacketCreator.getChatText(chr.getId(), s, false, (byte) 0));
             } else {
                 chr.getMap().broadcastMessage(MaplePacketCreator.getChatText(chr.getId(), s, false, slea.readByte()));
             }

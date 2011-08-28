@@ -265,8 +265,9 @@ public class MapleGuild {
                         }
                     }
                 }
-            } catch (Exception re) {
-                System.out.println("Failed to contact channel(s) for broadcast.");//fu?
+            } catch (Exception e) {
+                System.out.println("Failed to contact channel(s) for broadcast.");
+                e.printStackTrace();
             }
         }
     }

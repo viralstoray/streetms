@@ -266,10 +266,6 @@ public class MapleClient {
 
     public int finishLogin() {
         synchronized (MapleClient.class) {
-            if (getLoginState() > LOGIN_NOTLOGGEDIN) {
-                loggedIn = false;
-                return 7;
-            }
             updateLoginState(LOGIN_LOGGEDIN);
         }
         return 0;

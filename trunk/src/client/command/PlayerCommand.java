@@ -59,15 +59,15 @@ public class PlayerCommand {
             player.message("[StreetSys] Current MESO Rate: " + c.getWorldServer().getMesoRate() + "x");
             player.message("[StreetSys] Current DROP Rate: " + c.getWorldServer().getDropRate() + "x");
         } else if (sub[0].equals("save")) {
-            if (player.canUrgentSave()) {
+            //if (player.canUrgentSave()) {
                 player.saveToDB(true);
                 player.message("[StreetSys] Your character information has been saved.");
-            } else if (player.isPendingSave()) {
+            /*} else if (player.isPendingSave()) {
                 player.message("[StreetSys] You're already pending a save.");
             } else {
                 player.markPendingSave();
                 player.message("[StreetSys] You can only save once per session, so on logout your information will be saved");
-            }
+            }*/
         } else if (sub[0].equals("str") || sub[0].equals("int") || sub[0].equals("luk") || sub[0].equals("dex")) {
             int amount = Integer.parseInt(sub[1]);
             if (amount > 0 && amount <= player.getRemainingAp() && amount < 31997) { 

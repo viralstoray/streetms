@@ -47,7 +47,7 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
             String[] socket = c.getChannelServer().getIP().split(":");
             chr.getCashShop().open(false);
             c.getChannelServer().removePlayer(chr);
-            c.updateLoginState(MapleClient.LOGIN_SERVER_TRANSITION);
+            c.updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
             try {
                 c.announce(MaplePacketCreator.getChannelChange(InetAddress.getByName(socket[0]), Integer.parseInt(socket[1])));
             } catch (UnknownHostException ex) {

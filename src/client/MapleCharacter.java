@@ -1826,6 +1826,14 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         }
         return skills.get(skill).masterlevel;
     }
+    
+    public int getMasterLevel(int skill) {
+        SkillEntry ret = skills.get(SkillFactory.getSkill(skill));
+        if (ret == null) {
+            return 0;
+        }
+        return ret.masterlevel;
+    }
 
     public int getMaxHp() {
         return maxhp;

@@ -438,6 +438,10 @@ public class AbstractPlayerInteraction {
         c.getPlayer().changeSkillLevel(SkillFactory.getSkill(id), (byte) level, masterlevel, -1);
     }
     
+    public void changeMastery(int id, int masterlevel) {
+        c.getPlayer().changeSkillLevel(SkillFactory.getSkill(id), (byte) c.getPlayer().getSkillLevel(id), masterlevel, -1);
+    }
+    
     public void getNpc(int id, String message, String type) {
         if (type.equals("ok"))
             c.announce(MaplePacketCreator.getNPCTalk(id, (byte) 0, message, "00 00", (byte) 0));

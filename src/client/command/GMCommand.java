@@ -573,7 +573,50 @@ public class GMCommand {
             list.add(lines[2]);
             list.add(lines[3]);
             Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.getAvatarMega(player, "", c.getChannel(), item, list, true));
-        } else if (sub[0].equals("sp")) {
+        } else if (sub[0].equals("smegap")) {
+            if (player.gmLevel() < 2) {
+                player.message("You need to be an admin to do this.");
+                return false;
+            }
+            if (sub.length == 0) {
+                player.message("Usage: !smegap [love/cloud/diablo] player text");
+                return true;
+            }
+            String[] lines = {"", "", "", ""};
+            String text = joinStringFrom(sub, 3);
+            int item = 0;
+            if (sub[1].equals("love")) {
+                item = 5390002;
+            } else if (sub[1].equals("cloud")) {
+                item = 5390001;
+            } else if (sub[1].equals("diablo")) {
+                item = 5390000;
+            } else {
+                player.message("Usage: !smega [love/cloud/diablo] text");
+            }
+            if (text.length() > 30) {
+                lines[0] = text.substring(0, 10);
+                lines[1] = text.substring(10, 20);
+                lines[2] = text.substring(20, 30);
+                lines[3] = text.substring(30);
+            } else if (text.length() > 20) {
+                lines[0] = text.substring(0, 10);
+                lines[1] = text.substring(10, 20);
+                lines[2] = text.substring(20);
+            } else if (text.length() > 10) {
+                lines[0] = text.substring(0, 10);
+                lines[1] = text.substring(10);
+            } else if (text.length() <= 10) {
+                lines[0] = text;
+            }
+            LinkedList<String> list = new LinkedList<String>();
+            list.add(lines[0]);
+            list.add(lines[1]);
+            list.add(lines[2]);
+            list.add(lines[3]);
+            MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[2]);
+            Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.getAvatarMega(victim, "", c.getChannel(), item, list, true));
+        } else if (sub[0].equals("sp")) { 
             player.setRemainingSp(Integer.parseInt(sub[1]));
             player.updateSingleStat(MapleStat.AVAILABLESP, player.getRemainingSp());
         } else if (sub[0].equals("spawn")) {

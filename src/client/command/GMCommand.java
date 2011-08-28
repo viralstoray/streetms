@@ -434,6 +434,21 @@ public class GMCommand {
                 player.message("RemoteException occurred while attempting to reload shops.");
                 System.out.println("RemoteException occurred while attempting to reload shops: " + re);
             }
+        } else if (sub[0].equals("saveall")) {
+            if (player.gmLevel() < 2) {
+                player.message("You need to be an admin.");
+            }
+            for (MapleCharacter chr : cserv.getPlayerStorage().getAllCharacters()) {
+                player.message("Saving...");
+                chr.saveToDB(true);
+                player.message("Everyone's saved!");
+            }
+        } else if (sub[0].equals("savemap")) {
+            for (MapleCharacter chr : player.getMap().getCharacters()) {
+                player.message("Saving...");
+                chr.saveToDB(true);
+                player.message("Everyone's saved!");
+            }
         } else if (sub[0].equals("search") || sub[0].equals("lookup")) {
             StringBuilder sb = new StringBuilder();
             sub[1] = sub[1].toLowerCase();

@@ -22,10 +22,8 @@
 package net.server.handlers.login;
 
 import client.MapleClient;
-import java.util.Calendar;
 import net.MaplePacketHandler;
 import server.TimerManager;
-import tools.DateUtil;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 

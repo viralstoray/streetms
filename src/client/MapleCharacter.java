@@ -720,7 +720,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     }
 
     public static boolean canCreateChar(String name) {
-        if (name.length() < 4 || name.length() > 12) {
+        if (name.length() <= 1 || name.length() > 12) {
             return false;
         }
 

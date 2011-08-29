@@ -333,6 +333,8 @@ public class GMCommand {
                 Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(1, joinStringFrom(sub, 2)));
             } else if (sub[1].equalsIgnoreCase("n")) {
                 Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(0, joinStringFrom(sub, 2)));
+            } else if (sub[1].equalsIgnoreCase("scr")) {
+                Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(4, joinStringFrom(sub, 2)));
             } else if (sub[1].equalsIgnoreCase("r")) {
                 Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(5, joinStringFrom(sub, 2)));
             } else if (sub[1].equalsIgnoreCase("b")) {

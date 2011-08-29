@@ -657,20 +657,19 @@ public class MapleStatEffect {
         }
         applyto.getClient().getSession().write(MaplePacketCreator.updatePlayerStats(hpmpupdate, true));
         if (moveTo != -1) {
-            if (applyto.getMap().getReturnMapId() != applyto.getMapId()) {
-                MapleMap target;
-                if (moveTo == 999999999) {
-                    target = applyto.getMap().getReturnMap();
-                } else {
-                    target = applyto.getClient().getWorldServer().getChannel(applyto.getClient().getChannel()).getMapFactory().getMap(moveTo);
-                    int targetid = target.getId() / 10000000;
-                    if (targetid != 60 && applyto.getMapId() / 10000000 != 61 && targetid != applyto.getMapId() / 10000000 && targetid != 21 && targetid != 20) {
-                        return false;
-                    }
+            MapleMap target;
+            if (moveTo == 999999999) {
+                if (applyto.getMap().getReturnMap() == applyto.getMap())
+                    return false;
+                target = applyto.getMap().getReturnMap();
+            } else if (moveTo != applyto.getMapId()) {
+                target = applyto.getClient().getWorldServer().getChannel(applyto.getClient().getChannel()).getMapFactory().getMap(moveTo);
+                int targetid = target.getId() / 10000000;
+                if (targetid != 60 && applyto.getMapId() / 10000000 != 61 && targetid != applyto.getMapId() / 10000000 && targetid != 21 && targetid != 20) {
+                    return false;
                 }
-                applyto.changeMap(target);
             } else return false;
-            
+            applyto.changeMap(target);
         }
         if (isShadowClaw()) {
             int projectile = 0;

@@ -20,10 +20,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function start() { 
-    cm.sendYesNo("We have a beautiful christmas tree.\r\nDo you want to see/decorate it?");
+	if (cm.getMapId() == 209000000)
+		cm.sendYesNo("We have a beautiful christmas tree.\r\nDo you want to see/decorate it?");
+	else if (cm.getMapId() == 209000001)
+		cm.sendYesNo("Would you like to leave now?");
 } 
 function action(m, t, s) {
     if (m > 0)
-        cm.warp(209000001);
+        cm.warp(cm.getMapId() == 209000001 ? 209000000 : 209000001);
     cm.dispose();
 } 

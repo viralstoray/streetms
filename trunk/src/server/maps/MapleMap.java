@@ -1285,12 +1285,14 @@ public class MapleMap {
             }, 15 * 60 * 1000 + 3000);
         }
         MaplePet[] pets = chr.getPets();
-        for (int i = 0; i < chr.getPets().length; i++) {
-            if (pets[i] != null) {
-                pets[i].setPos(getGroundBelow(chr.getPosition()));
-                chr.announce(MaplePacketCreator.showPet(chr, pets[i], false, false));
-            } else {
-                break;
+        if (chr.getPets() != null) {
+            for (int i = 0; i < chr.getPets().length; i++) {
+                if (pets[i] != null) {
+                    pets[i].setPos(getGroundBelow(chr.getPosition()));
+                    chr.announce(MaplePacketCreator.showPet(chr, pets[i], false, false));
+                } else {
+                    break;
+                }
             }
         }
 

@@ -113,6 +113,10 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
                         if (targetid == 140000000) {
                             warp = true;
                         }
+                    } else if (divi == 914090201) { // Aran 2nd Job Advancement Clip #2
+                        if (targetid == 140030000) {
+                            warp = true;
+                        }
                     }
                     if (warp) {
                         final MapleMap to = c.getChannelServer().getMapFactory().getMap(targetid);

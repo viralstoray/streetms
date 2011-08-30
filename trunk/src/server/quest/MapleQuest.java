@@ -199,9 +199,7 @@ public class MapleQuest {
         c.updateQuest(newStatus);
     }
 
-    public boolean forceStart(MapleCharacter c, int npc) {
-        if (!canStart(c, npc)) return false;
-
+    public void forceStart(MapleCharacter c, int npc) {
         MapleQuestStatus newStatus = new MapleQuestStatus(this, MapleQuestStatus.Status.STARTED, npc);
         newStatus.setForfeited(c.getQuest(this).getForfeited());
 
@@ -210,20 +208,15 @@ public class MapleQuest {
 
         }
         c.updateQuest(newStatus);
-        return true;
     }
 
-    public boolean forceComplete(MapleCharacter c, int npc) {
-        if (!canComplete(c, npc)) return false;
-
+    public void forceComplete(MapleCharacter c, int npc) {
         MapleQuestStatus newStatus = new MapleQuestStatus(this, MapleQuestStatus.Status.COMPLETED, npc);
         newStatus.setForfeited(c.getQuest(this).getForfeited());
         newStatus.setCompletionTime(System.currentTimeMillis());
         c.announce(MaplePacketCreator.showSpecialEffect(9));
         c.getMap().broadcastMessage(c, MaplePacketCreator.showForeignEffect(c.getId(), 9), false);
         c.updateQuest(newStatus);
-
-        return true;
     }
 
     public short getId() {

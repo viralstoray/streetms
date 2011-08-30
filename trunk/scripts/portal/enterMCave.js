@@ -23,12 +23,8 @@
 */
 function enter(pi) {
 	if (pi.isQuestStarted(21201)) {
-		var em = pi.getEventManager("Aran2ndJob");
-		if (em == null) {
-			pi.message("Sorry, but this is currently undergoing maintenance. Try again soon!");
-			return false;
-		} else
-			em.startInstance(pi.getPlayer());
+		pi.warp(108000700, "out00");
+		pi.openNpc(1203000);
 		return true;
 	}
 	return false;

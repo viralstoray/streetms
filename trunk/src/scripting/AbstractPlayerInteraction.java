@@ -496,15 +496,23 @@ public class AbstractPlayerInteraction {
         c.getPlayer().deletePlayerVariable(name);
     }
     
-    public boolean forceStartQuest(int id, int npcid) {
-        return MapleQuest.getInstance(id).forceStart(getPlayer(), npcid);
+    public void forceStartQuest(int id, int npcid) {
+        MapleQuest.getInstance(id).forceStart(getPlayer(), npcid);
     }
     
-    public boolean forceCompleteQuest(int id, int npcid) {
-        return MapleQuest.getInstance(id).forceComplete(getPlayer(), npcid);
+    public void forceCompleteQuest(int id, int npcid) {
+        MapleQuest.getInstance(id).forceComplete(getPlayer(), npcid);
     }
     
     public MapleJob getJob() {
         return c.getPlayer().getJob();
+    }
+    
+    public void hideNpc(int id) {
+        c.getPlayer().getMap().toggleHiddenNPC(id);
+    }
+    
+    public void changeJobById(int a) {
+        c.getPlayer().changeJob(MapleJob.getById(a));
     }
 }

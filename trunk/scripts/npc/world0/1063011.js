@@ -24,7 +24,10 @@
 var status = -1;
 
 function start() {
-	cm.sendNext("Aren't you the one that used to be in Ellinia? So I finally found you! Do you know how long it took for me to finally find you?", 9);
+	if (cm.isQuestStarted(21731))
+		cm.sendGetText("A suspicious voice pierces through the silence. #e#bPassword!#k#n");
+	else
+		cm.dispose();
 }
 
 function action(mode, type, selection) {
@@ -33,13 +36,11 @@ function action(mode, type, selection) {
     } else {
         status++;
 		if (status == 0) {
-			cm.sendNextPrev("Who are you?", 3);
-		} else if (status == 1) {
-			cm.sendAcceptDecline("Me? If you want to know, then you should stop by my cave. I'm even sending you a formal invitation. The moment you accept It, you'll be sent directly to my cave. I'll be waiting for you.");
-		} else if (status == 2) {
-			cm.warp(910510200);
-			cm.forceStartQuest(21719, 1204000);
-			cm.forceCompleteQuest(21719, 1204000);
+			if (cm.getText() == "Francis is a genius Puppeteer!") {
+				cm.warp(910510001);
+			} else {
+				cm.sendOk("#e#rWrong!#k#n");
+			}
 			cm.dispose();
 		}
     }

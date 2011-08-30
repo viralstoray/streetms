@@ -24,7 +24,10 @@
 var status = -1;
 
 function start() {
-	cm.sendNext("Aren't you the one that used to be in Ellinia? So I finally found you! Do you know how long it took for me to finally find you?", 9);
+	if (!cm.haveItem(4032322))
+		cm.sendNext("You again? How in the world did you get in? I thought I warned you not to stand in my way!", 9);
+	else
+		cm.dispose();
 }
 
 function action(mode, type, selection) {
@@ -33,13 +36,12 @@ function action(mode, type, selection) {
     } else {
         status++;
 		if (status == 0) {
-			cm.sendNextPrev("Who are you?", 3);
+			cm.sendNextPrev("What exactly are you trying to do? Why are you controlling those monsters? Tell me what the Black Wings are up to!", 3);
 		} else if (status == 1) {
-			cm.sendAcceptDecline("Me? If you want to know, then you should stop by my cave. I'm even sending you a formal invitation. The moment you accept It, you'll be sent directly to my cave. I'll be waiting for you.");
+			cm.sendNextPrev("Hmph, I don't have to tell you anything! Now prepare to die!", 9);
 		} else if (status == 2) {
-			cm.warp(910510200);
-			cm.forceStartQuest(21719, 1204000);
-			cm.forceCompleteQuest(21719, 1204000);
+			cm.hideNpc(1104000);
+			cm.spawnMonster(9300344, 679, 245);
 			cm.dispose();
 		}
     }

@@ -337,7 +337,7 @@ public class GMCommand {
                 if (player.gmLevel() < 2) {
                     player.message("You need to be an admin to do this.");
                 } else {
-                    Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(4, joinStringFrom(sub, 2)));
+                    Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverMessage(joinStringFrom(sub, 2)));
                 }
             } else if (sub[1].equalsIgnoreCase("r")) {
                 Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(5, joinStringFrom(sub, 2)));
@@ -544,7 +544,7 @@ public class GMCommand {
         } else if (sub[0].equals("smega")) {
             if (sub.length == 0) {
                 player.message("Usage: !smega [love/cloud/diablo] text");
-                return true;
+                return false;
             }
             String[] lines = {"", "", "", ""};
             String text = joinStringFrom(sub, 2);
@@ -586,7 +586,7 @@ public class GMCommand {
             }
             if (sub.length == 0) {
                 player.message("Usage: !smegap [love/cloud/diablo] player text");
-                return true;
+                return false;
             }
             String[] lines = {"", "", "", ""};
             String text = joinStringFrom(sub, 3);

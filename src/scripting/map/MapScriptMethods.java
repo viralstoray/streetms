@@ -58,6 +58,9 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
             case 914090200:
                 lockUI();
                 c.announce(MaplePacketCreator.showIntro("Effect/Direction1.img/aranTutorial/Maha"));
+            case 914090201:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction1.img/aranTutorial/PoleArm"));
         }
     }
 
@@ -112,9 +115,7 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
     public void explorerQuest(short questid, String questName) {
         MapleQuest quest = MapleQuest.getInstance(questid);
         if (!isQuestStarted(questid)) {
-            if (!quest.forceStart(getPlayer(), 9000066)) {
-                return;
-            }
+            quest.forceStart(getPlayer(), 9000066);
         }
         MapleQuestStatus q = getPlayer().getQuest(quest);
         if (!q.addMedalMap(getPlayer().getMapId())) {
@@ -141,9 +142,7 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
     public void touchTheSky() { //29004
         MapleQuest quest = MapleQuest.getInstance(29004);
         if (!isQuestStarted(29004)) {
-            if (!quest.forceStart(getPlayer(), 9000066)) {
-                return;
-            }
+            quest.forceStart(getPlayer(), 9000066);
         }
         MapleQuestStatus q = getPlayer().getQuest(quest);
         if (!q.addMedalMap(getPlayer().getMapId())) {

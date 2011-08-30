@@ -23,9 +23,7 @@
 	Author: Biscuit
 */
 
-function enter(pi) {
-	pi.warp(104000004, "out00");
-	if (pi.isQuestCompleted(21719) && !pi.isQuestStarted(21720) && !pi.isQuestCompleted(21720))
-		pi.openNpc(1002104);
-	return true;
+function act() {
+	if (isQuestStarted(21723))
+		rm.dropItems();
 }

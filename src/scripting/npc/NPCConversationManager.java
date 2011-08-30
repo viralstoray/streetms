@@ -278,10 +278,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return getPlayer().getGender();
     }
 
-    public void changeJobById(int a) {
-        getPlayer().changeJob(MapleJob.getById(a));
-    }
-
     public void addRandomItem(int id) {
         MapleItemInformationProvider i = MapleItemInformationProvider.getInstance();
         MapleInventoryManipulator.addFromDrop(getClient(), i.randomizeStats((Equip) i.getEquipById(id)), true);

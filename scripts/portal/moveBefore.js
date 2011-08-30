@@ -24,8 +24,6 @@
 */
 
 function enter(pi) {
-	pi.warp(104000004, "out00");
-	if (pi.isQuestCompleted(21719) && !pi.isQuestStarted(21720) && !pi.isQuestCompleted(21720))
-		pi.openNpc(1002104);
+	pi.warp(108000700, "west00");
 	return true;
 }

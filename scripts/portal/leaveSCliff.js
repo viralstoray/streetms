@@ -1,15 +1,14 @@
 /*
 	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc> 
+                       Matthias Butz <matze@odinms.de>
+                       Jan Christian Meyer <vimes@odinms.de>
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
+    it under the terms of the GNU Affero General Public License version 3
+    as published by the Free Software Foundation. You may not use, modify
+    or distribute this program under any other version of the
+    GNU Affero General Public License.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,11 +21,9 @@
 /*
 	Author: Biscuit
 */
-
 function enter(pi) {
-	if (pi.isQuestStarted(21301) && !pi.isQuestCompleted(21301))
-		pi.warp(108010700, "west00");
-	else
-		pi.warp(140020300, "west00");
+	pi.warp(140030000, "in00");
+	if (pi.isQuestCompleted(21303))
+		pi.gainItem(4032312, 1);
 	return true;
 }

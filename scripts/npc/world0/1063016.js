@@ -19,14 +19,11 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*
-	Author: Biscuit
+/*	
+	Author : Biscuit
 */
 
-function enter(pi) {
-	if (pi.isQuestStarted(21301) && !pi.isQuestCompleted(21301))
-		pi.warp(108010700, "west00");
-	else
-		pi.warp(140020300, "west00");
-	return true;
+function start() {
+	cm.warp(105040201);
+	cm.dispose();
 }

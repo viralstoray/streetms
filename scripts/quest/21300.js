@@ -19,14 +19,29 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*
-	Author: Biscuit
+/*	
+	Author : Biscuit
 */
+var status = -1;
 
-function enter(pi) {
-	if (pi.isQuestStarted(21301) && !pi.isQuestCompleted(21301))
-		pi.warp(108010700, "west00");
-	else
-		pi.warp(140020300, "west00");
-	return true;
+function start(mode, type, selection) {
+    status++;
+    if (mode != 1) {
+		if(type == 1 && mode == 0) {
+			qm.dispose();
+			return;
+		}else{
+			qm.dispose();
+			return;
+		}
+	}
+	
+	if (status == 0) {
+		qm.sendNext("How is training going? Hm, Lv. 70? You still have a long way to go, but it's definitely praiseworthy compared to the first time I met you. Continue to train diligently, and I'm sure you'll regain your strength soon!");
+	} else if (status == 1) {
+		qm.sendAcceptDecline("But first, you must head to #bRien#k. Your #bGiant Polearm#k is acting weird again. I think it has something to tell you. It might be able to restore your abilities, so please hurry.");
+	} else if (status == 2) {
+		qm.forceStartQuest();
+		qm.dispose();
+	}
 }

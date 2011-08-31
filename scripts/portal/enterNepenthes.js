@@ -24,9 +24,13 @@
 */
 
 function enter(pi) {
-	if (pi.isQuestStarted(21301) && !pi.isQuestCompleted(21301))
-		pi.warp(108010700, "west00");
-	else
-		pi.warp(140020300, "west00");
-	return true;
+	if (pi.isQuestStarted(21737)) {
+		pi.warp(200060001, "out00");
+		return true;
+	} else if (pi.isQuestStarted(21739)) {
+		pi.warp(920030000, "out00");
+		pi.spawnMonsterOnMap(920030001, 9300348, 836, 83);
+		return true;
+	}
+	return false;
 }

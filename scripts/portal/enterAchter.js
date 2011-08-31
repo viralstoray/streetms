@@ -23,6 +23,9 @@
 Author: Biscuit
 */
 function enter(pi) {
-	pi.warp(100000201, "out02");
+	if (pi.isQuestCompleted(21753) && !pi.isQuestStarted(21754) && !pi.isQuestCompleted(21754))
+		pi.warp(910050000, "out00");
+	else
+		pi.warp(100000201, "out02");
 	return true;
 }

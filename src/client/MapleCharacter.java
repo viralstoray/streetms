@@ -2471,6 +2471,10 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             NPCScriptManager.getInstance().dispose(client);
             NPCScriptManager.getInstance().start(client, 1204000, null, null);
         }
+        if (level == 31 && job.isA(MapleJob.ARAN2)) {
+            NPCScriptManager.getInstance().dispose(client);
+            NPCScriptManager.getInstance().start(client, 1204007, null, null);
+        }
         //saveToDB(true); NAH!
     }
 

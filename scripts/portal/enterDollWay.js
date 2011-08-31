@@ -20,13 +20,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*
-	Author: Biscuit
+Author: Biscuit
 */
 
 function enter(pi) {
-	if (pi.isQuestStarted(21301) && !pi.isQuestCompleted(21301))
-		pi.warp(108010700, "west00");
-	else
-		pi.warp(140020300, "west00");
-	return true;
+	if (pi.isQuestStarted(21734)) {
+		pi.warp(910510100);
+		return true;
+	}
+	return false;
 }

@@ -19,14 +19,31 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*
-	Author: Biscuit
+/*	
+	Author : Biscuit
 */
+var status = -1;
 
-function enter(pi) {
-	if (pi.isQuestStarted(21301) && !pi.isQuestCompleted(21301))
-		pi.warp(108010700, "west00");
-	else
-		pi.warp(140020300, "west00");
-	return true;
+function end(mode, type, selection) {
+    status++;
+    if (mode != 1) {
+		if(type == 1 && mode == 0) {
+			qm.dispose();
+			return;
+		}else{
+			qm.dispose();
+			return;
+		}
+	}
+	
+	if (status == 0) {
+		qm.sendNext("Oh, isn't that... Hey, did you remember how to make the Red Jade? You may be a dummy who has amnesia, but this is why I can't leave you. Now hurry, give me the gem!");
+	} else if (status == 1) {
+		qm.sendYesNo("Okay, now that I have the power of the Red Jade, I'll restore more of your abilities. Your level has gotten much higher since the last time we met, so I'm sure I can work my magic a bit more this time!");
+	} else if (status == 2) {
+		qm.forceCompleteQuest();
+		qm.changeJobById(2111);
+		qm.sendNext("Please get back all of your abilities soon. I want to explore with you like we did in the good old days.");
+		qm.dispose();
+	}
 }

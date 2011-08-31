@@ -431,6 +431,8 @@ public class GMCommand {
             } else {
                 player.dropMessage("You have entered an invalid Npc-Id");
             }
+        } else if (sub[0].equals("pos")) {
+            player.message("X: " + player.getPosition().getX() + " Y: " + player.getPosition().getY() + " FH: " + player.getFh());
         } else if (sub[0].equals("reloadshops")) {
             try {
                 player.message("Attempting to reload all shops. This may take awhile...");
@@ -542,7 +544,7 @@ public class GMCommand {
             Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(6, "[Notice] The server will be shut down in " + (time/60000) + " minute" + ((time/60000) == 1 ? "" : "s") + ". Please log off safely."));
             TimerManager.getInstance().schedule(Server.getInstance().shutdown(false), time);
         } else if (sub[0].equals("smega")) {
-            if (sub.length == 0) {
+            if (sub.length == 0 || (!sub[1].equals("love") && !sub[1].equals("cloud") && !sub[1].equals("diablo"))) {
                 player.message("Usage: !smega [love/cloud/diablo] text");
                 return false;
             }
@@ -584,7 +586,7 @@ public class GMCommand {
                 player.message("You need to be an admin to do this.");
                 return false;
             }
-            if (sub.length == 0) {
+            if (sub.length == 0 || (!sub[1].equals("love") && !sub[1].equals("cloud") && !sub[1].equals("diablo"))) {
                 player.message("Usage: !smegap [love/cloud/diablo] player text");
                 return false;
             }

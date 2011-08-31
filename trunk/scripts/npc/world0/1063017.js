@@ -19,14 +19,26 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*
-	Author: Biscuit
+/*	
+	Author : Biscuit
 */
+var status = -1;
 
-function enter(pi) {
-	if (pi.isQuestStarted(21301) && !pi.isQuestCompleted(21301))
-		pi.warp(108010700, "west00");
-	else
-		pi.warp(140020300, "west00");
-	return true;
+function start() {
+	cm.sendYesNo("Welcome, Master Francis. Do you want to be sent to your cave?");
+}
+
+function action(mode, type, selection) {
+    if (mode != 1) {
+        cm.dispose();
+    } else {
+        status++;
+        if (status == 0) {
+			cm.sendOk("Thank you, Master Francis.");
+		} else if (status == 1) {
+			cm.spawnMonsterOnMap(910510202, 9300346, 300, 254);
+			cm.warp(910510202, "out00");
+			cm.dispose();
+		}
+    }
 }

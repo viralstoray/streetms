@@ -26,6 +26,12 @@ function enter(pi) {
 		pi.warp(108000700, "out00");
 		pi.openNpc(1203000);
 		return true;
+	} else if (pi.isQuestStarted(21302)) {
+		if (pi.getNumMobs(108010702) == 0)
+			pi.spawnMonsterOnMap(108010702, 9001013, -139, 454);
+		pi.warp(108010701, "out00");
+		pi.openNpc(1203001);
+		return true;
 	}
 	return false;
 }

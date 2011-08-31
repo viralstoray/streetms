@@ -19,14 +19,32 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*
-	Author: Biscuit
+/*	
+	Author : Biscuit
 */
+var status = -1;
 
-function enter(pi) {
-	if (pi.isQuestStarted(21301) && !pi.isQuestCompleted(21301))
-		pi.warp(108010700, "west00");
-	else
-		pi.warp(140020300, "west00");
-	return true;
+function start(mode, type, selection) {
+    status++;
+    if (mode != 1) {
+		if(type == 1 && mode == 0) {
+			qm.dispose();
+			return;
+		}else{
+			qm.dispose();
+			return;
+		}
+	}
+	
+	if (status == 0) {
+		qm.sendNext("Seal Stone... It's an item that has been protected in Mu Lung for a long time. And now, someone is after it.", 9);
+	} else if (status == 1) {
+		qm.sendNextPrev("Please tell me everything you know about the Seal Stone.", 3);
+	} else if (status == 2) {
+		qm.sendAcceptDecline("I can't do that. How do I know that you're not as dangerous as the Shadow Knight? I must first test you. Do you want to take my #btest#k?");
+	} else if (status == 3) {
+		qm.forceStartQuest();
+		qm.warp(925040001);
+		qm.dispose();
+	}
 }

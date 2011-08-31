@@ -46,7 +46,9 @@ function action(mode, type, selection) {
         else
             status--;
         if (status == 0) {
-            if (cm.getJobId()==0) {
+			if (cm.haveItem(4032328)) {
+				cm.sendNext("Aran! Aran... I knew I'd see you again someday. I knew it because you always keep your promises! I've been waiting for this moment.");
+			} else if (cm.getJobId()==0) {
                 if (cm.getLevel() >= 10)
                     cm.sendNext("So you decided to become a #rBowman#k?");
                 else {
@@ -82,18 +84,36 @@ function action(mode, type, selection) {
                     cm.dispose();
                 }
             }
-        } else if (status == 1)
-            cm.sendNextPrev("It is an important and final choice. You will not be able to turn back.");
-        else if (status == 2)
-            cm.sendYesNo("Do you want to become a #rBowman#k?");
-        else if (status == 3) {
-            if (cm.getJobId()==0)
-                cm.changeJobById(300);
-            cm.gainItem(1452051, 1);
-            cm.gainItem(2060000, 1000);
-            cm.sendOk("So be it! Now go, and go with pride.");
-            cm.resetStats();
-            cm.dispose();
+        } else if (status == 1) {
+			if (cm.haveItem(4032328))
+				cm.sendNextPrev("#b(Athena Pierce greets you with a huge smile.)#k", 3);
+			else
+				cm.sendNextPrev("It is an important and final choice. You will not be able to turn back.");
+        } else if (status == 2) {
+			if (cm.haveItem(4032328))
+				cm.sendAcceptDecline("I can finally give you the letter I couldn't hundreds of years ago. It's been a long time, so the letter is a little wrinkled...but I'm sure you can still read it.");
+			else
+				cm.sendYesNo("Do you want to become a #rBowman#k?");
+        } else if (status == 3) {
+			if (cm.haveItem(4032328)) {
+				cm.forceStartQuest(21754, 1012100);
+				cm.sendNext("I'd like to chat more, but I no longer have as much time as I used to since I've become a Bowman instructor. Please, come talk to me again later.");
+			} else {
+				if (cm.getJobId()==0)
+					cm.changeJobById(300);
+				cm.gainItem(1452051, 1);
+				cm.gainItem(2060000, 1000);
+				cm.sendOk("So be it! Now go, and go with pride.");
+				cm.resetStats();
+				cm.dispose();
+			}
+		} else if (status == 4) {
+			if (cm.haveItem(4032328))
+				cm.sendNextPrev("I'm happy to have been of assistance, my dear friend.");
+		} else if (status == 5) {
+			if (cm.haveItem(4032328))
+				cm.sendPrev("#b(You receive a letter from Athena Pierce... You wonder what it says... You should read it with Tru.)#k", 3);
+				cm.dispose();
         } else if (status == 11)
             cm.sendNextPrev("You may be ready to take the next step as a #rHunter#k or #rCrossbowman#k.")
         else if (status == 12)

@@ -350,6 +350,12 @@ public class AbstractPlayerInteraction {
         monster.setPosition(c.getPlayer().getPosition());
         getPlayer().getMap().spawnMonster(monster);
     }
+    
+    public void spawnMonsterOnMap(int mapid, int id, int x, int y) {
+        MapleMonster monster = MapleLifeFactory.getMonster(id);
+        monster.setPosition(new Point(x,y));
+        c.getChannelServer().getMapFactory().getMap(mapid).spawnMonster(monster);
+    }
 
     public void spawnGuide() {
         c.announce(MaplePacketCreator.spawnGuide(true));
@@ -457,6 +463,8 @@ public class AbstractPlayerInteraction {
             c.announce(MaplePacketCreator.getNPCTalk(id, (byte) 0x0C, message, "", (byte) 0));
         else if (type.equals("simple"))
             c.announce(MaplePacketCreator.getNPCTalk(id, (byte) 4, message, "", (byte) 0));
+        else if (type.equals("person"))
+            c.announce(MaplePacketCreator.getNPCTalk(id, (byte) 0, message, "00 00", (byte) 3));
     }
     
     public void clearDrops(int mapid) {
@@ -514,5 +522,14 @@ public class AbstractPlayerInteraction {
     
     public void changeJobById(int a) {
         c.getPlayer().changeJob(MapleJob.getById(a));
+    }
+    
+    public int getNumMobs(int mapid) {
+        List<MapleMapObject> monsters = c.getChannelServer().getMapFactory().getMap(mapid).getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
+        return monsters.size();
+    }
+    
+    public int getNumMobs() {
+        return getNumMobs(c.getPlayer().getMapId());
     }
 }

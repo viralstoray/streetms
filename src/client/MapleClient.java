@@ -532,6 +532,7 @@ public class MapleClient {
                 player.getEventInstance().playerDisconnected(player);
             }
             player.cancelAllDebuffs();
+        } catch (NullPointerException e) {
         } catch (final Throwable t) {
             PrintError.print(PrintError.ACCOUNT_STUCK, t);
         }
@@ -887,7 +888,9 @@ public class MapleClient {
     }
 
     public void announce(MaplePacket packet) {
-        session.write(packet);
+        if (this.player != null) {
+            session.write(packet);
+        }
     }
     
     public long getBanEnding() {

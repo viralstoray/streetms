@@ -483,7 +483,6 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     }
 
     public boolean applyStatus(MapleCharacter from, final MonsterStatusEffect status, boolean poison, long duration, boolean venom) {
-        System.out.println("applyStatus: " + status.getSkill());
         switch (stats.getEffectiveness(status.getSkill().getElement())) {
             case IMMUNE:
             case STRONG:

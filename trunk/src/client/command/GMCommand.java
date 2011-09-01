@@ -24,6 +24,7 @@ import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import scripting.npc.NPCScriptManager;
+import scripting.portal.PortalScriptManager;
 import server.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MapleShopFactory;
@@ -60,6 +61,7 @@ public class GMCommand {
             }
         } else if (sub[0].equals("ap")) {
             player.setRemainingAp(Integer.parseInt(sub[1]));
+            player.updateSingleStat(MapleStat.AVAILABLEAP, Integer.parseInt(sub[1]));
         } else if (sub[0].equals("buffme")) {
             final int[] array = {9001000, 9101002, 9101003, 9101008, 2001002, 1101007, 1005, 2301003, 5121009, 1111002, 4111001, 4111002, 4211003, 4211005, 1321000, 2321004, 3121002};
             for (int i : array) {
@@ -437,6 +439,15 @@ public class GMCommand {
             try {
                 player.message("Attempting to reload all shops. This may take awhile...");
                 MapleShopFactory.getInstance().reloadShops();
+                player.message("Completed.");
+            } catch (Exception re) {
+                player.message("RemoteException occurred while attempting to reload shops.");
+                System.out.println("RemoteException occurred while attempting to reload shops: " + re);
+            }
+        } else if (sub[0].equals("reloadportals")) {
+            try {
+                player.message("Attempting to reload all portals. This may take awhile...");
+                PortalScriptManager.getInstance().clearScripts();
                 player.message("Completed.");
             } catch (Exception re) {
                 player.message("RemoteException occurred while attempting to reload shops.");

@@ -888,9 +888,7 @@ public class MapleClient {
     }
 
     public void announce(MaplePacket packet) {
-        if (this.player != null) {
-            session.write(packet);
-        }
+        session.write(packet);
     }
     
     public long getBanEnding() {

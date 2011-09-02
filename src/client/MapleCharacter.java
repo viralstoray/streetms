@@ -2467,11 +2467,11 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             getGuild().broadcast(MaplePacketCreator.levelUpMessage(2, level, name), this.getId());
         }
         guildUpdate();
-        if (level == 22 && job.isA(MapleJob.ARAN1)) {
+        if (level >= 22 && job.isA(MapleJob.ARAN1) && getQuest(MapleQuest.getInstance(21719)).getStatus() != MapleQuestStatus.Status.COMPLETED  && getQuest(MapleQuest.getInstance(21719)).getStatus() != MapleQuestStatus.Status.STARTED) {
             NPCScriptManager.getInstance().dispose(client);
             NPCScriptManager.getInstance().start(client, 1204000, null, null);
         }
-        if (level == 31 && job.isA(MapleJob.ARAN2)) {
+        if (level >= 31 && job.isA(MapleJob.ARAN2) && getQuest(MapleQuest.getInstance(21733)).getStatus() != MapleQuestStatus.Status.COMPLETED && getQuest(MapleQuest.getInstance(21733)).getStatus() != MapleQuestStatus.Status.STARTED) {
             NPCScriptManager.getInstance().dispose(client);
             NPCScriptManager.getInstance().start(client, 1204007, null, null);
         }

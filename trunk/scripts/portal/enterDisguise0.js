@@ -25,6 +25,6 @@
 */
 
 function enter(pi) {
-	pi.warp(130010000, "west00");
+	pi.warp(130010000, "east00");
 	return true;
 }

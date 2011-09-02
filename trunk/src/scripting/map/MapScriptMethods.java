@@ -43,12 +43,15 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
                 c.announce(MaplePacketCreator.showIntro("Effect/Direction1.img/aranTutorial/Scene0"));
                 break;
             case 914090011:
+                lockUI();
                 c.announce(MaplePacketCreator.showIntro("Effect/Direction1.img/aranTutorial/Scene1" + c.getPlayer().getGender()));
                 break;
             case 914090012:
+                lockUI();
                 c.announce(MaplePacketCreator.showIntro("Effect/Direction1.img/aranTutorial/Scene2" + c.getPlayer().getGender()));
                 break;
             case 914090013:
+                lockUI();
                 c.announce(MaplePacketCreator.showIntro("Effect/Direction1.img/aranTutorial/Scene3"));
                 break;
             case 914090100:
@@ -58,9 +61,11 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
             case 914090200:
                 lockUI();
                 c.announce(MaplePacketCreator.showIntro("Effect/Direction1.img/aranTutorial/Maha"));
+                break;
             case 914090201:
                 lockUI();
                 c.announce(MaplePacketCreator.showIntro("Effect/Direction1.img/aranTutorial/PoleArm"));
+                break;
         }
     }
 
@@ -73,6 +78,72 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
         c.getPlayer().changeSkillLevel(SkillFactory.getSkill(20000018), (byte) -1, 0, -1);
         c.getPlayer().setRemainingSp(0);
         c.announce(MaplePacketCreator.showIntro("Effect/Direction1.img/aranTutorial/ClickLilin"));
+    }
+    
+    public void displayCygnusIntro() {
+        switch (c.getPlayer().getMapId()) {
+            case 913040000:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction.img/cygnus/Scene0"));
+                break;
+            case 913040001:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction.img/cygnus/Scene1"));
+                break;
+            case 913040002:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction.img/cygnus/Scene2"));
+                break;
+            case 913040003:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction.img/cygnus/Scene3"));
+                break;
+            case 913040004:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction.img/cygnus/Scene4"));
+                break;
+            case 913040005:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction.img/cygnus/Scene5"));
+                break;
+            case 913040006:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction.img/cygnus/Scene6"));
+                break;
+        }
+    }
+    
+    public void displayCygnusJobTutorial() {
+        switch (c.getPlayer().getMapId()) {
+            case 913040100:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene0"));
+                break;
+            case 913040101:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene1"));
+                break;
+            case 913040102:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene2"));
+                break;
+            case 913040103:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene3"));
+                break;
+            case 913040104:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene4"));
+                break;
+            case 913040105:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene5"));
+                break;
+            case 913040106:
+                lockUI();
+                c.announce(MaplePacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene6"));
+                break;
+        }
     }
 
     public void startExplorerExperience() {

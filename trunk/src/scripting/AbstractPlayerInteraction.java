@@ -532,4 +532,12 @@ public class AbstractPlayerInteraction {
     public int getNumMobs() {
         return getNumMobs(c.getPlayer().getMapId());
     }
+    
+    public void setRemainingAp(int remainingAp) {
+        c.getPlayer().setRemainingAp(remainingAp);
+    }
+    
+    public void setRemainingSp(int remainingSp) {
+        c.getPlayer().setRemainingSp(remainingSp);
+    }
 }

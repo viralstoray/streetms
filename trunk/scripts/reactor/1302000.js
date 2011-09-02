@@ -24,6 +24,5 @@
 */
 
 function act() {
-	if (rm.isQuestStarted(21723))
-		rm.dropItems();
+	rm.dropItems();
 }

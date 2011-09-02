@@ -27,7 +27,9 @@ import constants.ServerConstants;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -484,7 +486,14 @@ public class Server implements Runnable {
     }
 
     public World getWorld(int id) {
-        return worlds.get(id);
+        try {
+            return worlds.get(id);
+        } catch (java.lang.NullPointerException NPE) {
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date now = new Date();
+            System.out.println("Error at time: " + sdfDate.format(now) + ". Error: " + NPE);
+            return null;
+        }
     }
 
     public List<World> getWorlds() {

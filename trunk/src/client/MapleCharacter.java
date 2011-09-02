@@ -4188,10 +4188,12 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
 
     public void setRemainingAp(int remainingAp) {
         this.remainingAp = remainingAp;
+        client.getPlayer().updateSingleStat(MapleStat.AVAILABLEAP, remainingAp);
     }
 
     public void setRemainingSp(int remainingSp) {
         this.remainingSp = remainingSp;
+        client.getPlayer().updateSingleStat(MapleStat.AVAILABLESP, remainingSp);
     }
 
     public void setSearch(String find) {

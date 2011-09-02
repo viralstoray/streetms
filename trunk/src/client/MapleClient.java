@@ -26,10 +26,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -888,7 +890,13 @@ public class MapleClient {
     }
 
     public void announce(MaplePacket packet) {
-        session.write(packet);
+        try {
+            session.write(packet);
+        } catch(java.lang.NullPointerException NPE) {
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date now = new Date();
+            System.out.println("Error caused by player: " + getPlayer().getName() + " at map: " + getPlayer().getMapId() + " at time: " + sdfDate.format(now) + ". Error: " + NPE);
+        }
     }
     
     public long getBanEnding() {

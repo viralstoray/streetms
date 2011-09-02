@@ -66,8 +66,8 @@ public class MapleServerHandler extends IoHandlerAdapter {
                 client.disconnect();
             }
         }*/
-        session.close(true);
-        PrintError.print(PrintError.EXCEPTION_CAUGHT, cause);
+        //session.close(true);
+        //PrintError.print(PrintError.EXCEPTION_CAUGHT, cause);
         //sessionClosed should be called
     }
 

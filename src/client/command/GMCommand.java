@@ -617,17 +617,17 @@ public class GMCommand {
             if (player.gmLevel() < 2) {
                 player.message("You need to be an admin.");
             }
+            player.message("Saving...");
             for (MapleCharacter chr : cserv.getPlayerStorage().getAllCharacters()) {
-                player.message("Saving...");
                 chr.saveToDB(true);
-                player.message("Everyone's saved!");
             }
+            player.message("Everyone's saved!");
         } else if (sub[0].equals("savemap")) {  // Save all players on the map
+            player.message("Saving...");
             for (MapleCharacter chr : player.getMap().getCharacters()) {
-                player.message("Saving...");
                 chr.saveToDB(true);
-                player.message("Everyone's saved!");
             }
+            player.message("Everyone's saved!");
         } else if (sub[0].equals("search") || sub[0].equals("lookup")) {  // Search for an item/npc/mob/skill/map
             if (sub.length < 3) {
                 player.message("Syntax: !search type query");

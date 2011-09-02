@@ -69,31 +69,36 @@ public class PlayerCommand {
                 player.message("[StreetSys] You can only save once per session, so on logout your information will be saved");
             }*/
         } else if (sub[0].equals("str") || sub[0].equals("int") || sub[0].equals("luk") || sub[0].equals("dex")) {
-            int amount = Integer.parseInt(sub[1]);
-            if (amount > 0 && amount <= player.getRemainingAp() && amount < 31997) { 
-                if (sub[0].equals("str") && amount + player.getStr() < 32001) {
-                    player.setStr(player.getStr() + amount); 
-                    player.updateSingleStat(MapleStat.STR, player.getStr());
-                    player.message("[StreetSys] " + amount + " STR has been added, making your total: " + player.getStr());
-                } else if (sub[0].equals("int") && amount + player.getInt() < 32001) {
-                    player.setInt(player.getInt() + amount); 
-                    player.updateSingleStat(MapleStat.INT, player.getInt());
-                    player.message("[StreetSys] " + amount + " INT has been added, making your total: " + player.getInt());
-                } else if (sub[0].equals("luk") && amount + player.getLuk() < 32001) {
-                    player.setLuk(player.getLuk() + amount); 
-                    player.updateSingleStat(MapleStat.LUK, player.getLuk());
-                    player.message("[StreetSys] " + amount + " LUK has been added, making your total: " + player.getLuk());
-                } else if (sub[0].equals("dex") && amount + player.getDex() < 32001) {
-                    player.setDex(player.getDex() + amount); 
-                    player.updateSingleStat(MapleStat.DEX, player.getDex());
-                    player.message("[StreetSys] " + amount + " DEX has been added, making your total: " + player.getDex());
+            try {
+                int amount = Integer.parseInt(sub[1]);
+                if (amount > 0 && amount <= player.getRemainingAp() && amount < 31997) { 
+                    if (sub[0].equals("str") && amount + player.getStr() < 32001) {
+                        player.setStr(player.getStr() + amount); 
+                        player.updateSingleStat(MapleStat.STR, player.getStr());
+                        player.message("[StreetSys] " + amount + " STR has been added, making your total: " + player.getStr());
+                    } else if (sub[0].equals("int") && amount + player.getInt() < 32001) {
+                        player.setInt(player.getInt() + amount); 
+                        player.updateSingleStat(MapleStat.INT, player.getInt());
+                        player.message("[StreetSys] " + amount + " INT has been added, making your total: " + player.getInt());
+                    } else if (sub[0].equals("luk") && amount + player.getLuk() < 32001) {
+                        player.setLuk(player.getLuk() + amount); 
+                        player.updateSingleStat(MapleStat.LUK, player.getLuk());
+                        player.message("[StreetSys] " + amount + " LUK has been added, making your total: " + player.getLuk());
+                    } else if (sub[0].equals("dex") && amount + player.getDex() < 32001) {
+                        player.setDex(player.getDex() + amount); 
+                        player.updateSingleStat(MapleStat.DEX, player.getDex());
+                        player.message("[StreetSys] " + amount + " DEX has been added, making your total: " + player.getDex());
+                    } else { 
+                        player.message("[StreetSys] The stat cannot exceed the maximum amount.");
+                    } 
+                    player.setRemainingAp(player.getRemainingAp() - amount); 
+                    player.updateSingleStat(MapleStat.AVAILABLEAP, player.getRemainingAp()); 
                 } else { 
-                    player.message("[StreetSys] The stat cannot exceed the maximum amount.");
-                } 
-                player.setRemainingAp(player.getRemainingAp() - amount); 
-                player.updateSingleStat(MapleStat.AVAILABLEAP, player.getRemainingAp()); 
-            } else { 
                 player.message("[StreetSys] Please make sure you have enough AP.");
+                }
+            } catch (NumberFormatException NFE) {
+                player.message("You need to provide a number.");
+                return true;
             }
         } else {
             return false;

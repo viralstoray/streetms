@@ -52,7 +52,6 @@ function start(mode, type, selection) {
 	} else if (status == 6) {
 		qm.sendAcceptDecline("Yes, that's it. According to what's been recorded, the weapon of a hero will recognize its rightful owner, and if you're the hero that used the Giant Polearm, the Giant Polearm will react when you grab the Giant Polearm. Please go find the #bGiant Polearm and click on it#k.");
 	} else if (status == 7) {
-		qm.sendOk("If the Giant Polearm reacts to you, then we'll know that you're #bAran#k, the hero that wielded a Giant Polearm.");
 		qm.showIntro("Effect/Direction1.img/aranTutorial/ClickPoleArm");
 		qm.forceStartQuest();
 		qm.forceCompleteQuest();

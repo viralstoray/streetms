@@ -2467,9 +2467,26 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             getGuild().broadcast(MaplePacketCreator.levelUpMessage(2, level, name), this.getId());
         }
         guildUpdate();
-        if (level >= 22 && job.isA(MapleJob.ARAN1) && getQuest(MapleQuest.getInstance(21719)).getStatus() != MapleQuestStatus.Status.COMPLETED  && getQuest(MapleQuest.getInstance(21719)).getStatus() != MapleQuestStatus.Status.STARTED) {
+        if (level == 10 && job.isA(MapleJob.LEGEND)) {
+            MapleQuest.getInstance(21015).forceComplete(client.getPlayer(), 1201000);
+            MapleQuest.getInstance(21016).forceComplete(client.getPlayer(), 1201000);
+            MapleQuest.getInstance(21017).forceComplete(client.getPlayer(), 1201000);
+            MapleQuest.getInstance(21018).forceComplete(client.getPlayer(), 1201000);
+        }
+        if (level >= 22 && job.isA(MapleJob.ARAN1) && getQuest(MapleQuest.getInstance(21719)).getStatus() != MapleQuestStatus.Status.COMPLETED && getQuest(MapleQuest.getInstance(21719)).getStatus() != MapleQuestStatus.Status.STARTED) {
             NPCScriptManager.getInstance().dispose(client);
             NPCScriptManager.getInstance().start(client, 1204000, null, null);
+        }
+        if (level == 30 && job.isA(MapleJob.ARAN1)) {
+            for (int i = 0; i < 24; i++) {
+                if (getQuest(MapleQuest.getInstance(21708 + i)).getStatus() != MapleQuestStatus.Status.COMPLETED) {
+                    MapleQuest.getInstance(21708 + i).forceComplete(client.getPlayer(), 1201000);
+                }
+            }
+            if (getSkillLevel(21000000) == 0)
+                changeSkillLevel(SkillFactory.getSkill(21000000), (byte) 0, 10, -1);
+            if (getSkillLevel(21001003) == 0)
+                changeSkillLevel(SkillFactory.getSkill(21001003), (byte) 0, 20, -1);
         }
         if (level >= 31 && job.isA(MapleJob.ARAN2) && getQuest(MapleQuest.getInstance(21733)).getStatus() != MapleQuestStatus.Status.COMPLETED && getQuest(MapleQuest.getInstance(21733)).getStatus() != MapleQuestStatus.Status.STARTED) {
             NPCScriptManager.getInstance().dispose(client);
@@ -5193,5 +5210,42 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     public void unlockUI() {
         client.announce(MaplePacketCreator.disableUI(false));
 	client.announce(MaplePacketCreator.lockUI(false));
+    }
+    
+    public void autoPot() {
+        if (getPlayerVariable("AUTO_HP") != null && getPlayerVariable("AUTO_POT") != null) {
+            int itemid = Integer.parseInt(getPlayerVariable("AUTO_HP"));
+            String percent = getPlayerVariable("AUTO_POT_percent");
+            double aphp = getHp(), apmaxhp = getMaxHp();
+            if ((aphp / apmaxhp) * 100 <= (percent != null ? Integer.parseInt(percent) : 40)) {
+                if (getItemQuantity(itemid, false) > 0) {
+                    deletePlayerVariable("AUTO_POT_HP_warned");
+                    MapleItemInformationProvider.getInstance().getItemEffect(itemid).applyTo(client.getPlayer());
+                    MapleInventoryManipulator.removeById(client, MapleInventoryType.USE, itemid, 1, false, true);
+                } else {
+                    if (getPlayerVariable("AUTO_POT_HP_warned") == null) {
+                        dropMessage(1, "You are out of your HP Potions: " + MapleItemInformationProvider.getInstance().getName(itemid) + "s!");
+                        setPlayerVariable("AUTO_POT_HP_warned", "yes");
+                    }
+                }
+            }
+        }
+        if (getPlayerVariable("AUTO_MP") != null && getPlayerVariable("AUTO_POT") != null) {
+            int itemid = Integer.parseInt(getPlayerVariable("AUTO_MP"));
+            String percent = getPlayerVariable("AUTO_POT_percent");
+            double apmp = getMp(), apmaxmp = getMaxMp();
+            if ((apmp / apmaxmp) * 100 <= (percent != null ? Integer.parseInt(percent) : 40)) {
+                if (getItemQuantity(itemid, false) > 0) {
+                    deletePlayerVariable("AUTO_POT_MP_warned");
+                    MapleItemInformationProvider.getInstance().getItemEffect(itemid).applyTo(client.getPlayer());
+                    MapleInventoryManipulator.removeById(client, MapleInventoryType.USE, itemid, 1, false, true);
+                } else {
+                    if (getPlayerVariable("AUTO_POT_MP_warned") == null) {
+                        dropMessage(1, "You are out of your MP Potions: " + MapleItemInformationProvider.getInstance().getName(itemid) + "s!");
+                        setPlayerVariable("AUTO_POT_MP_warned", "yes");
+                    }
+                }
+            }
+        }
     }
 }

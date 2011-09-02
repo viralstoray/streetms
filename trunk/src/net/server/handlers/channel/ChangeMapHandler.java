@@ -83,21 +83,21 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
                     chr.changeMap(to, to.getPortal(0));
                     chr.unlockUI();
                 } else if (targetid != -1 && !chr.isGM()) {//Thanks celino for saving me some time (:
-                    final int divi = chr.getMapId() / 100;
+                    final int divi = chr.getMapId();// / 100;
                     boolean warp = false;
                     if (divi == 0) {
                         if (targetid == 10000) {
                             warp = true;
                         }
-                    } else if (divi == 20100) {
+                    } else if (divi == 2010000) {
                         if (targetid == 104000000) {
                             warp = true;
                         }
-                    } else if (divi == 9130401) { // Only allow warp if player is already in Intro map, or else = hack
+                    } else if (divi == 913040100) { // Only allow warp if player is already in Intro map, or else = hack
                         if (targetid == 130000000 || targetid / 100 == 9130401) { // Cygnus introduction
                             warp = true;
                         }
-                    } else if (divi == 9140900) { // Aran Introduction
+                    } else if (divi == 914090000) { // Aran Introduction
                         if (targetid == 914090011 || targetid == 914090012 || targetid == 914090013 || targetid == 140090000) {
                             warp = true;
                         }
@@ -105,7 +105,7 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
                         if (targetid == 140000000) {
                             warp = true;
                         }
-                    } else if (divi / 10 == 1020) { // Adventurer movie clip Intro
+                    } else if (divi / 10 == 102000) { // Adventurer movie clip Intro
                         if (targetid == 1020000) {
                             warp = true;
                         }

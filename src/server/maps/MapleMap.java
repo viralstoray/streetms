@@ -48,6 +48,8 @@ import client.MaplePet;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import constants.ItemConstants;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
@@ -960,10 +962,17 @@ public class MapleMap {
     }
 
     public Point getGroundBelow(Point pos) {
-        Point spos = new Point(pos.x, pos.y - 1);
-        spos = calcPointBelow(spos);
-        spos.y--;
-        return spos;
+        try {
+            Point spos = new Point(pos.x, pos.y - 1);
+            spos = calcPointBelow(spos);
+            spos.y--;
+            return spos;
+        } catch (java.lang.NullPointerException NPE) {
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date now = new Date();
+            System.out.println("Error in map: " + getId() + ". at time: " + sdfDate.format(now) + ". Error: " + NPE);
+            return null;
+        }
     }
 
     public void spawnRevives(final MapleMonster monster) {

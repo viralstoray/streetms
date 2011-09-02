@@ -29,7 +29,9 @@ import client.MapleCharacter;
 import client.MapleFamily;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -283,7 +285,13 @@ public class World {
                     chr.setParty(party);
                     chr.setMPC(partychar);
                 }
-                chr.getClient().getSession().write(MaplePacketCreator.updateParty(chr.getClient().getChannel(), party, operation, target));
+                try {
+                    chr.getClient().getSession().write(MaplePacketCreator.updateParty(chr.getClient().getChannel(), party, operation, target));
+                } catch (java.lang.NullPointerException NPE) {
+                    SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date now = new Date();
+                    System.out.println("Error caused by player: " + chr.getName() + " in map: " + chr.getMapId() + "at time: " + sdfDate.format(now) + ". Error: " + NPE);
+                }
             }
         }
         switch (operation) {
@@ -566,15 +574,21 @@ public class World {
                 BuddylistEntry ble = chr.getBuddylist().get(characterId);
                 if (ble != null && ble.isVisible()) {
                     byte mcChannel;
-                    if (offline) {
-                        ble.setChannel((byte) -1);
-                        mcChannel = -1;
-                    } else {
-                        ble.setChannel(channel);
-                        mcChannel = (byte) (channel - 1);
+                    try {
+                        if (offline) {
+                            ble.setChannel((byte) -1);
+                            mcChannel = -1;
+                        } else {
+                            ble.setChannel(channel);
+                            mcChannel = (byte) (channel - 1);
+                        }
+                        chr.getBuddylist().put(ble);
+                        chr.getClient().getSession().write(MaplePacketCreator.updateBuddyChannel(ble.getCharacterId(), mcChannel));
+                    } catch (java.lang.NullPointerException NPE) {
+                        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date now = new Date();
+                        System.out.println("Error caused by: " + chr.getName() + ". at map: " + chr.getMapId() + ". at time: " + sdfDate.format(now) + ". Error: " + NPE);
                     }
-                    chr.getBuddylist().put(ble);
-                    chr.getClient().getSession().write(MaplePacketCreator.updateBuddyChannel(ble.getCharacterId(), mcChannel));
                 }
             }
         }

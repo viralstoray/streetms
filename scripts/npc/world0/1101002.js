@@ -59,7 +59,7 @@ function action(mode, type, selection) {
 				cm.sendNextPrev("Thunder Breakers are the special few that receive divine protection from the Spirit of Lightning. Yes, that means if you become one, you'll be able to #bsummon Fulgar, the Spirit of Lightning! Fulgar will provide you protection and even fight for you. You may also use powerful skills from the depths of the heart#k. Doesn't that sound exciting?");
 		} else if (status == 2) {
 			if (select == 0)
-				cm.sendYesNo("Being a Dawn Warrior requires one to have a clear head, deadly sword, warm heart, and an eternal loyalty towards the Empress. If you are willing to develop these qualities, then I will make you a #bDawn Warrior.#k");
+				cm.sendYesNo("Being a Dawn Warrior requires one to have a clear head, deadly sword, warm heart, and an eternal loyalty towards the Empress. If you are willing to develop these qualities, then I will make you a #bDawn Warrior#k.");
 			else if (select == 1)
 				cm.sendYesNo("You... you can become a Blaze Wizard if you have the desire and perseverence to keep striving for your goal, along with a determined set of eyes that never deviate from an opponent. If you are willing to take these steps then I will make you a #bBlaze Wizard#k.");
 			else if (select == 2)
@@ -70,7 +70,6 @@ function action(mode, type, selection) {
 				cm.sendYesNo("Fighting the Black Mage will be a difficult task, yes... but it's no fun having to cringe everytime you run into a brick wall. You should enjoy it, always with a smile on your face! Being a #bThunder Breaker#k will allow you to have dynamic life experiences that you may not face anywhere else. Are you interested in becoming a #bThunder Breaker#k?");
 		} else if (status == 3) {
 			cm.resetStats();
-			cm.setRemainingAp(63);
 			cm.changeJobById(1000 + (100 * (select + 1)));
 			cm.forceCompleteQuest(20100 + (select + 1));
 			cm.sendOk("You have made a wise decision. You are now a #b" + cm.getPlayer().getJobName() + "#k.");

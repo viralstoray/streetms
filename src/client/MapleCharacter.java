@@ -5213,7 +5213,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     }
     
     public void autoPot() {
-        if (getPlayerVariable("AUTO_HP") != null && getPlayerVariable("AUTO_POT") != null) {
+        if (getPlayerVariable("AUTO_HP") != null && getPlayerVariable("AUTO_POT") != null && isAlive()) {
             int itemid = Integer.parseInt(getPlayerVariable("AUTO_HP"));
             String percent = getPlayerVariable("AUTO_POT_percent");
             double aphp = getHp(), apmaxhp = getMaxHp();
@@ -5230,7 +5230,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
                 }
             }
         }
-        if (getPlayerVariable("AUTO_MP") != null && getPlayerVariable("AUTO_POT") != null) {
+        if (getPlayerVariable("AUTO_MP") != null && getPlayerVariable("AUTO_POT") != null && isAlive()) {
             int itemid = Integer.parseInt(getPlayerVariable("AUTO_MP"));
             String percent = getPlayerVariable("AUTO_POT_percent");
             double apmp = getMp(), apmaxmp = getMaxMp();

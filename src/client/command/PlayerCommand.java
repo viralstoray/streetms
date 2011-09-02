@@ -43,8 +43,18 @@ public class PlayerCommand {
                 return true;
             }
             if (sub[1].equals("percent")) {
+                try {
+                    Integer.valueOf(sub[2]);
+                } catch (NumberFormatException e) {
+                    player.message("Please enter a number for your percentage.");
+                    return true;
+                }
+                if (sub[2].equals("100")) {
+                    player.message("You must choose a percentage between 0% ~ 99%");
+                    return true;
+                }
                 player.setPlayerVariable("AUTO_POT_percent", sub[2]);
-                player.message("Your Auto Potion HP percentage has been changed to " + sub[2] + "%");
+                player.message("Your Auto Potion percentage has been changed to " + sub[2] + "%");
                 return true;
             }
             if (!sub[1].equals("hp") && !sub[1].equals("mp")) {
@@ -115,7 +125,7 @@ public class PlayerCommand {
             MapleMap returnMap = player.getMap().getReturnMap();
             player.gainMeso(-500, true);
             player.changeMap(returnMap);
-            player.message("[StreetSys] You have been warped to " + returnMap.getMapName() + " for 5,000 mesos.");
+            player.message("[StreetSys] You have been warped to " + returnMap.getMapName() + " for 500 mesos.");
         } else if (sub[0].equals("help")) {
             player.message("**************************************************");
             player.message("@autopot - enables/sets up auto potion feature.");

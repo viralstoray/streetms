@@ -27,6 +27,11 @@ var status = -1;
 function start() {
 	if (cm.getLevel() > 9 && cm.getJobId() == 1000) 
 		cm.sendSimple("Now that you've seen all your job possibilities, which one would you like to become?\r\n#b#L0#Dawn Warrior#l\r\n#L1#Blaze Wizard#l\r\n#L2#Wind Archer#l\r\n#L3#Night Walker#l\r\n#L4#Thunder Breaker#l#k");
+	else {
+		cm.getItemEffect(2022458).applyTo(cm.getPlayer());
+		cm.sendOk("Don't stop training. Every ounce of your energy is required to protect Maple World...");
+		cm.dispose();
+	}
 }
 
 function action(mode, type, selection) {
@@ -73,6 +78,7 @@ function action(mode, type, selection) {
 			cm.setRemainingAp(63);
 			cm.changeJobById(1000 + (100 * (select + 1)));
 			cm.forceCompleteQuest(20100 + (select + 1));
+			cm.gainItem(1142066, 1);
 			cm.sendOk("You have made a wise decision. You are now a #b" + cm.getPlayer().getJobName() + "#k.");
 			cm.dispose();
 		}

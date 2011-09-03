@@ -20,11 +20,15 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /* 
-	Map(s): 		Empress' Road : Training Forest III
-	Description: 		Takes you to Entrance to Drill Hall
+	Author: Biscuit
 */
 
 function enter(pi) {
-	pi.warp(130020000, "east00");
-	return true;
+	if (pi.isQuestStarted(20702)) {
+		pi.warp(913000100, "out00");
+		return true;
+	} else {
+		pi.getPlayer().dropMessage(5,"You can only enter the Drill Hall if you are getting trained by Kiku.");
+		return false;
+	}
 }

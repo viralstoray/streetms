@@ -37,11 +37,18 @@ function action(mode, type, selection){
         return;
     }
     if (status == 0) {
-        cm.sendYesNo("Ummm, are you trying to leave Ereve again? I can take you to #bEllinia#k if you want...");
+		if (cm.haveItem(4032288))
+			cm.sendYesNo("Ummm, it looks like you have a special taxi coupon from Neinheart. Would you like to use it to go to #bHenesys#k?");
+		else
+			cm.sendYesNo("Ummm, are you trying to leave Ereve again? I can take you to #bEllinia#k if you want...");
     } else if (status == 1) {
         cm.sendNext("Okay, off you go!");
 	} else if (status == 2) {
-        cm.warp(101000400);
+		if (cm.haveItem(4032288)) {
+			cm.gainItem(4032288, -1);
+			cm.warp(100000000);
+		} else
+			cm.warp(101000400);
         cm.dispose();
     }
 }

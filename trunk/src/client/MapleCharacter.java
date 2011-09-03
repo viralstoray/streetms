@@ -2492,6 +2492,13 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             NPCScriptManager.getInstance().dispose(client);
             NPCScriptManager.getInstance().start(client, 1204007, null, null);
         }
+        if (level == 13 && isCygnus()) {
+            for (int i = 0; i < 3; i++) {
+                if (getQuest(MapleQuest.getInstance(20701 + i)).getStatus() != MapleQuestStatus.Status.COMPLETED) {
+                    MapleQuest.getInstance(20701 + i).forceComplete(client.getPlayer(), 1102000);
+                }
+            }
+        }
         //saveToDB(true); NAH!
     }
 

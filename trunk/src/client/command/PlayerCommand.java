@@ -107,7 +107,7 @@ public class PlayerCommand {
                 player.message("[StreetSys] You are already in the Free Market.");
                 return true;
             }
-            player.setPlayerVariable("FREE_MARKET", player.getMapId()+"");
+            player.setPlayerVariable("FREE_MARKET", Integer.toString(player.getMapId()));
             player.changeMap(910000000);
         } else if (sub[0].equals("gms")) {
             String names = "";

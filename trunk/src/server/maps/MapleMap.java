@@ -94,9 +94,11 @@ public class MapleMap {
         put("ariant", 260000100);
         put("aqua", 230000000);
         put("balrog", 105090900);
+        put("cbd", 540000000);
         put("dmap", 100000203);
         put("ellinia", 101000000);
         put("elnath", 211000000);
+        put("ereve", 140000000);
         put("excavation", 990000000);
         put("florina", 110000000);
         put("fm", 910000000);
@@ -109,11 +111,13 @@ public class MapleMap {
         put("herb", 251000000);
         put("horntail", 240060200);
         put("kerning", 103000000);
+        put("kerningsquare", 103040000);
         put("korean", 222000000);
         put("leafre", 240000000);
         put("lith", 104000000);
         put("ludi", 220000000);
         put("manon", 240020401);
+        put("mushcastle", 106020000);
         put("mulung", 250000000);
         put("mushmom", 100000005);
         put("nlc", 600000000);

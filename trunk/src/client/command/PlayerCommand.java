@@ -26,6 +26,7 @@ public class PlayerCommand {
             if (sub.length == 1) {
                 player.message("Auto Potion: " + (player.getPlayerVariable("AUTO_POT") != null ? "ON" : "OFF"));
                 if (player.getPlayerVariable("AUTO_POT") != null) {
+                    player.message("Notices: " + (player.getPlayerVariable("AUTO_POT_notices") != null ? "on" : "off"));
                     player.message("Percentage: " + (player.getPlayerVariable("AUTO_POT_percent") != null ? player.getPlayerVariable("AUTO_POT_percent") + "%" : "40%"));
                     player.message("HP Potion: " + (player.getPlayerVariable("AUTO_HP") != null ? MapleItemInformationProvider.getInstance().getName(Integer.parseInt(player.getPlayerVariable("AUTO_HP"))) : "none"));
                     player.message("MP Potion: " + (player.getPlayerVariable("AUTO_MP") != null ? MapleItemInformationProvider.getInstance().getName(Integer.parseInt(player.getPlayerVariable("AUTO_MP"))) : "none"));
@@ -40,6 +41,18 @@ public class PlayerCommand {
             if (sub[1].equals("off")) {
                 player.deletePlayerVariable("AUTO_POT");
                 player.message("Auto Potion has been turned OFF!");
+                return true;
+            }
+            if (sub[1].equals("notices")) {
+                if (sub[2].equals("on")) {
+                    player.setPlayerVariable("AUTO_POT_notices", "on");
+                    player.message("Auto Potion notices have been turned on.");
+                } else if (sub[2].equals("off")) {
+                    player.deletePlayerVariable("AUTO_POT_notices");
+                    player.message("Auto Potion notices have been turned off.");
+                } else {
+                    player.message("Use @autopot notices [on/off].");
+                }
                 return true;
             }
             if (sub[1].equals("percent")) {

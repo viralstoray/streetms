@@ -71,7 +71,7 @@ function end(mode, type, selection) {
 		qm.sendNext("I've been receiving updates about the Black Wings from Tru. I heard he even got attacked not too long ago. What about you? Are you alright? Mmm... Is this really the #t4032323#? So Tru did end up finding the #t4032323# before they could.");
 	} else if (status == 1) {
 		qm.sendYesNo("I don't know what this item even does, but I do know that it has something to do with the Black Mage. As long as they are looking for this, we'll have to protect it. No matter what it takes, you must become stronger.");
-	} else if status == 2) {
+	} else if (status == 2) {
 		qm.forceCompleteQuest();
 		qm.gainItem(4032323, -1);
 		qm.teachSkill(21100005, 0, 20);

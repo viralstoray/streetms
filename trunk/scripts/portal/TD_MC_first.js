@@ -19,12 +19,10 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-function enter(pi) {
-    try { 
-        pi.warp(parseInt(pi.getPlayerVariable("FREE_MARKET")));
-		pi.deletePlayerVariable("FREE_MARKET");
-    } catch(err) {
-        pi.warp(100000000);
-    }
-    return true;
-}
+/*
+	Author: Biscuit
+*/
+function enter(pi) { 
+    pi.warp(106020000, "left00"); 
+    return true; 
+}  

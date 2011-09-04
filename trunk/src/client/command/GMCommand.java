@@ -205,7 +205,7 @@ public class GMCommand {
                 return true;
             }
         } else if (sub[0].equals("giveitem")) {
-            if (sub.length < 4) {
+            if (sub.length < 3) {
                 player.message("Syntax: !giveitem person itemid amount");
                 return true;
             }
@@ -213,13 +213,14 @@ public class GMCommand {
                 MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(sub[1]);
                 int itemId = Integer.parseInt(sub[2]);
                 short quantity = 1;
-                quantity = Short.parseShort(sub[3]);
+                if (sub.length > 3)
+                    quantity = Short.parseShort(sub[3]);
                 int petid = -1;
                 if (ItemConstants.isPet(itemId)) {
                     petid = MaplePet.createPet(itemId);
                 }
                 MapleInventoryManipulator.addById(victim.getClient(), itemId, quantity, player.getName(), petid, -1);
-                player.message("You have successfully given " + victim.getName() + " " + quantity + " " + MapleItemInformationProvider.getInstance().getName(itemId) + (quantity == 1 ? "." : "s."));
+                player.message("You have given " + victim.getName() + " " + quantity + " " + MapleItemInformationProvider.getInstance().getName(itemId) + (quantity == 1 ? "." : "s."));
             } catch (NumberFormatException NFE) {
                 player.message("Either that player doesn't exist, or you didn't use the correct syntax: !giveitem person itemid amount");
                 return true;
@@ -300,24 +301,56 @@ public class GMCommand {
                 player.message("You need to provide an id.");
                 return true;
             }
-        } else if (sub[0].equals("hp")) {  // Set your max HP
+        } else if (sub[0].equals("hp")) {  // Set your HP
             if (sub.length < 2) {
                 player.message("Syntax: !hp amount");
                 return true;
             }
             try {
+                player.setHp(Integer.parseInt(sub[1]));
+                player.updateSingleStat(MapleStat.HP, Integer.parseInt(sub[1]));
+            } catch (NumberFormatException e) {
+                player.message("You need to provide a number.");
+                return true;
+            }
+        } else if (sub[0].equals("maxhp")) {  // Set your max HP
+            if (sub.length < 2) {
+                player.message("Syntax: !maxhp amount");
+                return true;
+            }
+            try {
+                if (Integer.parseInt(sub[1]) < player.getHp()) {
+                    player.setHp(Integer.parseInt(sub[1]));
+                    player.updateSingleStat(MapleStat.HP, Integer.parseInt(sub[1]));
+                }
                 player.setMaxHp(Integer.parseInt(sub[1]));
                 player.updateSingleStat(MapleStat.MAXHP, Integer.parseInt(sub[1]));
             } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
-        } else if (sub[0].equals("mp")) {  // Set your max MP
+        } else if (sub[0].equals("mp")) {  // Set your MP
             if (sub.length < 2) {
                 player.message("Syntax: !mp amount");
                 return true;
             }
             try {
+                player.setMp(Integer.parseInt(sub[1]));
+                player.updateSingleStat(MapleStat.MP, Integer.parseInt(sub[1]));
+            } catch (NumberFormatException e) {
+                player.message("You need to provide a number.");
+                return true;
+            }
+        } else if (sub[0].equals("maxmp")) {  // Set your max MP
+            if (sub.length < 2) {
+                player.message("Syntax: !maxmp amount");
+                return true;
+            }
+            try {
+                if (Integer.parseInt(sub[1]) < player.getMp()) {
+                    player.setMp(Integer.parseInt(sub[1]));
+                    player.updateSingleStat(MapleStat.MP, Integer.parseInt(sub[1]));
+                }
                 player.setMaxMp(Integer.parseInt(sub[1]));
                 player.updateSingleStat(MapleStat.MAXMP, Integer.parseInt(sub[1]));
             } catch (NumberFormatException e) {
@@ -468,7 +501,7 @@ public class GMCommand {
             player.setMaxMp(30000);
             player.updateSingleStat(MapleStat.LEVEL, 255);
             player.updateSingleStat(MapleStat.FAME, 13337);
-			player.updateSingleStat(MapleStat.MAXHP, 30000);
+            player.updateSingleStat(MapleStat.MAXHP, 30000);
             player.updateSingleStat(MapleStat.MAXMP, 30000);
         } else if (sub[0].equals("maxskills")) {  // Set all your skills to the maximum value
             for (MapleData skill_ : MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/" + "String.wz")).getData("Skill.img").getChildren()) {

@@ -5229,6 +5229,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
                     deletePlayerVariable("AUTO_POT_HP_warned");
                     MapleItemInformationProvider.getInstance().getItemEffect(itemid).applyTo(client.getPlayer());
                     MapleInventoryManipulator.removeById(client, MapleInventoryType.USE, itemid, 1, false, true);
+                    if (getPlayerVariable("AUTO_POT_notices") != null)
+                        client.announce(MaplePacketCreator.earnTitleMessage(getItemQuantity(itemid, false) + " HP potions left"));
                 } else {
                     if (getPlayerVariable("AUTO_POT_HP_warned") == null) {
                         dropMessage(1, "You are out of your HP Potions: " + MapleItemInformationProvider.getInstance().getName(itemid) + "s!");
@@ -5246,6 +5248,8 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
                     deletePlayerVariable("AUTO_POT_MP_warned");
                     MapleItemInformationProvider.getInstance().getItemEffect(itemid).applyTo(client.getPlayer());
                     MapleInventoryManipulator.removeById(client, MapleInventoryType.USE, itemid, 1, false, true);
+                    if (getPlayerVariable("AUTO_POT_notices") != null)
+                        client.announce(MaplePacketCreator.earnTitleMessage(getItemQuantity(itemid, false) + " MP potions left"));
                 } else {
                     if (getPlayerVariable("AUTO_POT_MP_warned") == null) {
                         dropMessage(1, "You are out of your MP Potions: " + MapleItemInformationProvider.getInstance().getName(itemid) + "s!");

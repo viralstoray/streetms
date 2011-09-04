@@ -26,7 +26,13 @@ var tips = new Array(
     "Use @fm to warp to the free market.",
     "Need something? Use @gms to find the nearest GM.",
 	"Did you know you can use player commands? Type @help to see them!",
-	"Visit our forums at www.streetsidegaming.com and our website at street.ariact.org."
+	"Visit our forums at www.streetsidegaming.com and our website at street.ariact.org.",
+	"To advance to 1st Job as a Knight of Cygnus, talk to Shinsoo in Ereve.",
+	"Out of return scrolls? Use @nearesttown to transport to the nearest town for 500 mesos.",
+	"Use @autopot to toggle auto potion on or off.",
+	"Use @help to see all the commands available for you to use.",
+	"Feeling lucky? Try the lottery by talking to Agent E. in the free market!",
+	"Crank up the beats by talking to Treasure Chest in the free market."
 );
 
 function init() {

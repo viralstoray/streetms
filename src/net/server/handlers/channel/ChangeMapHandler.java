@@ -83,7 +83,7 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
                     chr.changeMap(to, to.getPortal(0));
                     chr.unlockUI();
                 } else if (targetid != -1 && !chr.isGM()) {//Thanks celino for saving me some time (:
-                    final int divi = chr.getMapId();// / 100;
+                    final int divi = chr.getMapId();
                     boolean warp = false;
                     if (divi == 0) {
                         if (targetid == 10000) {
@@ -93,8 +93,8 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
                         if (targetid == 104000000) {
                             warp = true;
                         }
-                    } else if (divi == 913040100) { // Only allow warp if player is already in Intro map, or else = hack
-                        if (targetid == 130000000 || targetid / 100 == 9130401) { // Cygnus introduction
+                    } else if (divi == 913040100) {
+                        if (targetid == 130000000 || targetid == 913040000 || targetid == 913040001 || targetid == 913040002 || targetid == 913040003 || targetid == 913040004 || targetid == 913040005 || targetid == 913040006) { // Cygnus introduction
                             warp = true;
                         }
                     } else if (divi == 914090000) { // Aran Introduction

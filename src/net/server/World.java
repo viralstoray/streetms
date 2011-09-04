@@ -253,7 +253,7 @@ public class World {
                 continue;
             }
             c = getPlayerStorage().getCharacterById(i);
-            if (c != null) {
+            if (c != null && packet != null) {
                 c.getClient().getSession().write(packet);
             }
         }

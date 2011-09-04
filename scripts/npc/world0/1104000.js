@@ -24,7 +24,9 @@
 var status = -1;
 
 function start() {
-	if (!cm.haveItem(4032322))
+	if (cm.getPlayer().isCygnus())
+		cm.sendNext("Wait, what is this? Who are you? What... #ba Cygnus Knight?#k How did you find me...? Well, since I'm found out and all, as a proud member of the #rBlack Wings#k, prepare to die, Knight!");
+	else if (!cm.haveItem(4032322) && !cm.getPlayer().isCygnus())
 		cm.sendNext("You again? How in the world did you get in? I thought I warned you not to stand in my way!", 9);
 	else
 		cm.dispose();
@@ -36,11 +38,14 @@ function action(mode, type, selection) {
     } else {
         status++;
 		if (status == 0) {
-			cm.sendNextPrev("What exactly are you trying to do? Why are you controlling those monsters? Tell me what the Black Wings are up to!", 3);
+			if (cm.getPlayer().isCygnus()) {
+				cm.spawnMonster(9300285, 679, 245);
+				cm.dispose();
+			} else
+				cm.sendNextPrev("What exactly are you trying to do? Why are you controlling those monsters? Tell me what the Black Wings are up to!", 3);
 		} else if (status == 1) {
 			cm.sendNextPrev("Hmph, I don't have to tell you anything! Now prepare to die!", 9);
 		} else if (status == 2) {
-			cm.hideNpc(1104000);
 			cm.spawnMonster(9300344, 679, 245);
 			cm.dispose();
 		}

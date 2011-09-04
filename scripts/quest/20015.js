@@ -45,6 +45,7 @@ function start(mode, type, selection) {
 	} else if (status == 3) {
 		qm.forceStartQuest();
 		qm.forceCompleteQuest();
+		qm.forceCompleteQuest(29905);
 		qm.gainItem(1142065, 1);
 		qm.sendNext("Heehee, I knew you'd say yes.");
 	} else if (status == 4) {

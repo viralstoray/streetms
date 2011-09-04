@@ -520,6 +520,10 @@ public class AbstractPlayerInteraction {
         c.getPlayer().getMap().toggleHiddenNPC(id);
     }
     
+    public void hideNpc(int mapid, int id) {
+        c.getChannelServer().getMapFactory().getMap(mapid).toggleHiddenNPC(id);
+    }
+    
     public void changeJobById(int a) {
         c.getPlayer().changeJob(MapleJob.getById(a));
     }

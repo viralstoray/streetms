@@ -48,6 +48,7 @@ function start(mode, type, selection) {
             qm.gainExp(20); //gain 20 exp!!
             qm.forceStartQuest();
             qm.forceCompleteQuest();
+			qm.forceCompleteQuest(29904);
             qm.dispose();
         }
     }

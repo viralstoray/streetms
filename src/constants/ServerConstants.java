@@ -30,6 +30,7 @@ public class ServerConstants {
     // Login Configuration
     public static final int CHANNEL_LOAD = 150;//Players per channel
     public static final long RANKING_INTERVAL = 3600000;
+    public static final boolean ENABLE_PIC = false;
     //Event Configuration
     public static final String EVENTS = "LudiPQ StreetTip Boats Subway AirPlane elevator slimeRoom autoPot";
     // IP Configuration

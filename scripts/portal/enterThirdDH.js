@@ -24,11 +24,11 @@
 */
 
 function enter(pi) {
-	if (pi.isQuestStarted(20703)) {
-		pi.warp(913000200, "out00");
+	if (pi.isQuestStarted(20601) || pi.isQuestStarted(20602) || pi.isQuestStarted(20603) || pi.isQuestStarted(20604) || pi.isQuestStarted(20605)) {
+		pi.warp(913010200);
 		return true;
 	} else {
-		pi.getPlayer().dropMessage(5,"You can only enter the Drill Hall if you are getting trained by Kiku.");
+		pi.getPlayer().dropMessage(5, "You can only enter the Drill Hall if you are being tested for a new skill.");
 		return false;
 	}
 }

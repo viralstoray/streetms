@@ -19,7 +19,15 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*
+	Author: Biscuit
+*/
 function enter(pi) {
-		pi.warp(101000003, 0);
-		return true;
+	if (pi.isQuestStarted(20718)) {
+		pi.warp(910110000, "out00");
+		pi.hideNpc(910110000, 1032109);
+		pi.hideNpc(910110000, 1032110);
+	} else
+		pi.warp(101000003, "out00");
+	return true;
 }

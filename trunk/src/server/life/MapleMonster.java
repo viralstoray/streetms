@@ -379,9 +379,10 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         if (controllers == newController) {
             return;
         }
-        if (controllers != null) {
+        MaplePacket stopcontrol = MaplePacketCreator.stopControllingMonster(getObjectId());
+        if (controllers != null && stopcontrol != null) {
             controllers.stopControllingMonster(this);
-            controllers.getClient().getSession().write(MaplePacketCreator.stopControllingMonster(getObjectId()));
+            controllers.getClient().getSession().write(stopcontrol);
         }
         newController.controlMonster(this, immediateAggro);
         setController(newController);

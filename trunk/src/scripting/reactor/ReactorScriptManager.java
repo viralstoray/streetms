@@ -21,6 +21,7 @@
 */
 package scripting.reactor;
 
+import java.lang.reflect.UndeclaredThrowableException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
@@ -56,6 +57,8 @@ public class ReactorScriptManager extends AbstractScriptManager {
             engine.put("rm", rm);
             ReactorScript rs = iv.getInterface(ReactorScript.class);
             rs.act();
+        } catch (UndeclaredThrowableException e) {
+            System.out.println("UndeclaredThrowableException caused by " + e.getCause());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -12,7 +12,9 @@ import client.MapleStat;
 import client.SkillFactory;
 import constants.ItemConstants;
 import java.io.File;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -67,7 +69,7 @@ public class GMCommand {
             try {
                 player.setRemainingAp(Integer.parseInt(sub[1]));
                 player.updateSingleStat(MapleStat.AVAILABLEAP, Integer.parseInt(sub[1]));
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -79,7 +81,7 @@ public class GMCommand {
         } else if (sub[0].equals("ban")) {  // Ban a user
             if (sub.length < 2) {
                 player.message("Syntax: !ban player");
-            } else if (player.gmLevel() < 2) {
+            } else if (c.getPlayer().gmLevel() < 2) {
                 player.message("Only administrators or moderators can ban. Forward this request.");
             } else {
                 MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[1]);
@@ -124,7 +126,7 @@ public class GMCommand {
                 return true;
             }
             MapleCharacter chr = c.getWorldServer().getPlayerStorage().getCharacterByName(sub[1]);
-            if (player.gmLevel() > chr.gmLevel()) {
+            if (c.getPlayer().gmLevel() > chr.gmLevel()) {
                 chr.getClient().disconnect();
             }
         } else if (sub[0].equals("dispose")) {  // Dispose stuck NPC script
@@ -137,7 +139,7 @@ public class GMCommand {
             }
             try {
                 Integer.parseInt(sub[1]);
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -159,7 +161,7 @@ public class GMCommand {
             }
             try {
                 Integer.parseInt(sub[1]);
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -170,14 +172,14 @@ public class GMCommand {
             }
         } else if (sub[0].equals("fame")) {  // Set a player's fame level
             if (sub.length < 2) {
-                player.message("Syntax: !fame amount");
+                player.message("Syntax: !fame player amount");
                 return true;
             }
             try {
                 MapleCharacter victim = cserv.getPlayerStorage().getCharacterByName(sub[1]);
                 victim.setFame(Integer.parseInt(sub[2]));
                 victim.updateSingleStat(MapleStat.FAME, victim.getFame());
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -198,7 +200,7 @@ public class GMCommand {
             try {
                 cserv.getPlayerStorage().getCharacterByName(sub[1]).getCashShop().gainCash(1, Integer.parseInt(sub[2]));
                 player.message("Done");
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -274,7 +276,7 @@ public class GMCommand {
             try {
                 player.setMaxHp(Integer.parseInt(sub[1]));
                 player.updateSingleStat(MapleStat.MAXHP, Integer.parseInt(sub[1]));
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -286,7 +288,7 @@ public class GMCommand {
             try {
                 player.setMaxMp(Integer.parseInt(sub[1]));
                 player.updateSingleStat(MapleStat.MAXMP, Integer.parseInt(sub[1]));
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -317,7 +319,7 @@ public class GMCommand {
                     }
                     c.getPlayer().getMap().spawnItemDrop(c.getPlayer(), c.getPlayer(), toDrop, c.getPlayer().getPosition(), true, true);
                 }
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -402,7 +404,7 @@ public class GMCommand {
                 player.setLevel(Integer.parseInt(sub[1]));
                 player.gainExp(-player.getExp(), false, false);
                 player.updateSingleStat(MapleStat.LEVEL, player.getLevel());
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -416,7 +418,7 @@ public class GMCommand {
                 victim.setLevel(Integer.parseInt(sub[2]));
                 victim.gainExp(-victim.getExp(), false, false);
                 victim.updateSingleStat(MapleStat.LEVEL, victim.getLevel());
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -440,7 +442,7 @@ public class GMCommand {
                 try {
                     ISkill skill = SkillFactory.getSkill(Integer.parseInt(skill_.getName()));
                     player.changeSkillLevel(skill, (byte) skill.getMaxLevel(), skill.getMaxLevel(), -1);
-                } catch (NumberFormatException nfe) {
+                } catch (NumberFormatException e) {
                     break;
                 } catch (NullPointerException npe) {
                     continue;
@@ -453,7 +455,7 @@ public class GMCommand {
             }
             try {
                 cserv.getPlayerStorage().getCharacterByName(sub[1]).gainMeso(Integer.parseInt(sub[2]), true);
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -464,7 +466,7 @@ public class GMCommand {
             }
             try {
                 player.gainMeso(Integer.parseInt(sub[1]), true);
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -478,7 +480,7 @@ public class GMCommand {
             } else if (sub[1].equalsIgnoreCase("n")) {
                 Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverNotice(0, joinStringFrom(sub, 2)));
             } else if (sub[1].equalsIgnoreCase("scr")) {
-                if (player.gmLevel() < 2) {
+                if (c.getPlayer().gmLevel() < 2) {
                     player.message("You need to be an admin to do this.");
                 } else {
                     Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.serverMessage(joinStringFrom(sub, 2)));
@@ -540,13 +542,14 @@ public class GMCommand {
                         ps.setInt(11, mobTime);
                         ps.executeUpdate();
                     } catch (SQLException e) {
-                        player.dropMessage("Failed to save MOB to the database");
+                        player.dropMessage("Failed to save mob to the database.");
+                        System.out.println("Failed to save mob to the database: " + e);
                     }
                     player.getMap().addMonsterSpawn(mob, mobTime, 0);
                 } else {
                     player.dropMessage("You have entered an invalid Mob-Id");
                 }
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -582,14 +585,15 @@ public class GMCommand {
                         ps.setInt(10, player.getMapId());
                         ps.executeUpdate();
                     } catch (SQLException e) {
-                        player.dropMessage("Failed to save NPC to the database");
+                        player.dropMessage("Failed to save NPC to the database.");
+                        System.out.println("Failed to save NPC to the database: " + e);
                     }
                     player.getMap().addMapObject(npc);
                     player.getMap().broadcastMessage(MaplePacketCreator.spawnNPC(npc));
                 } else {
                     player.dropMessage("You have entered an invalid Npc-Id");
                 }
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -601,7 +605,7 @@ public class GMCommand {
                 MapleShopFactory.getInstance().reloadShops();
                 player.message("Completed.");
             } catch (Exception re) {
-                player.message("RemoteException occurred while attempting to reload shops.");
+                player.message("RemoteException occurred while attempting to reload shops");
                 System.out.println("RemoteException occurred while attempting to reload shops: " + re);
             }
         } else if (sub[0].equals("reloadportals")) {  // Reload all portals
@@ -613,8 +617,51 @@ public class GMCommand {
                 player.message("RemoteException occurred while attempting to reload shops.");
                 System.out.println("RemoteException occurred while attempting to reload shops: " + re);
             }
+        } else if (sub[0].equals("rename")) {  // Rename a player
+            if (c.getPlayer().gmLevel() < 2) {
+                player.message("You need to be an admin.");
+            }
+            if (sub.length < 3) {
+                player.message("Syntax: !rename player newname");
+                return true;
+            }
+            Connection con = DatabaseConnection.getConnection();
+            try {
+                // Check if player exists
+                PreparedStatement ps = con.prepareStatement("SELECT id FROM characters WHERE name = ?");
+                ps.setString(1, sub[1]);
+                ResultSet rs = ps.executeQuery();
+                if (!rs.next()) {
+                    player.message(sub[1] + " does not exist.");
+                    rs.close();
+                    ps.close();
+                    return true;
+                }
+                
+                // Check if name is already in use
+                ps = con.prepareStatement("SELECT id FROM characters WHERE name = ?");
+                ps.setString(1, sub[2]);
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    player.message(sub[2] + " is already in use.");
+                    rs.close();
+                    ps.close();
+                    return true;
+                }
+                
+                // Rename
+                ps = con.prepareStatement("UPDATE characters SET name = ? WHERE name = ?");
+                ps.setString(1, sub[2]);
+                ps.setString(2, sub[1]);
+                ps.executeUpdate();
+                if (rs.getInt("guildid") > 0) { } //TODO Update guild when renaming without having to restart
+                player.message(sub[1] + " renamed to " + sub[2]);
+            } catch (SQLException e) {
+                player.dropMessage("Failed to rename " + sub[1]);
+                System.out.println("Failed to rename " + sub[1] + ": " + e);
+            }
         } else if (sub[0].equals("saveall")) {  // Save all online players
-            if (player.gmLevel() < 2) {
+            if (c.getPlayer().gmLevel() < 2) {
                 player.message("You need to be an admin.");
             }
             player.message("Saving...");
@@ -710,7 +757,7 @@ public class GMCommand {
                 player.updateSingleStat(MapleStat.DEX, x);
                 player.updateSingleStat(MapleStat.INT, x);
                 player.updateSingleStat(MapleStat.LUK, x);
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -768,7 +815,7 @@ public class GMCommand {
             list.add(lines[3]);
             Server.getInstance().broadcastMessage(player.getWorld(), MaplePacketCreator.getAvatarMega(player, "", c.getChannel(), item, list, true));
         } else if (sub[0].equals("smegap")) {  // Send a super megaphone as another player
-            if (player.gmLevel() < 2) {
+            if (c.getPlayer().gmLevel() < 2) {
                 player.message("You need to be an admin to do this.");
                 return true;
             }
@@ -816,7 +863,7 @@ public class GMCommand {
             try {
                 player.setRemainingSp(Integer.parseInt(sub[1]));
                 player.updateSingleStat(MapleStat.AVAILABLESP, player.getRemainingSp());
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
@@ -833,12 +880,12 @@ public class GMCommand {
                 } else {
                     player.getMap().spawnMonsterOnGroudBelow(MapleLifeFactory.getMonster(Integer.parseInt(sub[1])), player.getPosition());
                 }
-            } catch (NumberFormatException NFE) {
+            } catch (NumberFormatException e) {
                 player.message("You need to provide a number.");
                 return true;
             }
         } else if (sub[0].equals("strip")) {  // Remove all a player's equips
-            if (player.gmLevel() == 2) {
+            if (c.getPlayer().gmLevel() == 2) {
                 cserv.getPlayerStorage().getCharacterByName(sub[1]).unequipAll(player);
             } else {
                 player.message("You need to be an admin or a mod for this.");

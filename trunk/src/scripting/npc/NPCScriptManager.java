@@ -70,14 +70,13 @@ public class NPCScriptManager extends AbstractScriptManager {
             } else {
                 ns.start(chr);
             }
-        } catch (UndeclaredThrowableException ute) {
-            ute.printStackTrace();
-            System.out.println("Error: NPC " + npc + ". UndeclaredThrowableException.");
+        } catch (UndeclaredThrowableException e) {
+            System.out.println("Error: NPC " + npc + ". UndeclaredThrowableException caused by " + e.getCause());
             dispose(c);
             cms.remove(c);
             notice(c, npc);
         } catch (Exception e) {
-            System.out.println("Error: NPC " + npc + ".");
+            System.out.println("Error: NPC " + npc + ", caused by " + e.getCause());
             dispose(c);
             cms.remove(c);
             notice(c, npc);

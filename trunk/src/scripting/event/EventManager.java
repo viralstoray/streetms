@@ -59,9 +59,7 @@ public class EventManager {
         try {
             iv.invokeFunction("cancelSchedule", (Object) null);
         } catch (ScriptException ex) {
-            ex.printStackTrace();
         } catch (NoSuchMethodException ex) {
-            ex.printStackTrace();
         }
     }
 
@@ -71,6 +69,7 @@ public class EventManager {
 
     public void schedule(final String methodName, final EventInstanceManager eim, long delay) {
         schedule = TimerManager.getInstance().schedule(new Runnable() {
+            @Override
             public void run() {
                 try {
                     iv.invokeFunction(methodName, eim);
@@ -89,6 +88,7 @@ public class EventManager {
 
     public ScheduledFuture<?> scheduleAtTimestamp(final String methodName, long timestamp) {
         return TimerManager.getInstance().scheduleAtTimestamp(new Runnable() {
+            @Override
             public void run() {
                 try {
                     iv.invokeFunction(methodName, (Object) null);

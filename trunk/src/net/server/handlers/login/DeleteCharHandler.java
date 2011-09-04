@@ -28,8 +28,13 @@ import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class DeleteCharHandler extends AbstractMaplePacketHandler {
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+        String pic = slea.readMapleAsciiString();
         int cid = slea.readInt();
-        c.announce(MaplePacketCreator.deleteCharResponse(cid, 0));
-        c.deleteCharacter(cid);
+        if (c.checkPic(pic)) {
+            c.announce(MaplePacketCreator.deleteCharResponse(cid, 0));
+            c.deleteCharacter(cid);
+        } else {
+            c.announce(MaplePacketCreator.deleteCharResponse(cid, 0x14));
+        }
     }
 }

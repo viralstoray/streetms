@@ -50,6 +50,7 @@ function start(mode, type, selection) {
 			qm.sendNext("Okay, please talk to #e#bShinsoo#k#n once you decide on a path. The choice is completely yours.");
 	} else if (status == 4) {
 		qm.forceStartQuest();
+		qm.forceCompleteQuest();
 		qm.forceStartQuest(20100);
 		qm.forceCompleteQuest(20100);
 		if (!qm.isQuestCompleted(20017))

@@ -27,6 +27,12 @@ function enter(pi) {
 	if (pi.isQuestStarted(20701)) {
 		pi.warp(913000000, "out00");
 		return true;
+	} else if (pi.isQuestStarted(20702)) {
+		pi.warp(913000100, "out00");
+		return true;
+	} else if (pi.isQuestStarted(20703)) {
+		pi.warp(913000200, "out00");
+		return true;
 	} else {
 		pi.getPlayer().dropMessage(5,"You can only enter the Drill Hall if you are getting trained by Kiku.");
 		return false;

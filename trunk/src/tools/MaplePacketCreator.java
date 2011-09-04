@@ -832,7 +832,11 @@ public class MaplePacketCreator {
         for (MapleCharacter chr : chars) {
             addCharEntry(mplew, chr, false);
         }
-        mplew.write(2);
+        if (ServerConstants.ENABLE_PIC) {
+            mplew.write(c.getPic() == null || c.getPic().length() == 0 ? 0 : 1);
+        } else {
+            mplew.write(2);
+        }
         mplew.writeInt(c.getCharacterSlots());
         return mplew.getPacket();
     }

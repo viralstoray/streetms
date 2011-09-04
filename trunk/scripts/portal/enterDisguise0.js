@@ -20,11 +20,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /* 
-	Map(s): 		Empress' Road : Crossroads of Ereve
-	Description: 		Takes you to Training Forest I
+	Author: Biscuit
 */
 
 function enter(pi) {
+	if (pi.isQuestStarted(20301) || pi.isQuestStarted(20302) || pi.isQuestStarted(20303) || pi.isQuestStarted(20304) || pi.isQuestStarted(20305)) {
+		if (!pi.haveItem(4032179)) {
+			pi.getPlayer().dropMessage(5, "Cannot pass through without an Investigation Permit.");
+			return false;
+		}
+	}
 	pi.warp(130010000, "east00");
 	return true;
 }

@@ -21,8 +21,6 @@
 */
 /*	
 	Author: Biscuit
-	Map(s):	Ereve
-	Desc:   Warps out of Ereve
 */
 
 function enter(pi) {

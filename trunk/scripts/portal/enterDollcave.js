@@ -24,7 +24,7 @@ Author: Biscuit
 */
 
 function enter(pi) {
-	if (pi.isQuestStarted(21731))
+	if (pi.isQuestStarted(21731) || pi.isQuestStarted(20730))
 		pi.openNpc(1063011);
 	return false;
 }

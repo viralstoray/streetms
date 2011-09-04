@@ -24,11 +24,11 @@
 */
 
 function enter(pi) {
-	if (pi.isQuestStarted(20702)) {
-		pi.warp(913000100, "out00");
+	if (pi.isQuestStarted(20201) || pi.isQuestStarted(20202) || pi.isQuestStarted(20203) || pi.isQuestStarted(20204) || pi.isQuestStarted(20205)) {
+		pi.warp(108000600);
 		return true;
 	} else {
-		pi.getPlayer().dropMessage(5,"You can only enter the Drill Hall if you are getting trained by Kiku.");
+		pi.getPlayer().dropMessage(5, "You can only enter the Drill Hall if you are being tested to be a Knight.");
 		return false;
 	}
 }

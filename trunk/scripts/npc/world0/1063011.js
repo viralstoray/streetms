@@ -24,7 +24,7 @@
 var status = -1;
 
 function start() {
-	if (cm.isQuestStarted(21731))
+	if (cm.isQuestStarted(21731) || cm.isQuestStarted(20730))
 		cm.sendGetText("A suspicious voice pierces through the silence. #e#bPassword!#k#n");
 	else
 		cm.dispose();

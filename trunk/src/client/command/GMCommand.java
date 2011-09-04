@@ -204,6 +204,26 @@ public class GMCommand {
                 player.message("You need to provide a number.");
                 return true;
             }
+        } else if (sub[0].equals("giveitem")) {
+            if (sub.length < 4) {
+                player.message("Syntax: !giveitem person itemid amount");
+                return true;
+            }
+            try {
+                MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(sub[1]);
+                int itemId = Integer.parseInt(sub[2]);
+                short quantity = 1;
+                quantity = Short.parseShort(sub[3]);
+                int petid = -1;
+                if (ItemConstants.isPet(itemId)) {
+                    petid = MaplePet.createPet(itemId);
+                }
+                MapleInventoryManipulator.addById(victim.getClient(), itemId, quantity, player.getName(), petid, -1);
+                player.message("You have successfully given " + victim.getName() + " " + quantity + " " + MapleItemInformationProvider.getInstance().getName(itemId) + (quantity == 1 ? "." : "s."));
+            } catch (NumberFormatException NFE) {
+                player.message("Either that player doesn't exist, or you didn't use the correct syntax: !giveitem person itemid amount");
+                return true;
+            }
         } else if (sub[0].equals("gmshop")) {  // Opens the GM shop
             MapleShopFactory.getInstance().getShop(1337).sendShop(c);
         } else if (sub[0].equals("gmtext")) {  // Change the color of your text
@@ -268,6 +288,18 @@ public class GMCommand {
             } else {
                 player.setHpMp(30000);
             }
+        } else if (sub[0].equals("hidenpc")) {
+            if (sub.length == 1) {
+                player.message("Usage: !hidenpc [id]");
+                return true;
+            }
+            try {
+                int id = Integer.parseInt(sub[1]);
+                c.getPlayer().getMap().toggleHiddenNPC(id);
+            } catch (NumberFormatException nfe) {
+                player.message("You need to provide an id.");
+                return true;
+            }
         } else if (sub[0].equals("hp")) {  // Set your max HP
             if (sub.length < 2) {
                 player.message("Syntax: !hp amount");
@@ -295,15 +327,16 @@ public class GMCommand {
         } else if (sub[0].equals("item") || sub[0].equals("drop")) {
             if (sub.length < 2) {
                 if (sub[0].equals("item"))
-                    player.message("Syntax: !item amount");
+                    player.message("Syntax: !item itemid amount");
                 else
-                    player.message("Syntax: !drop amount");
+                    player.message("Syntax: !drop itemid amount");
                 return true;
             }
             try {
                 int itemId = Integer.parseInt(sub[1]);
                 short quantity = 1;
-                quantity = Short.parseShort(sub[2]);
+                if (sub.length > 2)
+                    quantity = Short.parseShort(sub[2]);
                 if (sub[0].equals("item")) {
                     int petid = -1;
                     if (ItemConstants.isPet(itemId)) {

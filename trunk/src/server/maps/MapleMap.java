@@ -1033,9 +1033,9 @@ public class MapleMap {
                 }, selfDestruction.removeAfter() * 1000);
             }
         }
-        if (mapid == 910110000 && !this.allowHPQSummon) { // HPQ make monsters invisible
+        /*if (mapid == 910110000 && !this.allowHPQSummon) { // HPQ make monsters invisible
             this.broadcastMessage(MaplePacketCreator.makeMonsterInvisible(monster));
-        }
+        }*/
     }
 
     public void spawnDojoMonster(final MapleMonster monster) {
@@ -1281,7 +1281,7 @@ public class MapleMap {
         }
         if (mapid == 923010000 && getMonsterById(9300102) == null) { // Kenta's Mount Quest
             spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300102), new Point(77, 426));
-        } else if (mapid == 910110000) { // Henesys Party Quest
+        /*} else if (mapid == 910110000) { // Henesys Party Quest
             chr.getClient().announce(MaplePacketCreator.getClock(15 * 60));
             TimerManager.getInstance().register(new Runnable() {
 
@@ -1292,7 +1292,7 @@ public class MapleMap {
                     }
                 }
             }, 15 * 60 * 1000 + 3000);
-        }
+        */}
         MaplePet[] pets = chr.getPets();
         if (chr.getPets() != null) {
             for (int i = 0; i < chr.getPets().length; i++) {

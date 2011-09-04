@@ -92,7 +92,8 @@ public class MapleClient {
     private byte loginattempt = 0;
     private String pin = null;
     private int pinattempt = 0;
-    private String pic = "00000";
+    private String pic = null;
+    private int picattempt = 0;
     private byte gender = -1;
 
     public MapleClient(MapleAESOFB send, MapleAESOFB receive, IoSession session) {
@@ -317,7 +318,15 @@ public class MapleClient {
     }
 
     public boolean checkPic(String other) {
-        return true;
+        picattempt++;
+        if (picattempt > 5) {
+            getSession().close(true);
+        }
+        if (pic.equals(other)) {
+            picattempt = 0;
+            return true;
+        }
+        return false;
     }
 
     public int login(String login, String pwd) {

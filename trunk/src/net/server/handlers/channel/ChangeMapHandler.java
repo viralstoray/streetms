@@ -101,6 +101,10 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
                         if (targetid == 914090011 || targetid == 914090012 || targetid == 914090013 || targetid == 140090000) {
                             warp = true;
                         }
+                    } else if (divi == 913040100) { // Cygnus Job Tutorial
+                        if (targetid == 913040100 || targetid == 913040101 || targetid == 913040102 || targetid == 913040103 || targetid == 913040104 || targetid == 913040105 || targetid == 913040106) {
+                            warp = true;
+                        }
                     } else if (divi == 914090100) { // Aran 1st Job Advancement Clip
                         if (targetid == 140000000) {
                             warp = true;

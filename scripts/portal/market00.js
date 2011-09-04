@@ -22,9 +22,9 @@
 function enter(pi) {
     try { 
         pi.warp(parseInt(pi.getPlayerVariable("FREE_MARKET")));
-		pi.deletePlayerVariable("FREE_MARKET");
     } catch(err) {
         pi.warp(100000000);
+		pi.setPlayerVariable("FREE_MARKET", "100000000");
     }
     return true;
 }

@@ -54,7 +54,6 @@ public class MapleGuild {
     private byte world;
     private Map<Byte, List<Integer>> notifications = new LinkedHashMap<Byte, List<Integer>>();
     private boolean bDirty = true;
-    private Logger errorLog = new Logger(true);
 
 
     public MapleGuild(MapleGuildCharacter initiator) {
@@ -103,7 +102,7 @@ public class MapleGuild {
             ps.close();
             rs.close();
         } catch (SQLException se) {
-            errorLog.logError(null, "Unable to read guild information from database (guildid " + guildid + "): " + se, true);
+            Logger.logError(null, "Unable to read guild information from database (guildid " + guildid + "): " + se, true);
         }
     }
 
@@ -267,7 +266,7 @@ public class MapleGuild {
                     }
                 }
             } catch (Exception e) {
-                errorLog.logError(null, "Failed to contact channel(s) for broadcast: " + e, true);
+                Logger.logError(null, "Failed to contact channel(s) for broadcast: " + e, true);
             }
         }
     }
@@ -389,7 +388,7 @@ public class MapleGuild {
                                 ps.executeUpdate();
                                 ps.close();
                             } catch (SQLException e) {
-                                errorLog.logError(null, String.format("%s failed to expel %s from guild %s: %s", initiator.getName(), mgc.getName(), this.getName(), e), true);
+                                Logger.logError(null, String.format("%s failed to expel %s from guild %s: %s", initiator.getName(), mgc.getName(), this.getName(), e), true);
                             }
                             Server.getInstance().getWorld(mgc.getWorld()).setOfflineGuildStatus((short) 0, (byte) 5, cid);
                         }
@@ -517,7 +516,7 @@ public class MapleGuild {
         return null;
     }
 
-    public void displayGuildRanks(MapleClient c, int npcid) {
+    public static void displayGuildRanks(MapleClient c, int npcid) {
         try {
             PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement("SELECT `name`, `GP`, `logoBG`, `logoBGColor`, " + "`logo`, `logoColor` FROM guilds ORDER BY `GP` DESC LIMIT 50");
             ResultSet rs = ps.executeQuery();
@@ -525,7 +524,8 @@ public class MapleGuild {
             ps.close();
             rs.close();
         } catch (SQLException e) {
-            errorLog.logError(c.getPlayer(), "Failed to display guild ranks (guild " + c.getPlayer().getGuild() + "): " + e, true);
+            System.err.println("Failed to display guild ranks (guild " + c.getPlayer().getGuild() + "): " + e);
+            //Logger.logError(c.getPlayer(), "Failed to display guild ranks (guild " + c.getPlayer().getGuild() + "): " + e, true);
         }
     }
 

@@ -38,20 +38,32 @@ import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.DatabaseConnection;
+import tools.Logger;
 import tools.MaplePacketCreator;
 import tools.Pair;
 
 /**
- * GMCommand
- * Manages all of our normal-level GM Commands.
+ * Manages all of the normal-level GM Commands.
+ * 
  * @author Doctor
+ * @version %I% %G%
  */
 public class GMCommand {
     
-    public static boolean execute(MapleClient c, String[] sub) {
+    /**
+     * Executes a GM command.
+     * 
+     * @param c the {@link MapleClient} object of the player
+     * @param sub the full command given, excluding the '!'
+     * @return true if command exists, false if not
+     * @see PlayerCommand#execute
+     */
+    public static boolean execute(MapleClient c, String[] sub) throws SQLException {
         MapleCharacter player = c.getPlayer();
         Channel cserv = c.getChannelServer();
         Server srv = Server.getInstance();
+        Logger cmdLog = new Logger(true);
+        Logger errorLog = new Logger(true);
         if (sub[0].equals("allgms")) {  // Send message to GMs
             String message = joinStringFrom(sub, 1);
             for (Channel ch : srv.getChannelsFromWorld(player.getWorld())) {
@@ -609,7 +621,7 @@ public class GMCommand {
                         ps.executeUpdate();
                     } catch (SQLException e) {
                         player.dropMessage("Failed to save mob to the database.");
-                        System.out.println("Failed to save mob to the database: " + e);
+                        errorLog.logError(player, "Failed to save mob to the database: " + e, true);
                     }
                     player.getMap().addMonsterSpawn(mob, mobTime, 0);
                 } else {
@@ -652,7 +664,7 @@ public class GMCommand {
                         ps.executeUpdate();
                     } catch (SQLException e) {
                         player.dropMessage("Failed to save NPC to the database.");
-                        System.out.println("Failed to save NPC to the database: " + e);
+                        errorLog.logError(player, "Failed to save NPC to the database: " + e, true);
                     }
                     player.getMap().addMapObject(npc);
                     player.getMap().broadcastMessage(MaplePacketCreator.spawnNPC(npc));
@@ -670,18 +682,18 @@ public class GMCommand {
                 player.message("Attempting to reload all shops. This may take awhile...");
                 MapleShopFactory.getInstance().reloadShops();
                 player.message("Completed.");
-            } catch (Exception re) {
-                player.message("RemoteException occurred while attempting to reload shops");
-                System.out.println("RemoteException occurred while attempting to reload shops: " + re);
+            } catch (Exception e) {
+                player.message("Error occurred while attempting to reload shops.");
+                errorLog.logError(player, "Error occurred while attempting to reload shops: " + e, true);
             }
         } else if (sub[0].equals("reloadportals")) {  // Reload all portals
             try {
                 player.message("Attempting to reload all portals. This may take awhile...");
                 PortalScriptManager.getInstance().clearScripts();
                 player.message("Completed.");
-            } catch (Exception re) {
-                player.message("RemoteException occurred while attempting to reload shops.");
-                System.out.println("RemoteException occurred while attempting to reload shops: " + re);
+            } catch (Exception e) {
+                player.message("Error occurred while attempting to reload portals.");
+                errorLog.logError(player, "Error occurred while attempting to reload portals: " + e, true);
             }
         } else if (sub[0].equals("rename")) {  // Rename a player
             if (c.getPlayer().gmLevel() < 2) {
@@ -692,15 +704,15 @@ public class GMCommand {
                 return true;
             }
             Connection con = DatabaseConnection.getConnection();
+            PreparedStatement ps = null;
+            ResultSet rs = null;
             try {
                 // Check if player exists
-                PreparedStatement ps = con.prepareStatement("SELECT id FROM characters WHERE name = ?");
+                ps = con.prepareStatement("SELECT id FROM characters WHERE name = ?");
                 ps.setString(1, sub[1]);
-                ResultSet rs = ps.executeQuery();
+                rs = ps.executeQuery();
                 if (!rs.next()) {
                     player.message(sub[1] + " does not exist.");
-                    rs.close();
-                    ps.close();
                     return true;
                 }
                 
@@ -710,8 +722,6 @@ public class GMCommand {
                 rs = ps.executeQuery();
                 if (rs.next()) {
                     player.message(sub[2] + " is already in use.");
-                    rs.close();
-                    ps.close();
                     return true;
                 }
                 
@@ -720,11 +730,19 @@ public class GMCommand {
                 ps.setString(1, sub[2]);
                 ps.setString(2, sub[1]);
                 ps.executeUpdate();
-                if (rs.getInt("guildid") > 0) { } //TODO Update guild when renaming without having to restart
+                //if (rs.getInt("guildid") > 0) { } TODO Update guild when renaming without having to restart
                 player.message(sub[1] + " renamed to " + sub[2]);
+                ps.close();
             } catch (SQLException e) {
                 player.dropMessage("Failed to rename " + sub[1]);
-                System.out.println("Failed to rename " + sub[1] + ": " + e);
+                errorLog.logError(player, "Failed to rename " + sub[1] + ": " + e, true);
+            } finally {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
             }
         } else if (sub[0].equals("saveall")) {  // Save all online players
             if (c.getPlayer().gmLevel() < 2) {
@@ -1010,9 +1028,17 @@ public class GMCommand {
         } else {
             return false;
         }
+        cmdLog.logCommand(player, joinStringFrom(sub, 0), false);
         return true;
     }
     
+    /**
+     * Concatenates a <code>String</code> array into a string
+     * 
+     * @param arr String array to join
+     * @param start which index of the array to start at
+     * @return the concatenated string
+     */
     private static String joinStringFrom(String arr[], int start) {
         StringBuilder builder = new StringBuilder();
         for (int i = start; i < arr.length; i++) {

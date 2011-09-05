@@ -13,12 +13,20 @@ import tools.MaplePacketCreator;
 import tools.Pair;
 
 /**
- * PlayerCommand
- * Manages all of our (@) player commands.
+ * Manages all of the (@) player commands.
+ * 
  * @author Doctor
  */
 public class PlayerCommand {
     
+    /**
+     * Executes a player command.
+     * 
+     * @param c the {@link MapleClient} object of the player
+     * @param sub the full command given, excluding the '@'
+     * @return true if command exists, false if not
+     * @see GMCommand#execute
+     */
     public static boolean execute(MapleClient c, String[] sub) {
         MapleCharacter player = c.getPlayer();
         int itemid = 0;

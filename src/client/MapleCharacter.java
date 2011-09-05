@@ -123,6 +123,7 @@ import server.partyquest.MonsterCarnivalParty;
 import server.partyquest.PartyQuest;
 import server.quest.MapleQuest;
 import tools.DatabaseConnection;
+import tools.Logger;
 import tools.MaplePacketCreator;
 import tools.Pair;
 import tools.Randomizer;
@@ -181,6 +182,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     private BuddyList buddylist;
     private EventInstanceManager eventInstance = null;
     private HiredMerchant hiredMerchant = null;
+    private Logger errorLog = new Logger(true);
     private MapleClient client;
     private MapleGuildCharacter mgc = null;
     private MaplePartyCharacter mpc = null;
@@ -719,7 +721,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         }
     }
 
-    public static boolean canCreateChar(String name) {
+    public boolean canCreateChar(String name) {
         if (name.length() <= 1 || name.length() > 12) {
             return false;
         }
@@ -910,7 +912,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
                 ps.execute();
                 ps.close();
             } catch (SQLException ex) {
-                System.out.print("Error deleting skill: " + ex);
+                errorLog.logError(this, "Error deleting skill: " + ex, true);
             }
         }
     }
@@ -1013,7 +1015,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            System.out.print("Error deleting guild: " + ex);
+            errorLog.logError(this, "Error deleting guild: " + ex, true);
         }
     }
 
@@ -1442,7 +1444,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         return buddylist;
     }
 
-    public static Map<String, String> getCharacterFromDatabase(String name) {
+    public Map<String, String> getCharacterFromDatabase(String name) {
         Map<String, String> character = new LinkedHashMap<String, String>();
 
         try {
@@ -1463,13 +1465,13 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             rs.close();
             ps.close();
         } catch (SQLException sqle) {
-            sqle.printStackTrace();
+            errorLog.logError(this, "Failed to get character from database (" + name + "):" + sqle, true);
         }
 
         return character;
     }
 
-    public static boolean isInUse(String name) {
+    public boolean isInUse(String name) {
         return getCharacterFromDatabase(name) != null;
     }
 
@@ -2209,7 +2211,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
                 Server.getInstance().allianceMessage(allianceId, MaplePacketCreator.updateAllianceJobLevel(this), getId(), -1);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            errorLog.logError(this, "Error updating guild (" + this.guildid + "): " + e, true);
         }
     }
 
@@ -2502,7 +2504,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         //saveToDB(true); NAH!
     }
 
-    public static MapleCharacter loadCharFromDB(int charid, MapleClient client, boolean channelserver) throws SQLException {
+    public MapleCharacter loadCharFromDB(int charid, MapleClient client, boolean channelserver) throws SQLException {
         try {
             MapleCharacter ret = new MapleCharacter();
             ret.client = client;
@@ -2809,7 +2811,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ret.maplemount.setActive(false);
             return ret;
         } catch (Exception e) {
-            e.printStackTrace();
+            errorLog.logError(this, "Error loading character from database: " + e, true);
         }
         return null;
     }
@@ -3517,11 +3519,15 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ps = con.prepareStatement("INSERT INTO skills (characterid, skillid, skilllevel, masterlevel, expiration) VALUES (?, ?, ?, ?, ?)");
             ps.setInt(1, id);
             for (Entry<ISkill, SkillEntry> skill : skills.entrySet()) {
-                ps.setInt(2, skill.getKey().getId());
-                ps.setInt(3, skill.getValue().skillevel);
-                ps.setInt(4, skill.getValue().masterlevel);
-                ps.setLong(5, skill.getValue().expiration);
-                ps.addBatch();
+                try {
+                    ps.setInt(2, skill.getKey().getId());
+                    ps.setInt(3, skill.getValue().skillevel);
+                    ps.setInt(4, skill.getValue().masterlevel);
+                    ps.setLong(5, skill.getValue().expiration);
+                    ps.addBatch();
+                } catch(java.lang.NullPointerException NPE) {
+                    errorLog.logError(this, NPE, true);
+                }
             }
             ps.executeBatch();
             deleteWhereCharacterId(con, "DELETE FROM savedlocations WHERE characterid = ?");
@@ -4628,8 +4634,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
                 ps.executeUpdate();
                 ps.close();
             } catch (SQLException ex) {
-                System.out.println("[AREA DATA] An error has occured.");
-                ex.printStackTrace();
+                errorLog.logError(this, "An error has occured adding area data: " + ex, true);
             }
         }
     }
@@ -4643,8 +4648,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException ex) {
-            System.out.println("[AREA DATA] An error has occured.");
-            ex.printStackTrace();
+            errorLog.logError(this, "An error has occured removing area data: " + ex, true);
         }
     }
 
@@ -4945,7 +4949,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            System.out.print("Error adding to lottery: " + ex);
+            errorLog.logError(this, "Error adding to lottery: " + ex, true);
         }
     }
 	
@@ -4964,7 +4968,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             
             return numRows * getLotteryPrice();
         } catch (SQLException ex) {
-            System.out.print("Error getting lottery amount: " + ex);
+            errorLog.logError(this, "Error getting lottery amount: " + ex, true);
             return 0;
         }
     }
@@ -4985,7 +4989,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ps.close();
             return winner;
         } catch (SQLException ex) {
-            System.out.print("Error getting lottery winner: " + ex);
+            errorLog.logError(this, "Error getting lottery winner: " + ex, true);
             return 0;
         }
     }
@@ -4996,7 +5000,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            System.out.print("Error resetting lottery: " + ex);
+            errorLog.logError(this, "Error resetting lottery: " + ex, true);
         }
     }
     
@@ -5162,7 +5166,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ps2.execute();
             ps2.close();
         } catch (SQLException ex) {
-            System.out.println("Error setting player variable: " + ex);
+            errorLog.logError(this, "Error setting player variable: " + ex, true);
         }
     }
     
@@ -5183,7 +5187,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
                 return null;
             }
         } catch (SQLException ex) {
-            System.out.println("Error getting player variable: " + ex);
+            errorLog.logError(this, "Error getting player variable: " + ex, true);
             return null;
         }
     }
@@ -5205,7 +5209,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ps.close();
             rs.close();
         } catch (SQLException ex) {
-            System.out.println("Error deleting player variable: " + ex);
+            errorLog.logError(this, "Error deleting player variable: " + ex, true);
         }
     }
     

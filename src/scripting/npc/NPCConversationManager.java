@@ -239,7 +239,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void displayGuildRanks() {
-        getClient().getPlayer().getGuild().displayGuildRanks(getClient(), npc);
+        MapleGuild.displayGuildRanks(getClient(), npc);
     }
 
     @Override

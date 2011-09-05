@@ -32,26 +32,7 @@ import server.maps.MapleMap;
  */
 public class Logger {
     
-    private String chatLog = "chat.log";  // File to log all chat
-    private PrintWriter chatLogger = null;
-    private String commandLog = "commands.log"; // File to log all GM commands
-    private PrintWriter commandLogger = null;
-    private String errorLog = "error.log";  // File to log all errors
-    private PrintWriter errorLogger = null;
-    private Logger ioErrorLog = new Logger(false);
-    private boolean persistentOpen;
-    private SimpleDateFormat sdfDate = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
-    
-    /**
-     * Initializes a Logger object. persistentOpen will take effect
-     * after the first write.
-     * 
-     * @param persistentOpen keep files open after first write (true),
-     * or open and close for every write (false)
-     */
-    public Logger(boolean persistentOpen) {
-        this.persistentOpen = persistentOpen;
-    }
+    //private static boolean persistentOpen = true;
     
     /**
      * Logs chat messages to chatLog and optionally the console
@@ -63,35 +44,39 @@ public class Logger {
      * @see #logCommand
      * @see #logError(client.MapleCharacter, java.lang.String, boolean)
      */
-    public boolean logChat(MapleCharacter player, String message, int toWhom, boolean writeToConsole) {
+    public static boolean logChat(MapleCharacter player, String message, int toWhom, boolean writeToConsole) {
+        String chatLog = "chat.log";  // File to log all chat
+        PrintWriter chatLogger = null;
         try {
             String name = player.getName();
             MapleMap mapObj = player.getMap();
             String map = mapObj.getMapName();
             int mapId = player.getMapId();
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
             Date now = new Date();
+            String datetime = sdfDate.format(now);
             
             if (writeToConsole) {
-                System.out.format("[SAY] [%s] %s on map %s to %d: %s%n", sdfDate.format(now), name, map, toWhom, message);
+                System.out.format("[SAY] [%s] %s on map %s to %d: %s%n", datetime, name, map, toWhom, message);
             }
             if (chatLogger == null) {
                 chatLogger = new PrintWriter(new BufferedWriter(new FileWriter(chatLog, true)));
             }
-            chatLogger.format("[%s] %s on map %s (%d): %s%n", sdfDate.format(now), name, map, mapId, message);
+            chatLogger.format("[%s] %s on map %s (%d): %s%n", datetime, name, map, mapId, message);
             return true;
         } catch (Exception e) {
-            ioErrorLog.logError(player, String.format("Error writing chat log to %s: %s", chatLog, e), true);
+            Logger.logError(player, String.format("Error writing chat log to %s: %s", chatLog, e), true);
             chatLogger.close();
             chatLogger = null;
         } finally {
-            if (!persistentOpen && chatLogger != null) {
+            if (chatLogger != null) {
                 chatLogger.close();
                 chatLogger = null;
             }
             return false;
         }
     }
-    // TODO Implement chat logging
+    // TODO: Implement chat logging (maybe)
 
     /**
      * Logs GM commands to commandLog and optionally the console
@@ -104,28 +89,32 @@ public class Logger {
      * @see #logChat
      * @see #logError(client.MapleCharacter, java.lang.String, boolean)
      */
-    public boolean logCommand(MapleCharacter player, String command, boolean writeToConsole) {
+    public static boolean logCommand(MapleCharacter player, String command, boolean writeToConsole) {
+        String commandLog = "commands.log"; // File to log all GM commands
+        PrintWriter commandLogger = null;
         try {
             String name = player.getName();
             MapleMap mapObj = player.getMap();
             String map = mapObj.getMapName();
             int mapId = player.getMapId();
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
             Date now = new Date();
+            String datetime = sdfDate.format(now);
             
             if (writeToConsole) {
-                System.out.format("[CMD] [%s] %s on map %s: %s%n", sdfDate.format(now), name, map, command);
+                System.out.format("[CMD] [%s] %s on map %s: %s%n", datetime, name, map, command);
             }
             if (commandLogger == null) {
                 commandLogger = new PrintWriter(new BufferedWriter(new FileWriter(commandLog, true)));
             }
-            commandLogger.format("[%s] %s on map %s (%d): %s%n", sdfDate.format(now), name, map, mapId, command);
+            commandLogger.format("[%s] %s on map %s (%d): %s%n", datetime, name, map, mapId, command);
             return true;
         } catch (Exception e) {
-            ioErrorLog.logError(player, String.format("Error writing command log to %s: %s", commandLog, e), true);
+            Logger.logError(player, String.format("Error writing command log to %s: %s", commandLog, e), true);
             commandLogger.close();
             commandLogger = null;
         } finally {
-            if (!persistentOpen && commandLogger != null) {
+            if (commandLogger != null) {
                 commandLogger.close();
                 commandLogger = null;
             }
@@ -146,7 +135,7 @@ public class Logger {
      * @see #logCommand
      * @see #logError(client.MapleCharacter, java.lang.String, boolean)
      */
-    public boolean logError(MapleCharacter player, Exception exception, boolean writeToConsole) {
+    public static boolean logError(MapleCharacter player, Exception exception, boolean writeToConsole) {
         String error = exception.toString();
         return logError(player, error, writeToConsole);
     }
@@ -165,9 +154,13 @@ public class Logger {
      * @see #logCommand
      * @see #logError(client.MapleCharacter, java.lang.Exception, boolean)
      */
-    public boolean logError(MapleCharacter player, String error, boolean writeToConsole) {
+    public static boolean logError(MapleCharacter player, String error, boolean writeToConsole) {
+        String errorLog = "error.log";  // File to log all errors
+        PrintWriter errorLogger = null;
         try {
+            SimpleDateFormat sdfDate = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
             Date now = new Date();
+            String datetime = sdfDate.format(now);
             if (player != null) {
                 String name = player.getName();
                 MapleMap mapObj = player.getMap();
@@ -196,7 +189,7 @@ public class Logger {
             errorLogger.close();
             errorLogger = null;
         } finally {
-            if (!persistentOpen && errorLogger != null) {
+            if (errorLogger != null) {
                 errorLogger.close();
                 errorLogger = null;
             }

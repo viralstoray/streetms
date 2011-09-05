@@ -30,6 +30,7 @@ import client.command.PlayerCommand;
 
 public final class GeneralchatHandler extends net.AbstractMaplePacketHandler {
 
+    @Override
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
         String s = slea.readMapleAsciiString();
         MapleCharacter chr = c.getPlayer();

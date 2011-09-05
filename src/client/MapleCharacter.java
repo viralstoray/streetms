@@ -182,7 +182,6 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
     private BuddyList buddylist;
     private EventInstanceManager eventInstance = null;
     private HiredMerchant hiredMerchant = null;
-    private Logger errorLog = new Logger(true);
     private MapleClient client;
     private MapleGuildCharacter mgc = null;
     private MaplePartyCharacter mpc = null;
@@ -721,7 +720,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         }
     }
 
-    public boolean canCreateChar(String name) {
+    public static boolean canCreateChar(String name) {
         if (name.length() <= 1 || name.length() > 12) {
             return false;
         }
@@ -912,7 +911,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
                 ps.execute();
                 ps.close();
             } catch (SQLException ex) {
-                errorLog.logError(this, "Error deleting skill: " + ex, true);
+                Logger.logError(this, "Error deleting skill: " + ex, true);
             }
         }
     }
@@ -1015,7 +1014,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            errorLog.logError(this, "Error deleting guild: " + ex, true);
+            Logger.logError(this, "Error deleting guild: " + ex, true);
         }
     }
 
@@ -1444,7 +1443,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         return buddylist;
     }
 
-    public Map<String, String> getCharacterFromDatabase(String name) {
+    public static Map<String, String> getCharacterFromDatabase(String name) {
         Map<String, String> character = new LinkedHashMap<String, String>();
 
         try {
@@ -1465,13 +1464,13 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             rs.close();
             ps.close();
         } catch (SQLException sqle) {
-            errorLog.logError(this, "Failed to get character from database (" + name + "):" + sqle, true);
+            Logger.logError(null, "Failed to get character from database (" + name + "):" + sqle, true);
         }
 
         return character;
     }
 
-    public boolean isInUse(String name) {
+    public static boolean isInUse(String name) {
         return getCharacterFromDatabase(name) != null;
     }
 
@@ -2211,7 +2210,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
                 Server.getInstance().allianceMessage(allianceId, MaplePacketCreator.updateAllianceJobLevel(this), getId(), -1);
             }
         } catch (Exception e) {
-            errorLog.logError(this, "Error updating guild (" + this.guildid + "): " + e, true);
+            Logger.logError(this, "Error updating guild (" + this.guildid + "): " + e, true);
         }
     }
 
@@ -2504,7 +2503,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
         //saveToDB(true); NAH!
     }
 
-    public MapleCharacter loadCharFromDB(int charid, MapleClient client, boolean channelserver) throws SQLException {
+    public static MapleCharacter loadCharFromDB(int charid, MapleClient client, boolean channelserver) throws SQLException {
         try {
             MapleCharacter ret = new MapleCharacter();
             ret.client = client;
@@ -2811,7 +2810,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ret.maplemount.setActive(false);
             return ret;
         } catch (Exception e) {
-            errorLog.logError(this, "Error loading character from database: " + e, true);
+            Logger.logError(null, "Error loading character from database: " + e, true);
         }
         return null;
     }
@@ -3526,7 +3525,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
                     ps.setLong(5, skill.getValue().expiration);
                     ps.addBatch();
                 } catch(java.lang.NullPointerException NPE) {
-                    errorLog.logError(this, NPE, true);
+                    Logger.logError(this, NPE, true);
                 }
             }
             ps.executeBatch();
@@ -4634,7 +4633,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
                 ps.executeUpdate();
                 ps.close();
             } catch (SQLException ex) {
-                errorLog.logError(this, "An error has occured adding area data: " + ex, true);
+                Logger.logError(this, "An error has occured adding area data: " + ex, true);
             }
         }
     }
@@ -4648,7 +4647,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException ex) {
-            errorLog.logError(this, "An error has occured removing area data: " + ex, true);
+            Logger.logError(this, "An error has occured removing area data: " + ex, true);
         }
     }
 
@@ -4949,7 +4948,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            errorLog.logError(this, "Error adding to lottery: " + ex, true);
+            Logger.logError(this, "Error adding to lottery: " + ex, true);
         }
     }
 	
@@ -4968,7 +4967,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             
             return numRows * getLotteryPrice();
         } catch (SQLException ex) {
-            errorLog.logError(this, "Error getting lottery amount: " + ex, true);
+            Logger.logError(this, "Error getting lottery amount: " + ex, true);
             return 0;
         }
     }
@@ -4989,7 +4988,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ps.close();
             return winner;
         } catch (SQLException ex) {
-            errorLog.logError(this, "Error getting lottery winner: " + ex, true);
+            Logger.logError(this, "Error getting lottery winner: " + ex, true);
             return 0;
         }
     }
@@ -5000,7 +4999,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            errorLog.logError(this, "Error resetting lottery: " + ex, true);
+            Logger.logError(this, "Error resetting lottery: " + ex, true);
         }
     }
     
@@ -5166,7 +5165,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ps2.execute();
             ps2.close();
         } catch (SQLException ex) {
-            errorLog.logError(this, "Error setting player variable: " + ex, true);
+            Logger.logError(this, "Error setting player variable: " + ex, true);
         }
     }
     
@@ -5187,7 +5186,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
                 return null;
             }
         } catch (SQLException ex) {
-            errorLog.logError(this, "Error getting player variable: " + ex, true);
+            Logger.logError(this, "Error getting player variable: " + ex, true);
             return null;
         }
     }
@@ -5209,7 +5208,7 @@ public class MapleCharacter extends AbstractAnimatedMapleMapObject {
             ps.close();
             rs.close();
         } catch (SQLException ex) {
-            errorLog.logError(this, "Error deleting player variable: " + ex, true);
+            Logger.logError(this, "Error deleting player variable: " + ex, true);
         }
     }
     

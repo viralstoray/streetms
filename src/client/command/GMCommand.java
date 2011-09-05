@@ -58,12 +58,10 @@ public class GMCommand {
      * @return true if command exists, false if not
      * @see PlayerCommand#execute
      */
-    public static boolean execute(MapleClient c, String[] sub) throws SQLException {
+    public static boolean execute(MapleClient c, String[] sub) {
         MapleCharacter player = c.getPlayer();
         Channel cserv = c.getChannelServer();
         Server srv = Server.getInstance();
-        Logger cmdLog = new Logger(true);
-        Logger errorLog = new Logger(true);
         if (sub[0].equals("allgms")) {  // Send message to GMs
             String message = joinStringFrom(sub, 1);
             for (Channel ch : srv.getChannelsFromWorld(player.getWorld())) {
@@ -621,7 +619,7 @@ public class GMCommand {
                         ps.executeUpdate();
                     } catch (SQLException e) {
                         player.dropMessage("Failed to save mob to the database.");
-                        errorLog.logError(player, "Failed to save mob to the database: " + e, true);
+                        Logger.logError(player, "Failed to save mob to the database: " + e, true);
                     }
                     player.getMap().addMonsterSpawn(mob, mobTime, 0);
                 } else {
@@ -664,7 +662,7 @@ public class GMCommand {
                         ps.executeUpdate();
                     } catch (SQLException e) {
                         player.dropMessage("Failed to save NPC to the database.");
-                        errorLog.logError(player, "Failed to save NPC to the database: " + e, true);
+                        Logger.logError(player, "Failed to save NPC to the database: " + e, true);
                     }
                     player.getMap().addMapObject(npc);
                     player.getMap().broadcastMessage(MaplePacketCreator.spawnNPC(npc));
@@ -684,7 +682,7 @@ public class GMCommand {
                 player.message("Completed.");
             } catch (Exception e) {
                 player.message("Error occurred while attempting to reload shops.");
-                errorLog.logError(player, "Error occurred while attempting to reload shops: " + e, true);
+                Logger.logError(player, "Error occurred while attempting to reload shops: " + e, true);
             }
         } else if (sub[0].equals("reloadportals")) {  // Reload all portals
             try {
@@ -693,7 +691,7 @@ public class GMCommand {
                 player.message("Completed.");
             } catch (Exception e) {
                 player.message("Error occurred while attempting to reload portals.");
-                errorLog.logError(player, "Error occurred while attempting to reload portals: " + e, true);
+                Logger.logError(player, "Error occurred while attempting to reload portals: " + e, true);
             }
         } else if (sub[0].equals("rename")) {  // Rename a player
             if (c.getPlayer().gmLevel() < 2) {
@@ -735,13 +733,16 @@ public class GMCommand {
                 ps.close();
             } catch (SQLException e) {
                 player.dropMessage("Failed to rename " + sub[1]);
-                errorLog.logError(player, "Failed to rename " + sub[1] + ": " + e, true);
+                Logger.logError(player, "Failed to rename " + sub[1] + ": " + e, true);
             } finally {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (rs != null) {
-                    rs.close();
+                try {
+                    if (ps != null && !ps.isClosed()) {
+                        ps.close();
+                    }
+                    if (rs != null && !ps.isClosed()) {
+                        rs.close();
+                    }
+                } catch (SQLException e) {
                 }
             }
         } else if (sub[0].equals("saveall")) {  // Save all online players
@@ -1028,7 +1029,7 @@ public class GMCommand {
         } else {
             return false;
         }
-        cmdLog.logCommand(player, joinStringFrom(sub, 0), false);
+        Logger.logCommand(player, joinStringFrom(sub, 0), false);
         return true;
     }
     
